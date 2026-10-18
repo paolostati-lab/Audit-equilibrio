@@ -1,0 +1,592 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Audit dell'Equilibrio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{
+  --bg:#F3F4F2; --panel:#FFFFFF; --panel2:#F8F9F7; --line:#DCE0E2; --text:#15191D; --muted:#5D6772;
+  --accent:#C98400; --accent-ink:#1A1405; --accent-soft:#F6E7C4;
+  --prima:#3F72C4; --dopo:#C98400; --good:#2B7A4B; --bad:#B83A34; --grid:#E6E9EB;
+  --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#0E1114; --panel:#171B20; --panel2:#1C2127; --line:#2A313A; --text:#E7EAEE; --muted:#8E98A4;
+  --accent:#F4B62C; --accent-ink:#1A1405; --accent-soft:#3A2F14; --prima:#5B8FE0; --dopo:#C98400; --good:#4CC38A; --bad:#EF6B63; --grid:#232932;}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#0E1114; --panel:#171B20; --panel2:#1C2127; --line:#2A313A; --text:#E7EAEE; --muted:#8E98A4;
+  --accent:#F4B62C; --accent-ink:#1A1405; --accent-soft:#3A2F14; --prima:#5B8FE0; --dopo:#C98400; --good:#4CC38A; --bad:#EF6B63; --grid:#232932;}
+html,body{background:var(--bg);color:var(--text)}
+body{font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 90px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.5vw,40px);line-height:1;margin:0}
+h1 span{color:var(--accent)}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0 0 4px}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,input[type=text],textarea{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%}
+textarea{width:100%;min-height:90px;font-family:var(--mono);font-size:12px;box-sizing:border-box}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;background:var(--panel);border-top:1px solid var(--line);padding:0 0 env(safe-area-inset-bottom,0px)}
+nav.tabs button{all:unset;flex:1;text-align:center;padding:12px 4px;cursor:pointer;font-family:var(--display);font-size:16px;font-weight:600;color:var(--muted);border-top:2px solid transparent}
+nav.tabs button[aria-selected=true]{color:var(--text);border-top-color:var(--accent)}
+nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+section.view{margin-top:22px}
+.block{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--panel2);display:flex;flex-direction:column;gap:4px}
+.opt b{font-family:var(--display);font-size:18px;font-weight:600}
+.opt small{color:var(--muted);font-size:13px;line-height:1.35}
+.opt[aria-pressed=true]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.opt:focus-visible,.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.chip{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;color:var(--muted);background:var(--panel)}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.field{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-top:1px solid var(--line)}
+.field:first-child{border-top:0}
+.field>label,.field>.lab{font-weight:600;font-size:14px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;padding:11px 18px;border-radius:10px;font-weight:600;font-family:var(--display);font-size:17px;letter-spacing:.02em}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{border:1px solid var(--line);color:var(--text);background:var(--panel)}
+.btn.small{padding:6px 12px;font-size:14.5px}
+.btn.danger{color:var(--bad);border:1px solid var(--line)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.status.ok .dot{background:var(--good)} .status.no .dot{background:var(--bad)}
+.hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--muted);font-size:12.5px}
+.tbl{overflow-x:auto}
+.up{color:var(--bad)} .down{color:var(--good)}
+.sess{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--panel2);margin-top:10px}
+.sess-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.tag{font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--text)}
+.plots{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:10px}
+.plot{border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--panel)}
+.plot svg{width:100%;height:auto;display:block}
+.plot .cap{font-weight:600;font-size:13.5px}
+.plot .met{font-size:12px;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:13px;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.ex{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--panel2);display:flex;flex-direction:column;gap:6px}
+.ex ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+.ex p{margin:0;font-size:14px}
+.sys{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.callout{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;background:var(--panel2);font-size:14px}
+/* overlay */
+.ov{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;display:flex;flex-direction:column}
+.ov-in{flex:1;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box;padding-inline:16px;padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.ov-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(64px,22vw,140px);line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+.cond{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.1;text-wrap:balance}
+#live{width:100%;max-width:340px;aspect-ratio:1;margin:0 auto;display:block;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper output{font-family:var(--mono);font-size:26px;min-width:2ch;text-align:center}
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.metrics div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel)}
+.metrics b{display:block;font-family:var(--mono);font-size:18px}
+.metrics span{font-size:12px;color:var(--muted)}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head><body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Valutazione posturografica con sensori del telefono</div>
+      <h1>Audit <span>dell'Equilibrio</span></h1>
+    </div>
+    <div class="pt">
+      <label for="ptSel" class="muted" style="font-size:13px">Paziente</label>
+      <select id="ptSel"></select>
+      <button class="btn ghost small" id="ptNewBtn" type="button">+ Nuovo</button>
+    </div>
+  </header>
+  <div id="ptNew" class="block" hidden>
+    <div class="row"><input type="text" id="ptName" placeholder="Nome o iniziali" autocomplete="off"><button class="btn primary small" id="ptAdd" type="button">Aggiungi</button><button class="btn ghost small" id="ptCancel" type="button">Annulla</button></div>
+  </div>
+
+  <section class="view" id="v-test"></section>
+  <section class="view" id="v-hist" hidden></section>
+  <section class="view" id="v-cmp" hidden></section>
+  <section class="view" id="v-ex" hidden></section>
+</div>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-v="test" aria-selected="true" type="button">Valuta</button>
+  <button role="tab" data-v="hist" aria-selected="false" type="button">Storico</button>
+  <button role="tab" data-v="cmp" aria-selected="false" type="button">Prima / Dopo</button>
+  <button role="tab" data-v="ex" aria-selected="false" type="button">Esercizi</button>
+</nav>
+
+<div class="ov" id="run" hidden><div class="ov-in" id="runIn"></div></div>
+<div class="ov" id="tmr" hidden><div class="ov-in" id="tmrIn"></div></div>
+
+<script>
+(()=>{
+/* ================= data model ================= */
+const PROTOS={
+ mctsib:{name:'mCTSIB',dur:30,desc:'4 condizioni sensoriali × 30 s. Piedi uniti, telefono sullo sterno.',conds:[
+  {id:'c1',n:'Superficie stabile · occhi aperti',s:'C1 Stabile OA',ec:0,f:1},
+  {id:'c2',n:'Superficie stabile · occhi chiusi',s:'C2 Stabile OC',ec:1,f:1.5},
+  {id:'c3',n:'Foam · occhi aperti',s:'C3 Foam OA',ec:0,f:1.7},
+  {id:'c4',n:'Foam · occhi chiusi',s:'C4 Foam OC',ec:1,f:2.8}]},
+ bess:{name:'BESS',dur:20,errors:1,desc:'6 condizioni × 20 s, occhi chiusi. Conta gli errori dopo ogni prova (max 10).',conds:[
+  {id:'b1',n:'Bipodalico · stabile',s:'Bipod. stabile',ec:1,f:1.3},
+  {id:'b2',n:'Monopodalico (non dominante) · stabile',s:'Monop. stabile',ec:1,f:2.4},
+  {id:'b3',n:'Tandem (non dominante dietro) · stabile',s:'Tandem stabile',ec:1,f:2},
+  {id:'b4',n:'Bipodalico · foam',s:'Bipod. foam',ec:1,f:2.2},
+  {id:'b5',n:'Monopodalico (non dominante) · foam',s:'Monop. foam',ec:1,f:3.4},
+  {id:'b6',n:'Tandem (non dominante dietro) · foam',s:'Tandem foam',ec:1,f:3}]},
+ romberg:{name:'Romberg',dur:30,desc:'Piedi uniti, occhi aperti poi chiusi. Calcola il quoziente di Romberg.',conds:[
+  {id:'r1',n:'Romberg · occhi aperti',s:'OA',ec:0,f:1},{id:'r2',n:'Romberg · occhi chiusi',s:'OC',ec:1,f:1.5}]},
+ tandem:{name:'Romberg sensibilizzato',dur:30,desc:'Tandem (tallone-punta), occhi aperti poi chiusi.',conds:[
+  {id:'t1',n:'Tandem · occhi aperti',s:'Tandem OA',ec:0,f:1.8},{id:'t2',n:'Tandem · occhi chiusi',s:'Tandem OC',ec:1,f:2.7}]},
+ slst:{name:'Monopodalico',dur:30,desc:'Appoggio su un piede, destro e sinistro, occhi aperti e chiusi.',conds:[
+  {id:'s1',n:'Destro · occhi aperti',s:'Dx OA',ec:0,f:2},{id:'s2',n:'Sinistro · occhi aperti',s:'Sx OA',ec:0,f:2.1},
+  {id:'s3',n:'Destro · occhi chiusi',s:'Dx OC',ec:1,f:3.4},{id:'s4',n:'Sinistro · occhi chiusi',s:'Sx OC',ec:1,f:3.6}]},
+ fukuda:{name:'Fukuda (stepping)',dur:30,yaw:1,bpm:100,desc:'50 passi sul posto a occhi chiusi a metronomo. Misura la rotazione sul piano orizzontale.',conds:[
+  {id:'f1',n:'Marcia sul posto · occhi chiusi · 50 passi',s:'Fukuda',ec:1,f:1}]},
+};
+const SYS={somato:'Somatosensoriale',visivo:'Visivo',vest:'Vestibolare',integr:'Integrazione'};
+const EXS=[
+ {id:'e1',sys:'somato',n:'Romberg a occhi chiusi',how:'Piedi uniti su superficie stabile, a piedi nudi. Occhi chiusi, respiro calmo, peso distribuito su tutto il piede.',w:30,r:20,sets:3,prog:['Semi-tandem → tandem','Braccia incrociate al petto','Rotazioni lente del capo']},
+ {id:'e2',sys:'somato',n:'Tandem a occhi chiusi',how:'Tallone davanti a punta, superficie stabile. Occhi chiusi, vicino a una parete per sicurezza.',w:20,r:20,sets:3,prog:['Alternare il piede anteriore','Aggiungere compito cognitivo']},
+ {id:'e3',sys:'somato',n:'Monopodalico a occhi chiusi',how:'Un piede, ginocchio morbido. Occhi chiusi. Alternare i lati.',w:15,r:15,sets:4,prog:['Da 10 a 30 s','Superficie morbida']},
+ {id:'e4',sys:'somato',n:'Trasferimenti di carico a piedi nudi',how:'Oscillazioni lente avanti-indietro e laterali dalle caviglie, occhi chiusi. Percepire la pressione sotto i piedi.',w:40,r:20,sets:3,prog:['Ampiezza maggiore','Su una gamba']},
+ {id:'e5',sys:'visivo',n:'Foam con fissazione',how:'Piedi uniti su foam, occhi su un punto a parete all’altezza degli occhi.',w:30,r:20,sets:3,prog:['Semi-tandem su foam','Tandem su foam']},
+ {id:'e6',sys:'visivo',n:'Foam + inseguimento visivo',how:'Su foam, segui con gli occhi un bersaglio che si muove orizzontalmente (penna o app di pursuit). Testa ferma.',w:30,r:20,sets:3,prog:['Traiettoria verticale e diagonale','Velocità maggiore']},
+ {id:'e7',sys:'visivo',n:'Foam + saccadi',how:'Su foam, sposta lo sguardo rapidamente tra due bersagli a parete distanti 30–40 cm.',w:30,r:20,sets:3,prog:['Bersagli più distanti','Tandem su foam']},
+ {id:'e8',sys:'vest',n:'Foam a occhi chiusi',how:'Piedi uniti su foam, occhi chiusi, con operatore vicino o davanti a un angolo.',w:20,r:20,sets:3,prog:['Piedi alla larghezza del bacino → uniti','Semi-tandem']},
+ {id:'e9',sys:'vest',n:'VOR ×1 in stazione eretta',how:'Guarda una lettera a parete e ruota il capo a destra-sinistra a ritmo del metronomo, lettera sempre nitida.',w:30,r:20,sets:3,bpm:80,prog:['Piedi uniti → tandem → foam','Movimento verticale','Metronomo più veloce']},
+ {id:'e10',sys:'vest',n:'Cammino con rotazioni del capo',how:'Cammina in linea retta girando il capo a destra e sinistra ogni 2 passi.',w:40,r:20,sets:3,prog:['Rotazioni verticali','Su linea (tandem walk)']},
+ {id:'e11',sys:'vest',n:'Marcia sul posto a occhi chiusi',how:'Marcia sul posto a occhi chiusi, ginocchia alte, braccia avanti. Correggi la rotazione a occhi aperti tra le serie.',w:30,r:20,sets:3,bpm:100,prog:['Da 30 a 60 s','Su foam']},
+ {id:'e12',sys:'integr',n:'Tandem walk con doppio compito',how:'Cammino tallone-punta contando all’indietro di 3 da 100.',w:40,r:20,sets:3,prog:['Occhi chiusi per 3 passi','Rotazioni del capo']},
+ {id:'e13',sys:'integr',n:'Monopodalico con lanci di palla',how:'Su un piede, passaggi di palla con l’operatore o contro il muro.',w:30,r:20,sets:3,prog:['Lanci laterali','Su foam']},
+ {id:'e14',sys:'integr',n:'Reformer · split stance sul carrello',how:'Un piede sulla piattaforma fissa, l’altro sul carrello con molle leggere. Mantieni il bacino neutro mentre il carrello scorre lentamente.',w:30,r:20,sets:3,prog:['Molle più leggere','Occhi chiusi per brevi tratti','Rotazioni del capo']},
+];
+
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+let DB=store.get('ba:db');
+const uid=()=>Math.random().toString(36).slice(2,10);
+const save=()=>store.set('ba:db',DB);
+
+/* ================= math ================= */
+function metrics(S,dur){
+  const n=S.length; if(n<5) return null;
+  let mx=0,my=0; S.forEach(s=>{mx+=s[1];my+=s[2]}); mx/=n; my/=n;
+  let sxx=0,syy=0,sxy=0,path=0,g2=0,yaw=0;
+  for(let i=0;i<n;i++){const x=S[i][1]-mx,y=S[i][2]-my; sxx+=x*x; syy+=y*y; sxy+=x*y; g2+=S[i][3]*S[i][3];
+    if(i){path+=Math.hypot(S[i][1]-S[i-1][1],S[i][2]-S[i-1][2]); yaw+=S[i][4]*(S[i][0]-S[i-1][0]);}}
+  sxx/=n; syy/=n; sxy/=n;
+  const area=Math.PI*5.991*Math.sqrt(Math.max(0,sxx*syy-sxy*sxy));
+  // downsampled centered trace ~20 Hz
+  const tr=[]; let lt=-1;
+  S.forEach(s=>{ if(s[0]-lt>=.05){ tr.push([+(s[1]-mx).toFixed(3),+(s[2]-my).toFixed(3)]); lt=s[0]; }});
+  return {rms:+Math.sqrt(sxx+syy).toFixed(3),ml:+Math.sqrt(sxx).toFixed(3),ap:+Math.sqrt(syy).toFixed(3),area:+area.toFixed(3),vel:+(path/Math.max(dur,.1)).toFixed(3),gyro:+Math.sqrt(g2/n).toFixed(2),yaw:+yaw.toFixed(1),sxx,syy,sxy,tr};
+}
+const fmt=(v,d=2)=>v==null||isNaN(v)?'—':(+v).toFixed(d);
+function pct(a,b){ if(!a) return null; return (b-a)/a*100; }
+function nice(v){ const e=Math.pow(10,Math.floor(Math.log10(v))); const m=v/e; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*e; }
+
+/* ================= simulation (examples + demo mode) ================= */
+function simTrial(f,dur,yawDrift){
+  const S=[]; let x=0,y=0,vx=0,vy=0; const dt=1/50, th=1.3, sg=.32*f;
+  const gn=()=>{let u=0;for(let i=0;i<6;i++)u+=Math.random();return (u-3)*1.41;};
+  for(let t=0;t<=dur;t+=dt){ const nx=x+(-th*x)*dt+sg*Math.sqrt(dt)*gn(), ny=y+(-th*y)*dt+sg*1.25*Math.sqrt(dt)*gn();
+    vx=(nx-x)/dt; vy=(ny-y)/dt; x=nx; y=ny;
+    S.push([t,x,y,Math.hypot(vx,vy)*.6+Math.random()*.4,(yawDrift||0)+gn()*3]); }
+  return S;
+}
+function seed(){
+  const pid=uid(); DB={patients:[{id:pid,name:'Esempio (dati simulati)'}],sessions:[]};
+  const mk=(label,daysAgo,scale)=>{ const P=PROTOS.mctsib; const d=new Date(Date.now()-daysAgo*864e5);
+    DB.sessions.push({id:uid(),pid,date:d.toISOString(),label,proto:'mctsib',example:1,trials:P.conds.map(c=>{
+      const f=c.id==='c4'?c.f*scale*1.25:c.f*(c.id==='c1'?1:scale); const S=simTrial(f,P.dur); return {cond:c.id,time:P.dur,full:1,m:metrics(S,P.dur)};})}); };
+  mk('Pre',21,1.35); mk('Post',0,.95); save();
+}
+if(!DB||!DB.patients) seed();
+let pid=(store.get('ba:pid')&&DB.patients.find(p=>p.id===store.get('ba:pid')))?store.get('ba:pid'):DB.patients[0]?.id;
+
+/* ================= sensors ================= */
+const SEN={state:'unknown',g:null,cur:{ml:0,ap:0,gyro:0,yaw:0},count:0,sim:false,simT:null};
+function onMotion(e){
+  const a=e.accelerationIncludingGravity; if(!a||a.x==null) return;
+  if(!SEN.g) SEN.g=[a.x,a.y,a.z]; else { const k=.25; SEN.g[0]+=k*(a.x-SEN.g[0]); SEN.g[1]+=k*(a.y-SEN.g[1]); SEN.g[2]+=k*(a.z-SEN.g[2]); }
+  const [gx,gy,gz]=SEN.g, G=Math.hypot(gx,gy,gz)||9.81, R=180/Math.PI;
+  const r=e.rotationRate||{}; const wx=r.beta||0, wy=r.gamma||0, wz=r.alpha||0;
+  SEN.cur={ml:Math.asin(Math.max(-1,Math.min(1,gx/G)))*R, ap:Math.asin(Math.max(-1,Math.min(1,gz/G)))*R, gyro:Math.hypot(wx,wy,wz), yaw:(wx*gx+wy*gy+wz*gz)/G};
+  SEN.count++;
+}
+async function enableSensor(){
+  try{
+    if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
+      const p=await DeviceMotionEvent.requestPermission(); if(p!=='granted'){ SEN.state='denied'; return false; }
+    }
+    if(typeof DeviceMotionEvent==='undefined'){ SEN.state='none'; return false; }
+    window.removeEventListener('devicemotion',onMotion); window.addEventListener('devicemotion',onMotion);
+    const c0=SEN.count; await new Promise(r=>setTimeout(r,1200));
+    SEN.state = SEN.count>c0+5 ? 'ok' : 'none'; return SEN.state==='ok';
+  }catch(e){ SEN.state='none'; return false; }
+}
+// simulation feed
+let simState=null;
+function startSim(f,yawDrift){ stopSim(); simState={x:0,y:0,f,yd:yawDrift||0}; const dt=.02,th=1.3;
+  const gn=()=>{let u=0;for(let i=0;i<6;i++)u+=Math.random();return (u-3)*1.41;};
+  SEN.simT=setInterval(()=>{const s=simState,sg=.32*s.f; const nx=s.x+(-th*s.x)*dt+sg*Math.sqrt(dt)*gn(), ny=s.y+(-th*s.y)*dt+sg*1.25*Math.sqrt(dt)*gn();
+    const v=Math.hypot(nx-s.x,ny-s.y)/dt; s.x=nx; s.y=ny; SEN.cur={ml:nx+2,ap:ny-1,gyro:v*.6+Math.random()*.4,yaw:s.yd+gn()*3};},20); }
+function stopSim(){ if(SEN.simT) clearInterval(SEN.simT); SEN.simT=null; }
+
+/* ================= audio / voice ================= */
+let AC=null;
+function initAudio(){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); AC.resume&&AC.resume(); }catch(e){AC=null} }
+function beep(f=880,d=.09,v=.35){ if(!AC) return; try{ const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime; o.frequency.value=f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(v,t+.006); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g).connect(AC.destination); o.start(t); o.stop(t+d+.02);}catch(e){} }
+let VOICE=store.get('ba:voice')??true;
+function say(t){ if(!VOICE) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='it-IT'; u.rate=1.02; speechSynthesis.speak(u);}catch(e){} }
+let wake=null; function lockScreen(){ try{ navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){} }
+function unlockScreen(){ try{ wake&&wake.release(); wake=null; }catch(e){} }
+
+/* ================= charts ================= */
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function ellipsePath(m,sc,c){
+  const {sxx,syy,sxy}=m; const a=(sxx+syy)/2, b=Math.sqrt(((sxx-syy)/2)**2+sxy*sxy);
+  const l1=a+b,l2=Math.max(0,a-b), th=.5*Math.atan2(2*sxy,sxx-syy);
+  const r1=Math.sqrt(5.991*l1)*sc, r2=Math.sqrt(5.991*l2)*sc;
+  return `<ellipse cx="${c}" cy="${c}" rx="${r1.toFixed(1)}" ry="${r2.toFixed(1)}" transform="rotate(${(-th*180/Math.PI).toFixed(1)} ${c} ${c})" fill="none" stroke-width="1.5" stroke-dasharray="4 3"`;
+}
+function statSVG(items){ // items: [{m,color,label}]
+  const Z=220,c=Z/2,pad=22; let mx=.2;
+  items.forEach(it=>it.m&&it.m.tr.forEach(p=>{mx=Math.max(mx,Math.abs(p[0]),Math.abs(p[1]))}));
+  const lim=nice(mx*1.05), sc=(c-pad)/lim;
+  let s=`<svg viewBox="0 0 ${Z} ${Z}" role="img" aria-label="Statokinesigramma ML/AP">`;
+  s+=`<rect x="${pad}" y="${pad}" width="${Z-2*pad}" height="${Z-2*pad}" fill="none" stroke="var(--grid)"/>`;
+  s+=`<line x1="${pad}" y1="${c}" x2="${Z-pad}" y2="${c}" stroke="var(--grid)"/><line x1="${c}" y1="${pad}" x2="${c}" y2="${Z-pad}" stroke="var(--grid)"/>`;
+  s+=`<text x="${Z-pad}" y="${c-4}" font-size="9" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">+${lim}°</text>`;
+  s+=`<text x="${pad+2}" y="${c-4}" font-size="9" fill="var(--muted)" font-family="var(--mono)">−${lim}°</text>`;
+  s+=`<text x="${c+4}" y="${pad+10}" font-size="9" fill="var(--muted)" font-family="var(--mono)">AP</text>`;
+  s+=`<text x="${Z-pad}" y="${c+12}" font-size="9" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">ML</text>`;
+  items.forEach(it=>{ if(!it.m) return; const pts=it.m.tr.map(p=>`${(c+p[0]*sc).toFixed(1)},${(c-p[1]*sc).toFixed(1)}`).join(' ');
+    s+=`<polyline points="${pts}" fill="none" stroke="${it.color}" stroke-width="1.1" stroke-opacity=".75" stroke-linejoin="round"/>`;
+    s+=ellipsePath(it.m,sc,c)+` stroke="${it.color}"/>`; });
+  return s+`</svg>`;
+}
+function barsSVG(groups,series,key,unit){ // groups:[{label, vals:[a,b]}]
+  const W=Math.max(320,groups.length*110), H=230, L=40, B=48, T=16, R=8, ih=H-B-T;
+  let mx=0; groups.forEach(g=>g.vals.forEach(v=>{if(v!=null) mx=Math.max(mx,v)})); const top=nice(mx*1.1||1);
+  const gw=(W-L-R)/groups.length, bw=Math.min(28,(gw-24)/series.length);
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W,600)}px" role="img" aria-label="Confronto ${key}">`;
+  for(let i=0;i<=4;i++){const v=top*i/4,y=T+ih-ih*i/4; s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${L-6}" y="${y+3}" font-size="10" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">${+v.toFixed(2)}</text>`;}
+  groups.forEach((g,i)=>{ const gx=L+gw*i+gw/2, x0=gx-(bw*series.length+2*(series.length-1))/2;
+    g.vals.forEach((v,j)=>{ if(v==null) return; const h=ih*v/top, x=x0+j*(bw+2), y=T+ih-h;
+      s+=`<path d="M${x} ${T+ih} V${y+Math.min(4,h)} Q${x} ${y} ${x+Math.min(4,bw/2)} ${y} H${x+bw-Math.min(4,bw/2)} Q${x+bw} ${y} ${x+bw} ${y+Math.min(4,h)} V${T+ih} Z" fill="${series[j].color}"><title>${series[j].label} · ${g.label}: ${fmt(v)} ${unit}</title></path>`;
+      s+=`<text x="${x+bw/2}" y="${y-4}" font-size="9.5" text-anchor="middle" fill="var(--muted)" font-family="var(--mono)">${fmt(v,v<10?2:1)}</text>`; });
+    s+=`<text x="${gx}" y="${H-B+16}" font-size="11" text-anchor="middle" fill="var(--text)">${g.label}</text>`; });
+  s+=`<line x1="${L}" x2="${W-R}" y1="${T+ih}" y2="${T+ih}" stroke="var(--muted)" stroke-opacity=".5"/>`;
+  return s+`</svg>`;
+}
+
+/* ================= UI helpers ================= */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dstr=iso=>new Date(iso).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'});
+const patient=()=>DB.patients.find(p=>p.id===pid);
+const sessOf=()=>DB.sessions.filter(s=>s.pid===pid).sort((a,b)=>b.date.localeCompare(a.date));
+function renderPt(){ $('ptSel').innerHTML=DB.patients.map(p=>`<option value="${p.id}" ${p.id===pid?'selected':''}>${esc(p.name)}</option>`).join('') || '<option>—</option>'; }
+$('ptSel').onchange=e=>{pid=e.target.value; store.set('ba:pid',pid); renderAll();};
+$('ptNewBtn').onclick=()=>{$('ptNew').hidden=false; $('ptName').focus();};
+$('ptCancel').onclick=()=>{$('ptNew').hidden=true;};
+$('ptAdd').onclick=()=>{ const n=$('ptName').value.trim(); if(!n){ $('ptName').focus(); return; } const p={id:uid(),name:n}; DB.patients.push(p); pid=p.id; store.set('ba:pid',pid); save(); $('ptName').value=''; $('ptNew').hidden=true; renderAll(); };
+let VIEW='test';
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{VIEW=b.dataset.v; document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); ['test','hist','cmp','ex'].forEach(v=>$('v-'+v).hidden=v!==VIEW); renderAll(); window.scrollTo(0,0);});
+function segHTML(id,opts,val){ return `<div class="seg" id="${id}" role="group">${opts.map(([v,l])=>`<button class="chip" type="button" data-v="${v}" aria-pressed="${String(v)===String(val)}">${l}</button>`).join('')}</div>`; }
+function bindSeg(id,cb){ const el=$(id); if(!el) return; el.onclick=e=>{const b=e.target.closest('button'); if(!b) return; el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); cb(b.dataset.v);}; }
+
+/* ================= VIEW: test setup ================= */
+const CFG=Object.assign({proto:'mctsib',label:'Pre',pre:5,src:'sensor',durOv:0},store.get('ba:cfg')||{});
+function renderTest(){
+  const P=PROTOS[CFG.proto];
+  const st={unknown:['','Sensore non ancora verificato'],ok:['ok','Sensore di movimento attivo'],denied:['no','Permesso ai sensori negato'],none:['no','Sensore non disponibile in questa vista']}[SEN.state];
+  $('v-test').innerHTML=`
+  <h2>Nuova valutazione</h2><p class="muted" style="margin:0">Paziente: <b>${esc(patient()?.name||'—')}</b></p>
+  <div class="block"><div class="lab" style="font-weight:600;margin-bottom:8px">Protocollo</div>
+    <div class="grid">${Object.entries(PROTOS).map(([k,p])=>`<button class="opt" type="button" data-p="${k}" aria-pressed="${k===CFG.proto}"><b>${p.name}</b><small>${p.desc}</small></button>`).join('')}</div></div>
+  <div class="block">
+    <div class="field"><span class="lab">Etichetta sessione</span>${segHTML('sLabel',[['Pre','Pre'],['Post','Post'],['Controllo','Controllo'],['Follow-up','Follow-up']],CFG.label)}</div>
+    <div class="field"><span class="lab">Durata per condizione</span>${segHTML('sDur',[[0,`Standard (${P.dur} s)`],[10,'10 s'],[20,'20 s'],[30,'30 s'],[60,'60 s']],CFG.durOv)}</div>
+    <div class="field"><span class="lab">Tempo per posizionarsi</span>${segHTML('sPre',[[3,'3 s'],[5,'5 s'],[10,'10 s']],CFG.pre)}</div>
+    <div class="field"><span class="lab">Guida vocale</span>${segHTML('sVoice',[['1','Attiva'],['0','Solo segnali acustici']],VOICE?'1':'0')}</div>
+    <div class="field"><span class="lab">Sorgente dati</span>${segHTML('sSrc',[['sensor','Sensori del telefono'],['sim','Simulazione (prova)']],CFG.src)}
+      <div class="row" style="margin-top:4px"><span class="status ${st[0]}"><span class="dot"></span>${st[1]}</span><button class="btn ghost small" id="sTest" type="button">Verifica sensore</button></div>
+      ${SEN.state==='none'||SEN.state==='denied'?`<p class="hint">Alcune viste integrate bloccano giroscopio e accelerometro. Apri l'app come pagina autonoma in Safari/Chrome (file HTML pubblicato su un indirizzo https) per le misure reali. Nel frattempo puoi provare il flusso con la simulazione.</p>`:''}
+    </div>
+  </div>
+  <div class="block callout">
+    <b>Posizionamento</b> — telefono in verticale, appoggiato allo <b>sterno</b> e tenuto con entrambe le mani, schermo rivolto verso l'esaminatore. Stessa posizione in tutte le prove, stesse calzature (o piedi nudi), stesso foam.
+  </div>
+  <div class="row" style="margin-top:16px"><button class="btn primary" id="startSess" type="button" style="flex:1">Inizia ${P.name}</button></div>`;
+  $('v-test').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{CFG.proto=b.dataset.p; store.set('ba:cfg',CFG); renderTest();});
+  bindSeg('sLabel',v=>{CFG.label=v; store.set('ba:cfg',CFG);});
+  bindSeg('sDur',v=>{CFG.durOv=+v; store.set('ba:cfg',CFG);});
+  bindSeg('sPre',v=>{CFG.pre=+v; store.set('ba:cfg',CFG);});
+  bindSeg('sVoice',v=>{VOICE=v==='1'; store.set('ba:voice',VOICE);});
+  bindSeg('sSrc',v=>{CFG.src=v; store.set('ba:cfg',CFG);});
+  $('sTest').onclick=async()=>{ await enableSensor(); renderTest(); };
+  $('startSess').onclick=async()=>{
+    if(!patient()){ $('ptNew').hidden=false; $('ptName').focus(); return; }
+    initAudio();
+    if(CFG.src==='sensor'){ const ok=await enableSensor(); if(!ok){ renderTest(); return; } }
+    startSession();
+  };
+}
+
+/* ================= RUN (test execution) ================= */
+let RUN=null, recT=null, rafId=0;
+function startSession(){
+  const P=PROTOS[CFG.proto];
+  RUN={P,key:CFG.proto,dur:CFG.durOv||P.dur,i:0,phase:'ready',trials:[],sess:{id:uid(),pid,date:new Date().toISOString(),label:CFG.label,proto:CFG.proto,sim:CFG.src==='sim'?1:0,trials:[]}};
+  $('run').hidden=false; lockScreen(); runRender();
+}
+function endRun(){ stopRec(); stopSim(); $('run').hidden=true; unlockScreen(); RUN=null; renderAll(); }
+function stopRec(){ clearInterval(recT); recT=null; cancelAnimationFrame(rafId); }
+function runRender(){
+  const R=RUN, c=R.P.conds[R.i], n=R.P.conds.length, el=$('runIn');
+  const head=`<div class="ov-top"><span class="eyebrow">${R.P.name} · condizione ${R.i+1}/${n}${R.sess.sim?' · simulazione':''}</span><button class="btn ghost small" id="rQuit" type="button">Chiudi</button></div>`;
+  if(R.phase==='ready'){
+    el.innerHTML=head+`<div class="cond">${c.n}</div>
+      <p class="muted" style="margin:0">${c.ec?'Occhi <b>chiusi</b> alla partenza.':'Occhi aperti, sguardo su un punto a parete.'} Durata ${R.dur} s${R.P.yaw?` · metronomo ${R.P.bpm} bpm`:''}. Telefono sullo sterno.</p>
+      ${R.P.errors?`<p class="hint">Errori BESS: mani via dai fianchi, apertura occhi, passo/inciampo/caduta, abduzione/flessione anca > 30°, sollevamento avampiede o tallone, fuori posizione > 5 s.</p>`:''}
+      <div class="row" style="margin-top:auto"><button class="btn primary" id="rGo" type="button" style="flex:1">Avvia (${CFG.pre} s per posizionarsi)</button></div>
+      ${R.trials.length?`<button class="btn ghost small" id="rSaveNow" type="button">Termina e salva le ${R.trials.length} condizioni completate</button>`:''}`;
+    $('rGo').onclick=()=>countdown();
+    if($('rSaveNow')) $('rSaveNow').onclick=finishSession;
+  }
+  if(R.phase==='count'||R.phase==='rec'){
+    el.innerHTML=head+`<div class="cond" style="font-size:22px">${c.n}</div>
+      <div class="big" id="rBig">${CFG.pre}</div><div class="muted" id="rSub" style="text-align:center">Posizionati</div>
+      <canvas id="live" width="600" height="600"></canvas>
+      <div class="row"><button class="btn ghost" id="rLoss" type="button" style="flex:1">${R.P.yaw?'Stop':'Perdita di equilibrio · stop'}</button><button class="btn ghost small" id="rAbort" type="button">Annulla prova</button></div>`;
+    $('rLoss').onclick=()=>{ if(R.phase==='rec') finishTrial(false); };
+    $('rAbort').onclick=()=>{ stopRec(); stopSim(); R.phase='ready'; say('Prova annullata'); runRender(); };
+  }
+  if(R.phase==='result'){
+    const t=R.cur, m=t.m;
+    el.innerHTML=head+`<div class="cond" style="font-size:22px">${c.n}</div>
+      ${!t.full?`<div class="callout">Prova interrotta a <b>${fmt(t.time,1)} s</b> su ${R.dur} s.</div>`:''}
+      ${m?`<div class="plot">${statSVG([{m,color:'var(--dopo)'}])}</div>
+      <div class="metrics">${R.P.yaw?`<div><b>${fmt(Math.abs(m.yaw),0)}°</b><span>Rotazione ${m.yaw>=0?'(verso sx)':'(verso dx)'}</span></div>`:''}
+        <div><b>${fmt(m.rms)}°</b><span>Oscillazione RMS</span></div><div><b>${fmt(m.area)}</b><span>Area ellisse 95% (°²)</span></div>
+        <div><b>${fmt(m.ml)}° / ${fmt(m.ap)}°</b><span>RMS ML / AP</span></div><div><b>${fmt(m.vel)}</b><span>Velocità (°/s)</span></div><div><b>${fmt(m.gyro,1)}</b><span>Giroscopio RMS (°/s)</span></div></div>`:'<p>Dati insufficienti.</p>'}
+      ${R.P.errors?`<div class="block" style="margin-top:0"><div class="lab" style="font-weight:600">Errori BESS</div><div class="stepper"><button class="btn ghost" id="eM" type="button" aria-label="Meno">−</button><output id="eV">${t.errors||0}</output><button class="btn ghost" id="eP" type="button" aria-label="Più">+</button><span class="muted">max 10</span></div></div>`:''}
+      <div class="row"><button class="btn ghost" id="rRedo" type="button">Ripeti</button><button class="btn primary" id="rNext" type="button" style="flex:1">${R.i<R.P.conds.length-1?'Avanti':'Salva sessione'}</button></div>`;
+    if(R.P.errors){ const upd=d=>{t.errors=Math.max(0,Math.min(10,(t.errors||0)+d)); $('eV').textContent=t.errors;}; $('eM').onclick=()=>upd(-1); $('eP').onclick=()=>upd(1); if(!t.full) t.errors=Math.max(t.errors||0,10); $('eV').textContent=t.errors||0; }
+    $('rRedo').onclick=()=>{R.phase='ready'; runRender();};
+    $('rNext').onclick=()=>{ R.trials.push(t); if(R.i<R.P.conds.length-1){R.i++; R.phase='ready'; runRender();} else finishSession(); };
+  }
+  if(R.phase==='done'){
+    const s=R.sess; el.innerHTML=head+`<div class="cond">Sessione salvata</div><p class="muted" style="margin:0">${esc(patient()?.name)} · ${s.label} · ${dstr(s.date)}</p>`+sessionSummaryHTML(s)+
+      `<div class="row" style="margin-top:8px"><button class="btn ghost" id="rHist" type="button">Storico</button><button class="btn primary" id="rCmp" type="button" style="flex:1">Confronta prima / dopo</button></div>`;
+    $('rHist').onclick=()=>{endRun(); document.querySelector('[data-v=hist]').click();};
+    $('rCmp').onclick=()=>{CMP.b=s.id; CMP.a=null; endRun(); document.querySelector('[data-v=cmp]').click();};
+    bindExLinks(el);
+  }
+  $('rQuit').onclick=()=>{ if(R.phase==='done'||(!R.trials.length&&R.phase!=='rec')) return endRun();
+    const q=$('rQuit'); if(q.dataset.c){ endRun(); return; } q.dataset.c=1; q.textContent='Esci senza salvare?'; setTimeout(()=>{ if(q.isConnected){ q.textContent='Chiudi'; delete q.dataset.c; }},3000); };
+}
+function countdown(){
+  const R=RUN, c=R.P.conds[R.i]; R.phase='count'; runRender();
+  if(CFG.src==='sim') startSim(c.f*(RUN.key==='fukuda'?1:1), R.P.yaw?(Math.random()<.5?-1:1)*1.3:0);
+  say(`${c.n}. Posizionati.`);
+  let left=CFG.pre; const t0=performance.now();
+  const tick=()=>{ if(!RUN||RUN.phase!=='count') return; const rem=CFG.pre-(performance.now()-t0)/1000; const k=Math.ceil(rem);
+    if(k!==left){ left=k; if(k>0&&k<=3) beep(660,.08); }
+    $('rBig').textContent=Math.max(0,k); drawLive(false);
+    if(rem<=0){ startRec(); return; } rafId=requestAnimationFrame(tick); };
+  rafId=requestAnimationFrame(tick);
+}
+let S=[],trail=[];
+function startRec(){
+  const R=RUN, c=R.P.conds[R.i]; R.phase='rec'; S=[]; trail=[]; beep(1175,.22,.45); say(c.ec?'Occhi chiusi. Via.':'Via.');
+  $('rSub').textContent='Registrazione'; const t0=performance.now(); let lastBeat=-1;
+  recT=setInterval(()=>{ const t=(performance.now()-t0)/1000, v=SEN.cur; S.push([t,v.ml,v.ap,v.gyro,v.yaw]);
+    if(R.P.yaw){ const b=Math.floor(t*R.P.bpm/60); if(b!==lastBeat){lastBeat=b; beep(b%10===0?1000:760,.05,.25);} }
+    if(t>=R.dur) finishTrial(true); },20);
+  const loop=()=>{ if(!RUN||RUN.phase!=='rec') return; const t=S.length?S[S.length-1][0]:0; $('rBig').textContent=Math.max(0,Math.ceil(R.dur-t)); drawLive(true); rafId=requestAnimationFrame(loop); };
+  rafId=requestAnimationFrame(loop);
+}
+function finishTrial(full){
+  const R=RUN; stopRec(); stopSim(); const c=R.P.conds[R.i];
+  const time=S.length?S[S.length-1][0]:0; beep(880,.12); setTimeout(()=>beep(880,.12),180); say(full?'Stop. Puoi aprire gli occhi.':'Prova interrotta.');
+  R.cur={cond:c.id,time:+time.toFixed(1),full:full?1:0,m:metrics(S,time)}; R.phase='result'; runRender();
+}
+function finishSession(){ const R=RUN; R.sess.trials=R.trials; DB.sessions.push(R.sess); save(); R.phase='done'; runRender(); }
+function drawLive(rec){
+  const cv=$('live'); if(!cv) return; const x=cv.getContext('2d'), Z=600, c=Z/2, v=SEN.cur;
+  if(!drawLive.base||!trail.length) drawLive.base=[v.ml,v.ap]; else { drawLive.base[0]+=.01*(v.ml-drawLive.base[0]); drawLive.base[1]+=.01*(v.ap-drawLive.base[1]); }
+  const px=(v.ml-drawLive.base[0]), py=(v.ap-drawLive.base[1]); trail.push([px,py]); if(trail.length>150) trail.shift();
+  const lim=2, sc=(c-30)/lim;
+  x.fillStyle=css('--panel'); x.fillRect(0,0,Z,Z); x.strokeStyle=css('--grid'); x.lineWidth=2;
+  [1,2].forEach(r=>{x.beginPath(); x.arc(c,c,r*sc,0,Math.PI*2); x.stroke();});
+  x.beginPath(); x.moveTo(30,c); x.lineTo(Z-30,c); x.moveTo(c,30); x.lineTo(c,Z-30); x.stroke();
+  x.fillStyle=css('--muted'); x.font='22px JetBrains Mono, monospace'; x.fillText('1°',c+sc+6,c-8); x.fillText('2°',c+2*sc-34,c-8);
+  x.strokeStyle=css('--dopo'); x.globalAlpha=.6; x.lineWidth=3; x.beginPath(); trail.forEach((p,i)=>{const X=c+Math.max(-lim,Math.min(lim,p[0]))*sc,Y=c-Math.max(-lim,Math.min(lim,p[1]))*sc; i?x.lineTo(X,Y):x.moveTo(X,Y);}); x.stroke(); x.globalAlpha=1;
+  x.fillStyle=rec?css('--dopo'):css('--muted'); x.beginPath(); x.arc(c+Math.max(-lim,Math.min(lim,px))*sc,c-Math.max(-lim,Math.min(lim,py))*sc,14,0,Math.PI*2); x.fill();
+}
+
+/* ================= session summary + suggestions ================= */
+function trialOf(s,cid){ return s.trials.find(t=>t.cond===cid); }
+function analysis(s){
+  const P=PROTOS[s.proto], out={lines:[],sys:[]}; const r=cid=>trialOf(s,cid)?.m?.rms;
+  if(s.proto==='mctsib'&&r('c1')){
+    const b=r('c1'), q=[['c2','somato','C2/C1 · senza vista','valori alti: minore uso dell’informazione somatosensoriale (dipendenza visiva)'],['c3','visivo','C3/C1 · superficie instabile','valori alti: minore uso dell’informazione visiva'],['c4','vest','C4/C1 · foam occhi chiusi','valori alti: minore uso dell’informazione vestibolare']];
+    const rows=q.filter(([c])=>r(c)).map(([c,sys,l,h])=>({sys,l,h,v:r(c)/b}));
+    out.ratios=rows; const worst=[...rows].sort((a,b)=>b.v/(b.sys==='vest'?1.6:1)-a.v/(a.sys==='vest'?1.6:1))[0]; if(worst) out.sys=[worst.sys,'integr'];
+  } else if((s.proto==='romberg'||s.proto==='tandem')){
+    const [a,b]=P.conds.map(c=>r(c.id)); if(a&&b){ out.lines.push(`Quoziente di Romberg (RMS OC/OA): <b>${fmt(b/a)}</b>`); out.sys=b/a>1.8?['somato','vest']:['integr']; }
+  } else if(s.proto==='slst'){
+    const g=cid=>r(cid); if(g('s1')&&g('s2')){ const asym=Math.abs(g('s1')-g('s2'))/Math.max(g('s1'),g('s2'))*100; out.lines.push(`Asimmetria Dx/Sx a occhi aperti: <b>${fmt(asym,0)}%</b>`);}
+    out.sys=['somato','integr'];
+  } else if(s.proto==='bess'){
+    const e=s.trials.reduce((a,t)=>a+(t.errors||0),0), ef=s.trials.filter(t=>['b4','b5','b6'].includes(t.cond)).reduce((a,t)=>a+(t.errors||0),0);
+    out.lines.push(`Errori totali BESS: <b>${e}</b> (stabile ${e-ef} · foam ${ef})`); out.sys=ef>e-ef+2?['vest','visivo']:['somato','integr'];
+  } else if(s.proto==='fukuda'){
+    const y=trialOf(s,'f1')?.m?.yaw; if(y!=null){ out.lines.push(`Rotazione: <b>${fmt(Math.abs(y),0)}°</b> — oltre 45° è considerato indicativo di asimmetria vestibolare.`); out.sys=Math.abs(y)>45?['vest']:['integr']; }
+  }
+  return out;
+}
+function sessionSummaryHTML(s){
+  const P=PROTOS[s.proto], A=analysis(s);
+  let h=`<div class="tbl"><table><thead><tr><th>Condizione</th><th>RMS °</th><th>Area °²</th><th>Vel °/s</th>${P.errors?'<th>Errori</th>':''}${P.yaw?'<th>Rotaz. °</th>':''}<th>Tempo</th></tr></thead><tbody>`+
+    P.conds.map(c=>{const t=trialOf(s,c.id); if(!t) return ''; const m=t.m||{};
+      return `<tr><td>${c.s}</td><td class="mono">${fmt(m.rms)}</td><td class="mono">${fmt(m.area)}</td><td class="mono">${fmt(m.vel)}</td>${P.errors?`<td class="mono">${t.errors??0}</td>`:''}${P.yaw?`<td class="mono">${fmt(Math.abs(m.yaw),0)}</td>`:''}<td class="mono">${t.full?'✓':fmt(t.time,1)+' s'}</td></tr>`;}).join('')+`</tbody></table></div>`;
+  if(A.ratios) h+=`<div style="margin-top:10px">${A.ratios.map(r=>`<div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:6px 0"><span>${r.l} <span class="hint" style="display:block;margin:0">${r.h}</span></span><b class="mono">${fmt(r.v)}</b></div>`).join('')}</div>`;
+  A.lines.forEach(l=>h+=`<p style="margin:8px 0 0">${l}</p>`);
+  if(A.sys.length) h+=`<div class="callout" style="margin-top:10px">Esercizi di integrazione suggeriti: ${A.sys.map(x=>`<button class="chip" type="button" data-exsys="${x}">${SYS[x]}</button>`).join(' ')}<span class="hint" style="display:block">Indicazione orientativa basata sulle condizioni con maggiore oscillazione: va integrata con la valutazione clinica.</span></div>`;
+  return h;
+}
+function bindExLinks(root){ root.querySelectorAll('[data-exsys]').forEach(b=>b.onclick=()=>{ EXF=b.dataset.exsys; if(!$('run').hidden) endRun(); document.querySelector('[data-v=ex]').click(); }); }
+
+/* ================= VIEW: history ================= */
+let OPEN=null, DEL=null;
+function renderHist(){
+  const L=sessOf();
+  $('v-hist').innerHTML=`<h2>Storico</h2><p class="muted" style="margin:0">${esc(patient()?.name||'—')} · ${L.length} sessioni</p>`+
+   (L.length?L.map(s=>{const P=PROTOS[s.proto]; return `<div class="sess"><div class="sess-h"><h3>${P.name} <span class="tag">${esc(s.label)}</span>${s.sim||s.example?' <span class="tag">simulazione</span>':''}</h3><span class="muted mono" style="font-size:12.5px">${dstr(s.date)}</span></div>
+     <div class="row" style="margin-top:6px;font-size:13px">${P.conds.map(c=>{const t=trialOf(s,c.id); return t?`<span class="muted">${c.s} <b class="mono" style="color:var(--text)">${fmt(t.m?.rms)}°</b></span>`:'';}).join('')}</div>
+     <div class="row" style="margin-top:8px"><button class="btn ghost small" data-open="${s.id}" type="button">${OPEN===s.id?'Chiudi':'Dettagli'}</button><button class="btn ghost small" data-cmpb="${s.id}" type="button">Confronta</button>
+     ${DEL===s.id?`<span class="confirm">Eliminare la sessione? <button class="btn danger small" data-delok="${s.id}" type="button">Elimina</button><button class="btn ghost small" data-delno type="button">No</button></span>`:`<button class="btn danger small" data-del="${s.id}" type="button">Elimina</button>`}</div>
+     ${OPEN===s.id?`<div style="margin-top:10px">${sessionSummaryHTML(s)}<div class="plots">${P.conds.map(c=>{const t=trialOf(s,c.id); return t&&t.m?`<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:t.m,color:'var(--dopo)'}])}</div>`:'';}).join('')}</div></div>`:''}</div>`;}).join('')
+   :`<div class="block muted">Nessuna sessione per questo paziente. Avvia una valutazione dalla scheda Valuta.</div>`)+
+   `<div class="block"><h3>Backup dei dati</h3><p class="hint">I dati restano solo su questo dispositivo e in questo browser. Copia il backup e conservalo (note, email a te stesso) per spostarlo o ripristinarlo.</p>
+     <div class="row" style="margin-top:8px"><button class="btn ghost small" id="bkCopy" type="button">Copia backup</button><button class="btn ghost small" id="bkImp" type="button">Importa backup</button><span class="muted" id="bkMsg" style="font-size:13px"></span></div>
+     <textarea id="bkTxt" hidden placeholder="Incolla qui il backup e premi Importa backup"></textarea>
+     ${DB.patients.length>0?`<div class="row" style="margin-top:12px"><button class="btn danger small" id="ptDel" type="button">Elimina paziente e sue sessioni</button></div>`:''}</div>`;
+  const v=$('v-hist');
+  v.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{OPEN=OPEN===b.dataset.open?null:b.dataset.open; renderHist();});
+  v.querySelectorAll('[data-cmpb]').forEach(b=>b.onclick=()=>{CMP.b=b.dataset.cmpb; CMP.a=null; document.querySelector('[data-v=cmp]').click();});
+  v.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{DEL=b.dataset.del; renderHist();});
+  v.querySelectorAll('[data-delno]').forEach(b=>b.onclick=()=>{DEL=null; renderHist();});
+  v.querySelectorAll('[data-delok]').forEach(b=>b.onclick=()=>{DB.sessions=DB.sessions.filter(s=>s.id!==b.dataset.delok); DEL=null; save(); renderHist();});
+  bindExLinks(v);
+  $('bkCopy').onclick=()=>{ const t=JSON.stringify(DB); const ta=$('bkTxt'); ta.hidden=false; ta.value=t;
+    navigator.clipboard?.writeText(t).then(()=>$('bkMsg').textContent='Backup copiato negli appunti').catch(()=>{ta.select(); $('bkMsg').textContent='Seleziona e copia il testo qui sotto';}) ?? (ta.select(), $('bkMsg').textContent='Seleziona e copia il testo qui sotto'); };
+  $('bkImp').onclick=()=>{ const ta=$('bkTxt'); if(ta.hidden||!ta.value.trim()){ ta.hidden=false; ta.value=''; ta.focus(); $('bkMsg').textContent='Incolla il backup, poi premi di nuovo Importa'; return; }
+    try{ const d=JSON.parse(ta.value); if(!d.patients||!d.sessions) throw 0; const ids=new Set(DB.sessions.map(s=>s.id)), pids=new Set(DB.patients.map(p=>p.id));
+      d.patients.forEach(p=>{if(!pids.has(p.id)) DB.patients.push(p)}); d.sessions.forEach(s=>{if(!ids.has(s.id)) DB.sessions.push(s)}); save(); $('bkMsg').textContent='Backup importato'; renderPt(); renderHist(); }
+    catch(e){ $('bkMsg').textContent='Testo non valido: incolla il backup completo copiato da questa app'; } };
+  if($('ptDel')) $('ptDel').onclick=e=>{ const b=e.target; if(!b.dataset.c){ b.dataset.c=1; b.textContent=`Confermi? Elimina ${patient()?.name}`; return; }
+    DB.sessions=DB.sessions.filter(s=>s.pid!==pid); DB.patients=DB.patients.filter(p=>p.id!==pid); pid=DB.patients[0]?.id; store.set('ba:pid',pid); save(); renderAll(); };
+}
+
+/* ================= VIEW: compare ================= */
+const CMP={a:null,b:null,key:'rms'};
+function renderCmp(){
+  const L=sessOf(); const v=$('v-cmp');
+  if(L.length<2){ v.innerHTML=`<h2>Prima / Dopo</h2><div class="block muted">Servono almeno due sessioni dello stesso paziente con lo stesso protocollo.</div>`; return; }
+  let B=L.find(s=>s.id===CMP.b)||L[0]; let A=L.find(s=>s.id===CMP.a&&s.id!==B.id);
+  if(!A||A.proto!==B.proto) A=L.find(s=>s.id!==B.id&&s.proto===B.proto&&s.date<=B.date)||L.find(s=>s.id!==B.id&&s.proto===B.proto);
+  CMP.b=B.id; CMP.a=A?.id;
+  if(A&&A.date>B.date){ const t=A; A=B; B=t; }
+  const opt=(sel,excl)=>L.filter(s=>s.id!==excl).map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${dstr(s.date)} · ${PROTOS[s.proto].name} · ${esc(s.label)}</option>`).join('');
+  let h=`<h2>Prima / Dopo</h2><p class="muted" style="margin:0">${esc(patient()?.name)}</p>
+   <div class="block"><div class="row"><div class="field" style="border:0;flex:1;min-width:220px"><label for="cA"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--prima);margin-right:6px"></i>Prima</label><select id="cA">${opt(A?.id,B.id)}</select></div>
+   <div class="field" style="border:0;flex:1;min-width:220px"><label for="cB"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--dopo);margin-right:6px"></i>Dopo</label><select id="cB">${opt(B.id,null)}</select></div></div></div>`;
+  if(!A||A.proto!==B.proto){ h+=`<div class="block muted">Scegli due sessioni con lo stesso protocollo (${PROTOS[B.proto].name}).</div>`; v.innerHTML=h; bindCmp(); return; }
+  const P=PROTOS[B.proto], conds=P.conds.filter(c=>trialOf(A,c.id)&&trialOf(B,c.id));
+  const K={rms:['Oscillazione RMS','°'],area:['Area ellisse 95%','°²'],vel:['Velocità','°/s']}; if(P.errors) K.err=['Errori BESS','']; if(P.yaw) K.yaw=['Rotazione','°'];
+  const val=(t,k)=>k==='err'?(t.errors??0):k==='yaw'?Math.abs(t.m?.yaw??0):t.m?.[k];
+  if(!K[CMP.key]) CMP.key='rms';
+  h+=`<div class="block"><div class="row" style="justify-content:space-between"><h3>${K[CMP.key][0]} per condizione</h3>${segHTML('cKey',Object.entries(K).map(([k,v])=>[k,v[0]]),CMP.key)}</div>
+    <div class="legend" style="margin-top:8px"><span><i style="background:var(--prima)"></i>Prima · ${dstr(A.date)}</span><span><i style="background:var(--dopo)"></i>Dopo · ${dstr(B.date)}</span></div>
+    <div class="tbl" style="margin-top:6px">${barsSVG(conds.map(c=>({label:c.s,vals:[val(trialOf(A,c.id),CMP.key),val(trialOf(B,c.id),CMP.key)]})),[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}],K[CMP.key][0],K[CMP.key][1])}</div>
+    <div class="tbl" style="margin-top:10px"><table><thead><tr><th>Condizione</th><th>Prima</th><th>Dopo</th><th>Variazione</th></tr></thead><tbody>${conds.map(c=>{const a=val(trialOf(A,c.id),CMP.key),b=val(trialOf(B,c.id),CMP.key),p=pct(a,b);
+      return `<tr><td>${c.s}</td><td class="mono">${fmt(a)}</td><td class="mono">${fmt(b)}</td><td class="mono ${p==null?'':p<0?'down':'up'}">${p==null?'—':(p>0?'+':'')+fmt(p,0)+'%'}</td></tr>`;}).join('')}</tbody></table></div>
+    <p class="hint">Valori più bassi = minore oscillazione. Variazione negativa (verde) = miglioramento.</p></div>`;
+  h+=`<div class="block"><h3>Statokinesigrammi</h3><div class="legend" style="margin-top:6px"><span><i style="background:var(--prima)"></i>Prima</span><span><i style="background:var(--dopo)"></i>Dopo</span><span class="muted">tratteggio = ellisse 95%</span></div>
+    <div class="plots">${conds.map(c=>{const a=trialOf(A,c.id),b=trialOf(B,c.id); return `<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:a.m,color:'var(--prima)'},{m:b.m,color:'var(--dopo)'}])}<div class="met mono">RMS ${fmt(a.m?.rms)} → ${fmt(b.m?.rms)}°</div></div>`;}).join('')}</div></div>`;
+  const aA=analysis(A), aB=analysis(B);
+  if(aA.ratios&&aB.ratios) h+=`<div class="block"><h3>Rapporti di integrazione sensoriale</h3><div class="tbl"><table><thead><tr><th>Rapporto</th><th>Prima</th><th>Dopo</th></tr></thead><tbody>${aB.ratios.map((r,i)=>`<tr><td>${r.l}</td><td class="mono">${fmt(aA.ratios[i]?.v)}</td><td class="mono">${fmt(r.v)}</td></tr>`).join('')}</tbody></table></div></div>`;
+  if(aB.sys.length) h+=`<div class="callout" style="margin-top:14px">Esercizi suggeriti dopo l'ultima sessione: ${aB.sys.map(x=>`<button class="chip" type="button" data-exsys="${x}">${SYS[x]}</button>`).join(' ')}</div>`;
+  v.innerHTML=h; bindCmp(); bindSeg('cKey',k=>{CMP.key=k; renderCmp();}); bindExLinks(v);
+}
+function bindCmp(){ $('cA').onchange=e=>{CMP.a=e.target.value; renderCmp();}; $('cB').onchange=e=>{CMP.b=e.target.value; CMP.a=null; renderCmp();}; }
+
+/* ================= VIEW: exercises ================= */
+let EXF='all';
+function renderEx(){
+  const list=EXS.filter(e=>EXF==='all'||e.sys===EXF);
+  $('v-ex').innerHTML=`<h2>Esercizi di integrazione</h2><p class="muted" style="margin:0 0 10px">Raggruppati per il sistema sensoriale su cui si vuole spostare il carico. Ogni esercizio ha un timer guidato con serie e recuperi.</p>
+   ${segHTML('exF',[['all','Tutti'],...Object.entries(SYS)],EXF)}
+   <div class="grid" style="margin-top:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${list.map(e=>`<div class="ex"><span class="sys">${SYS[e.sys]}</span><h3>${e.n}</h3><p>${e.how}</p>
+     <div class="mono muted" style="font-size:12.5px">${e.sets} × ${e.w} s · recupero ${e.r} s${e.bpm?` · ${e.bpm} bpm`:''}</div>
+     <ul>${e.prog.map(p=>`<li>${p}</li>`).join('')}</ul><button class="btn ghost small" data-ex="${e.id}" type="button" style="margin-top:auto">Avvia timer</button></div>`).join('')}</div>
+   <p class="hint" style="margin-top:14px">Eseguire sempre in sicurezza (parete, angolo o operatore vicino), specie a occhi chiusi e su foam.</p>`;
+  bindSeg('exF',v=>{EXF=v; renderEx();});
+  $('v-ex').querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{initAudio(); startTimer(EXS.find(e=>e.id===b.dataset.ex));});
+}
+let TM=null;
+function startTimer(e){ TM={e,set:1,phase:'pre',t0:performance.now(),dur:5,paused:false,acc:0,lastSec:-1,lastBeat:-1,w:e.w,r:e.r,sets:e.sets}; $('tmr').hidden=false; lockScreen(); say(e.n); tmRender(); requestAnimationFrame(tmLoop); }
+function tmRender(){
+  const T=TM, e=T.e;
+  $('tmrIn').innerHTML=`<div class="ov-top"><span class="eyebrow">${SYS[e.sys]}</span><button class="btn ghost small" id="tmX" type="button">Chiudi</button></div>
+   <div class="cond">${e.n}</div><p class="muted" style="margin:0">${e.how}</p>
+   <div style="margin:auto 0;text-align:center"><div class="eyebrow" id="tmPh"></div><div class="big" id="tmBig"></div><div class="mono muted" id="tmSet"></div></div>
+   <div class="block" style="margin-top:0"><div class="row" style="justify-content:space-between"><span>Serie</span><div class="stepper"><button class="btn ghost small" data-a="sets" data-d="-1" type="button">−</button><output>${T.sets}</output><button class="btn ghost small" data-a="sets" data-d="1" type="button">+</button></div></div>
+   <div class="row" style="justify-content:space-between"><span>Lavoro (s)</span><div class="stepper"><button class="btn ghost small" data-a="w" data-d="-5" type="button">−</button><output>${T.w}</output><button class="btn ghost small" data-a="w" data-d="5" type="button">+</button></div></div></div>
+   <div class="row"><button class="btn primary" id="tmP" type="button" style="flex:1">${T.paused?'Riprendi':'Pausa'}</button><button class="btn ghost" id="tmS" type="button">Salta</button></div>`;
+  $('tmX').onclick=()=>{TM=null; $('tmr').hidden=true; unlockScreen();};
+  $('tmP').onclick=()=>{ if(T.paused){T.t0=performance.now()-T.acc*1000; T.paused=false;} else {T.paused=true;} tmRender(); };
+  $('tmS').onclick=()=>tmNext();
+  $('tmrIn').querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ const k=b.dataset.a; T[k]=Math.max(k==='sets'?1:5,T[k]+(+b.dataset.d)); tmRender(); });
+}
+function tmNext(){ const T=TM; if(!T) return;
+  if(T.phase==='pre'||T.phase==='rest'){ T.phase='work'; T.dur=T.w; beep(1175,.2,.45); say('Via'); }
+  else if(T.phase==='work'){ if(T.set>=T.sets){ T.phase='done'; beep(880,.12); setTimeout(()=>beep(880,.12),180); setTimeout(()=>beep(1175,.25),360); say('Esercizio completato'); }
+    else { T.phase='rest'; T.dur=T.r; T.set++; beep(880,.12); setTimeout(()=>beep(880,.12),180); say('Recupero'); } }
+  T.t0=performance.now(); T.acc=0; T.lastSec=-1; }
+function tmLoop(){
+  const T=TM; if(!T) return;
+  if(!T.paused&&T.phase!=='done'){ T.acc=(performance.now()-T.t0)/1000; const rem=T.dur-T.acc, k=Math.ceil(rem);
+    if(k!==T.lastSec){ T.lastSec=k; if(k<=3&&k>0&&T.phase!=='work') beep(660,.07); }
+    if(T.phase==='work'&&T.e.bpm){ const b=Math.floor(T.acc*T.e.bpm/60); if(b!==T.lastBeat){T.lastBeat=b; beep(760,.04,.22);} }
+    if(rem<=0) tmNext(); }
+  const big=$('tmBig'); if(big){ const rem=Math.max(0,Math.ceil(T.dur-T.acc));
+    big.textContent=T.phase==='done'?'✓':rem; $('tmPh').textContent={pre:'Preparati',work:'Lavoro',rest:'Recupero',done:'Completato'}[T.phase];
+    $('tmSet').textContent=`Serie ${Math.min(T.set,T.sets)} di ${T.sets}`; big.style.color=T.phase==='work'?'var(--accent)':'var(--text)'; }
+  requestAnimationFrame(tmLoop);
+}
+
+/* ================= boot ================= */
+function renderAll(){ renderPt(); if(VIEW==='test') renderTest(); if(VIEW==='hist') renderHist(); if(VIEW==='cmp') renderCmp(); if(VIEW==='ex') renderEx(); }
+renderAll();
+})();
+</script>
+</body></html>
