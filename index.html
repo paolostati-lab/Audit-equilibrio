@@ -1,5 +1,4 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
-<title>Audit dell'Equilibrio</title>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style><title>Audit dell'Equilibrio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
@@ -20,23 +19,27 @@
   --accent:#F4B62C; --accent-ink:#1A1405; --accent-soft:#3A2F14; --prima:#5B8FE0; --dopo:#C98400; --good:#4CC38A; --bad:#EF6B63; --grid:#232932;}
 html,body{background:var(--bg);color:var(--text)}
 body{font-family:var(--body);font-size:15px;line-height:1.5}
-.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 90px}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.5vw,40px);line-height:1;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:18px 96px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,5.5vw,38px);line-height:1;margin:0}
 h1 span{color:var(--accent)}
 h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0 0 4px}
 h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0}
 .muted{color:var(--muted)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:52px;height:52px;flex:none}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .pt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-select,input[type=text],textarea{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%}
-textarea{width:100%;min-height:90px;font-family:var(--mono);font-size:12px;box-sizing:border-box}
+select,input[type=text],input[type=number],textarea{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%;box-sizing:border-box}
+input[type=number]{width:96px;font-family:var(--mono)}
+textarea{width:100%;min-height:90px}
+textarea.code{font-family:var(--mono);font-size:12px}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;background:var(--panel);border-top:1px solid var(--line);padding:0 0 env(safe-area-inset-bottom,0px)}
 nav.tabs button{all:unset;flex:1;text-align:center;padding:12px 4px;cursor:pointer;font-family:var(--display);font-size:16px;font-weight:600;color:var(--muted);border-top:2px solid transparent}
 nav.tabs button[aria-selected=true]{color:var(--text);border-top-color:var(--accent)}
 nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-section.view{margin-top:22px}
+section.view{margin-top:20px}
 .block{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:14px}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
@@ -48,6 +51,8 @@ section.view{margin-top:22px}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .chip{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;color:var(--muted);background:var(--panel)}
 .chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.cats .chip{white-space:nowrap;font-size:14.5px;padding:7px 14px}
 .field{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-top:1px solid var(--line)}
 .field:first-child{border-top:0}
 .field>label,.field>.lab{font-weight:600;font-size:14px}
@@ -56,16 +61,18 @@ section.view{margin-top:22px}
 .btn.ghost{border:1px solid var(--line);color:var(--text);background:var(--panel)}
 .btn.small{padding:6px 12px;font-size:14.5px}
 .btn.danger{color:var(--bad);border:1px solid var(--line)}
+.btn[aria-disabled=true]{opacity:.45;pointer-events:none}
 .status{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
 .status.ok .dot{background:var(--good)} .status.no .dot{background:var(--bad)}
 .hint{font-size:13px;color:var(--muted);margin:6px 0 0}
 table{border-collapse:collapse;width:100%;font-size:13.5px}
 th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
-th:first-child,td:first-child{text-align:left}
+th:first-child,td:first-child{text-align:left;white-space:normal}
 th{font-weight:600;color:var(--muted);font-size:12.5px}
 .tbl{overflow-x:auto}
 .up{color:var(--bad)} .down{color:var(--good)}
+.flag{color:var(--bad);font-weight:600}
 .sess{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--panel2);margin-top:10px}
 .sess-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
 .tag{font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--text)}
@@ -81,30 +88,36 @@ th{font-weight:600;color:var(--muted);font-size:12.5px}
 .ex p{margin:0;font-size:14px}
 .sys{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .callout{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;background:var(--panel2);font-size:14px}
-/* overlay */
 .ov{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;display:flex;flex-direction:column}
 .ov-in{flex:1;max-width:640px;width:100%;margin:0 auto;box-sizing:border-box;padding-inline:16px;padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
 .ov-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.big{font-family:var(--display);font-weight:700;font-size:clamp(64px,22vw,140px);line-height:1;text-align:center;font-variant-numeric:tabular-nums}
-.cond{font-family:var(--display);font-size:28px;font-weight:700;line-height:1.1;text-wrap:balance}
-#live{width:100%;max-width:340px;aspect-ratio:1;margin:0 auto;display:block;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(60px,20vw,130px);line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+.cond{font-family:var(--display);font-size:26px;font-weight:700;line-height:1.1;text-wrap:balance}
+#live,#tgt,#spc{width:100%;max-width:340px;aspect-ratio:1;margin:0 auto;display:block;border:1px solid var(--line);border-radius:12px;background:var(--panel);touch-action:none}
+#spc{max-width:none;aspect-ratio:2/1}
 .stepper{display:flex;align-items:center;gap:12px}
-.stepper output{font-family:var(--mono);font-size:26px;min-width:2ch;text-align:center}
+.stepper output{font-family:var(--mono);font-size:24px;min-width:2ch;text-align:center}
 .metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .metrics div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel)}
 .metrics b{display:block;font-family:var(--mono);font-size:18px}
 .metrics span{font-size:12px;color:var(--muted)}
 .confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+.q{border-top:1px solid var(--line);padding:12px 0}
+.q p{margin:0 0 8px;font-weight:500}
+.q .n{font-family:var(--mono);font-size:12px;color:var(--muted);margin-right:6px}
+.q.miss p{color:var(--bad)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer}
+.chk input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent)}
+.prog{position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2;font-family:var(--mono);font-size:13px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 </head><body>
 <div class="wrap">
   <header class="top">
-    <div>
-      <div class="eyebrow">Valutazione posturografica con sensori del telefono</div>
-      <h1>Audit <span>dell'Equilibrio</span></h1>
-    </div>
+    <div class="brand"><img src="data:image/png;base64,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" alt="Paolo Stati Osteopata"><div>
+      <div class="eyebrow">Paolo Stati Osteopata · Centro Parioli</div>
+      <h1>Audit <span>dell'Equilibrio</span></h1></div></div>
     <div class="pt">
       <label for="ptSel" class="muted" style="font-size:13px">Paziente</label>
       <select id="ptSel"></select>
@@ -112,9 +125,8 @@ th{font-weight:600;color:var(--muted);font-size:12.5px}
     </div>
   </header>
   <div id="ptNew" class="block" hidden>
-    <div class="row"><input type="text" id="ptName" placeholder="Nome o iniziali" autocomplete="off"><button class="btn primary small" id="ptAdd" type="button">Aggiungi</button><button class="btn ghost small" id="ptCancel" type="button">Annulla</button></div>
+    <div class="row"><input type="text" id="ptName" placeholder="Nome e cognome o iniziali" autocomplete="off"><button class="btn primary small" id="ptAdd" type="button">Aggiungi</button><button class="btn ghost small" id="ptCancel" type="button">Annulla</button></div>
   </div>
-
   <section class="view" id="v-test"></section>
   <section class="view" id="v-hist" hidden></section>
   <section class="view" id="v-cmp" hidden></section>
@@ -130,46 +142,93 @@ th{font-weight:600;color:var(--muted);font-size:12.5px}
 
 <div class="ov" id="run" hidden><div class="ov-in" id="runIn"></div></div>
 <div class="ov" id="tmr" hidden><div class="ov-in" id="tmrIn"></div></div>
-
+<div class="ov" id="rep" hidden><div class="ov-in" id="repIn"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js';document.head.appendChild(s);"></script>
 <script>
 (()=>{
-/* ================= data model ================= */
-const PROTOS={
- mctsib:{name:'mCTSIB',dur:30,desc:'4 condizioni sensoriali × 30 s. Piedi uniti, telefono sullo sterno.',conds:[
+const STUDIO={name:'Paolo Stati Osteopata',sub:'Centro Parioli',addr:'Via Alberto Caroncini 58 · 00197 Roma'};
+const LOGO='data:image/png;base64,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';
+/* ================= test catalogue ================= */
+const CATS=[['eq','Equilibrio'],['cerv','Cervicale'],['rom','Mobilità rachide'],['gait','Cammino'],['q','Questionari']];
+const TESTS={
+ mctsib:{kind:'sway',cat:'eq',name:'mCTSIB',dur:30,desc:'4 condizioni sensoriali × 30 s. Piedi uniti, telefono sullo sterno.',conds:[
   {id:'c1',n:'Superficie stabile · occhi aperti',s:'C1 Stabile OA',ec:0,f:1},
   {id:'c2',n:'Superficie stabile · occhi chiusi',s:'C2 Stabile OC',ec:1,f:1.5},
   {id:'c3',n:'Foam · occhi aperti',s:'C3 Foam OA',ec:0,f:1.7},
   {id:'c4',n:'Foam · occhi chiusi',s:'C4 Foam OC',ec:1,f:2.8}]},
- bess:{name:'BESS',dur:20,errors:1,desc:'6 condizioni × 20 s, occhi chiusi. Conta gli errori dopo ogni prova (max 10).',conds:[
+ bess:{kind:'sway',cat:'eq',name:'BESS',dur:20,errors:1,desc:'6 condizioni × 20 s, occhi chiusi. Conta gli errori dopo ogni prova (max 10).',conds:[
   {id:'b1',n:'Bipodalico · stabile',s:'Bipod. stabile',ec:1,f:1.3},
   {id:'b2',n:'Monopodalico (non dominante) · stabile',s:'Monop. stabile',ec:1,f:2.4},
   {id:'b3',n:'Tandem (non dominante dietro) · stabile',s:'Tandem stabile',ec:1,f:2},
   {id:'b4',n:'Bipodalico · foam',s:'Bipod. foam',ec:1,f:2.2},
   {id:'b5',n:'Monopodalico (non dominante) · foam',s:'Monop. foam',ec:1,f:3.4},
   {id:'b6',n:'Tandem (non dominante dietro) · foam',s:'Tandem foam',ec:1,f:3}]},
- romberg:{name:'Romberg',dur:30,desc:'Piedi uniti, occhi aperti poi chiusi. Calcola il quoziente di Romberg.',conds:[
+ romberg:{kind:'sway',cat:'eq',name:'Romberg',dur:30,desc:'Piedi uniti, occhi aperti poi chiusi. Calcola il quoziente di Romberg.',conds:[
   {id:'r1',n:'Romberg · occhi aperti',s:'OA',ec:0,f:1},{id:'r2',n:'Romberg · occhi chiusi',s:'OC',ec:1,f:1.5}]},
- tandem:{name:'Romberg sensibilizzato',dur:30,desc:'Tandem (tallone-punta), occhi aperti poi chiusi.',conds:[
+ tandem:{kind:'sway',cat:'eq',name:'Romberg sensibilizzato',dur:30,desc:'Tandem (tallone-punta), occhi aperti poi chiusi.',conds:[
   {id:'t1',n:'Tandem · occhi aperti',s:'Tandem OA',ec:0,f:1.8},{id:'t2',n:'Tandem · occhi chiusi',s:'Tandem OC',ec:1,f:2.7}]},
- slst:{name:'Monopodalico',dur:30,desc:'Appoggio su un piede, destro e sinistro, occhi aperti e chiusi.',conds:[
+ slst:{kind:'sway',cat:'eq',name:'Monopodalico',dur:30,desc:'Appoggio su un piede, destro e sinistro, occhi aperti e chiusi.',conds:[
   {id:'s1',n:'Destro · occhi aperti',s:'Dx OA',ec:0,f:2},{id:'s2',n:'Sinistro · occhi aperti',s:'Sx OA',ec:0,f:2.1},
   {id:'s3',n:'Destro · occhi chiusi',s:'Dx OC',ec:1,f:3.4},{id:'s4',n:'Sinistro · occhi chiusi',s:'Sx OC',ec:1,f:3.6}]},
- fukuda:{name:'Fukuda (stepping)',dur:30,yaw:1,bpm:100,desc:'50 passi sul posto a occhi chiusi a metronomo. Misura la rotazione sul piano orizzontale.',conds:[
+ fukuda:{kind:'sway',cat:'eq',name:'Fukuda (stepping)',dur:30,yaw:1,bpm:100,desc:'50 passi sul posto a occhi chiusi a metronomo. Misura la rotazione sul piano orizzontale.',conds:[
   {id:'f1',n:'Marcia sul posto · occhi chiusi · 50 passi',s:'Fukuda',ec:1,f:1}]},
+ 'jpe-laser':{kind:'jpe',mode:'laser',cat:'cerv',name:'JPE cervicale · laser',desc:'Puntatore laser sulla testa, bersaglio a parete. Inserisci dove torna il punto a ogni ripetizione.'},
+ 'jpe-sensor':{kind:'jpe',mode:'sensor',cat:'cerv',name:'JPE cervicale · sensore',desc:'Telefono fissato sulla fronte: misura direttamente l’errore di riposizionamento in gradi.'},
+ spnt:{kind:'spnt',cat:'cerv',name:'Smooth Pursuit Neck Torsion',desc:'Inseguimento lento con collo neutro e in torsione. Valuti saccadi di recupero e sintomi.'},
+ 'rom-cerv':{kind:'rom',cat:'rom',name:'ROM cervicale',desc:'Flesso-estensione, inclinazioni e rotazioni. Paziente seduto, telefono sulla fronte.',
+   place:'Paziente seduto con la schiena appoggiata. Telefono fissato sulla fronte con una fascia (o tenuto fermo sulla testa dall’esaminatore).',
+   moves:[{id:'fl',n:'Flessione',m:'tilt',ref:50},{id:'ex',n:'Estensione',m:'tilt',ref:60},{id:'ldx',n:'Inclinazione Dx',m:'tilt',ref:45,pair:'lsx'},{id:'lsx',n:'Inclinazione Sx',m:'tilt',ref:45},{id:'rdx',n:'Rotazione Dx',m:'yaw',ref:80,pair:'rsx'},{id:'rsx',n:'Rotazione Sx',m:'yaw',ref:80}]},
+ 'rom-dors':{kind:'rom',cat:'rom',name:'Rotazione dorsale',desc:'Rotazione del tronco da seduti con bacino bloccato, telefono sullo sterno.',
+   place:'Seduto a cavalcioni di una sedia o con il bacino stabilizzato, braccia incrociate che tengono il telefono sullo sterno.',
+   moves:[{id:'rdx',n:'Rotazione Dx',m:'yaw',ref:45,pair:'rsx'},{id:'rsx',n:'Rotazione Sx',m:'yaw',ref:45}]},
+ 'rom-lomb':{kind:'rom',cat:'rom',name:'Flesso-estensione lombare',desc:'Metodo del doppio inclinometro: misura su T12 e su S1, l’app calcola la componente lombare.',
+   place:'In piedi. Appoggia il telefono in verticale sulla colonna: prima su T12, poi su S1, come indicato a ogni passaggio.',
+   moves:[{id:'flT',n:'Flessione · telefono su T12',m:'tilt',ref:110},{id:'flS',n:'Flessione · telefono su S1',m:'tilt',ref:50},{id:'exT',n:'Estensione · telefono su T12',m:'tilt',ref:35},{id:'exS',n:'Estensione · telefono su S1',m:'tilt',ref:10}],
+   derived:[{id:'fl',n:'Flessione lombare',a:'flT',b:'flS',ref:60},{id:'ex',n:'Estensione lombare',a:'exT',b:'exS',ref:25}]},
+ gait:{kind:'gait',cat:'gait',name:'Cammino 10 m',desc:'Velocità, cadenza, variabilità e simmetria del passo. Fino a 4 condizioni, incluso il doppio compito.'},
+ dhi:{kind:'q',cat:'q',name:'DHI',desc:'Dizziness Handicap Inventory: 25 domande sull’impatto di vertigini e instabilità.'},
+ ndi:{kind:'q',cat:'q',name:'Neck Disability Index',desc:'10 sezioni sulla disabilità legata al dolore cervicale.'},
+ abc:{kind:'q',cat:'q',name:'ABC Scale',desc:'Activities-specific Balance Confidence: fiducia nel mantenere l’equilibrio in 16 attività.'},
 };
-const SYS={somato:'Somatosensoriale',visivo:'Visivo',vest:'Vestibolare',integr:'Integrazione'};
+const JPE_DIRS=[['rdx','Rotazione Dx'],['rsx','Rotazione Sx'],['fl','Flessione'],['ex','Estensione']];
+const GAIT_CONDS=[['norm','Velocità abituale'],['fast','Velocità massima'],['dual','Doppio compito (conta indietro di 3)'],['head','Rotazioni del capo']];
+const SPNT_CONDS=[{id:'n',n:'Neutro',ins:'Testa e tronco allineati, sguardo in avanti.'},
+  {id:'r',n:'Torsione Dx',ins:'Collo ruotato a destra: l’esaminatore tiene ferma la testa e ruota il tronco di 45° verso sinistra (sedia girevole).'},
+  {id:'l',n:'Torsione Sx',ins:'Collo ruotato a sinistra: testa ferma, tronco ruotato di 45° verso destra.'}];
+
+/* ---- questionnaires ---- */
+const YN=[['4','Sì'],['2','A volte'],['0','No']];
+const DHI_Q=[['P','Guardare in alto aumenta il problema?'],['E','Si sente frustrato/a a causa del problema?'],['F','Il problema limita i suoi viaggi di lavoro o di piacere?'],['P','Camminare tra le corsie di un supermercato aumenta il problema?'],['F','Ha difficoltà a coricarsi o ad alzarsi dal letto?'],['F','Il problema limita la sua partecipazione ad attività sociali (cene, cinema, feste)?'],['F','Ha difficoltà a leggere?'],['P','Attività più impegnative (sport, ballo, faccende come spazzare o riporre i piatti) aumentano il problema?'],['E','Ha paura di uscire di casa da solo/a?'],['E','Si sente in imbarazzo davanti agli altri?'],['P','I movimenti rapidi della testa aumentano il problema?'],['F','Evita i luoghi alti?'],['P','Girarsi nel letto aumenta il problema?'],['F','Ha difficoltà a svolgere lavori domestici pesanti o di giardinaggio?'],['E','Teme che gli altri pensino che sia ubriaco/a?'],['F','Ha difficoltà a fare una passeggiata da solo/a?'],['P','Camminare sul marciapiede aumenta il problema?'],['E','Ha difficoltà a concentrarsi?'],['F','Ha difficoltà a camminare in casa al buio?'],['E','Ha paura di restare a casa da solo/a?'],['E','Si sente limitato/a a causa del problema?'],['E','Il problema ha creato tensioni con familiari o amici?'],['E','Si sente depresso/a a causa del problema?'],['F','Il problema interferisce con il lavoro o con le responsabilità domestiche?'],['P','Chinarsi in avanti aumenta il problema?']];
+const NDI_Q=[['Intensità del dolore',['Al momento non ho dolore','Il dolore è molto lieve','Il dolore è moderato','Il dolore è abbastanza forte','Il dolore è molto forte','Il dolore è il peggiore immaginabile']],
+ ['Cura personale (lavarsi, vestirsi)',['Normale, senza dolore','Normale, ma con dolore','È dolorosa: sono lento/a e attento/a','Serve un po’ di aiuto, ma faccio quasi tutto','Serve aiuto ogni giorno per quasi tutto','Non mi vesto, mi lavo con difficoltà, resto a letto']],
+ ['Sollevare pesi',['Sollevo pesi elevati senza dolore','Sollevo pesi elevati con dolore','Non da terra, ma sì se ben posizionati (es. su un tavolo)','Solo pesi leggeri o medi ben posizionati','Solo pesi molto leggeri','Non riesco a sollevare nulla']],
+ ['Lettura',['Leggo quanto voglio senza dolore','Quanto voglio, con lieve dolore','Quanto voglio, con dolore moderato','Non quanto vorrei, per dolore moderato','Quasi per niente, per dolore forte','Non riesco a leggere']],
+ ['Mal di testa',['Nessun mal di testa','Lieve e raro','Moderato e raro','Moderato e frequente','Forte e frequente','Quasi sempre']],
+ ['Concentrazione',['Mi concentro senza difficoltà','Con lieve difficoltà','Con discreta difficoltà','Con molta difficoltà','Con moltissima difficoltà','Non riesco a concentrarmi']],
+ ['Lavoro',['Lavoro quanto voglio','Solo il mio lavoro abituale','La maggior parte del lavoro abituale, non di più','Non riesco a fare il lavoro abituale','Quasi nessun lavoro','Nessun lavoro']],
+ ['Guida',['Guido senza dolore','Quanto voglio, con lieve dolore','Quanto voglio, con dolore moderato','Non quanto vorrei, per dolore moderato','Quasi per niente, per dolore forte','Non riesco a guidare']],
+ ['Sonno',['Nessun problema','Disturbato per meno di 1 ora','Disturbato per 1–2 ore','Disturbato per 2–3 ore','Disturbato per 3–5 ore','Disturbato per 5–7 ore']],
+ ['Tempo libero',['Faccio tutte le attività senza dolore','Tutte, con un po’ di dolore','La maggior parte, ma non tutte','Solo alcune','Quasi nessuna','Nessuna']]];
+const ABC_Q=['Camminare per casa','Salire o scendere le scale','Chinarsi a raccogliere una pantofola dal pavimento','Prendere un barattolo da uno scaffale all’altezza degli occhi','Alzarsi in punta di piedi per prendere qualcosa sopra la testa','Salire su una sedia per prendere qualcosa','Spazzare il pavimento','Uscire di casa e raggiungere l’auto parcheggiata','Salire o scendere dall’auto','Attraversare un parcheggio per raggiungere un centro commerciale','Salire o scendere una rampa','Camminare in un centro commerciale affollato, con persone che passano veloci','Essere urtato/a dalle persone mentre cammina in un centro commerciale','Salire o scendere da una scala mobile tenendosi al corrimano','Salire o scendere da una scala mobile senza corrimano, con pacchi in mano','Camminare all’aperto su un marciapiede ghiacciato'];
+
+const SYS={somato:'Somatosensoriale',visivo:'Visivo',vest:'Vestibolare',cerv:'Cervicale',integr:'Integrazione'};
 const EXS=[
  {id:'e1',sys:'somato',n:'Romberg a occhi chiusi',how:'Piedi uniti su superficie stabile, a piedi nudi. Occhi chiusi, respiro calmo, peso distribuito su tutto il piede.',w:30,r:20,sets:3,prog:['Semi-tandem → tandem','Braccia incrociate al petto','Rotazioni lente del capo']},
  {id:'e2',sys:'somato',n:'Tandem a occhi chiusi',how:'Tallone davanti a punta, superficie stabile. Occhi chiusi, vicino a una parete per sicurezza.',w:20,r:20,sets:3,prog:['Alternare il piede anteriore','Aggiungere compito cognitivo']},
  {id:'e3',sys:'somato',n:'Monopodalico a occhi chiusi',how:'Un piede, ginocchio morbido. Occhi chiusi. Alternare i lati.',w:15,r:15,sets:4,prog:['Da 10 a 30 s','Superficie morbida']},
  {id:'e4',sys:'somato',n:'Trasferimenti di carico a piedi nudi',how:'Oscillazioni lente avanti-indietro e laterali dalle caviglie, occhi chiusi. Percepire la pressione sotto i piedi.',w:40,r:20,sets:3,prog:['Ampiezza maggiore','Su una gamba']},
  {id:'e5',sys:'visivo',n:'Foam con fissazione',how:'Piedi uniti su foam, occhi su un punto a parete all’altezza degli occhi.',w:30,r:20,sets:3,prog:['Semi-tandem su foam','Tandem su foam']},
- {id:'e6',sys:'visivo',n:'Foam + inseguimento visivo',how:'Su foam, segui con gli occhi un bersaglio che si muove orizzontalmente (penna o app di pursuit). Testa ferma.',w:30,r:20,sets:3,prog:['Traiettoria verticale e diagonale','Velocità maggiore']},
+ {id:'e6',sys:'visivo',n:'Foam + inseguimento visivo',how:'Su foam, segui con gli occhi un bersaglio che si muove orizzontalmente. Testa ferma.',w:30,r:20,sets:3,prog:['Traiettoria verticale e diagonale','Velocità maggiore']},
  {id:'e7',sys:'visivo',n:'Foam + saccadi',how:'Su foam, sposta lo sguardo rapidamente tra due bersagli a parete distanti 30–40 cm.',w:30,r:20,sets:3,prog:['Bersagli più distanti','Tandem su foam']},
  {id:'e8',sys:'vest',n:'Foam a occhi chiusi',how:'Piedi uniti su foam, occhi chiusi, con operatore vicino o davanti a un angolo.',w:20,r:20,sets:3,prog:['Piedi alla larghezza del bacino → uniti','Semi-tandem']},
- {id:'e9',sys:'vest',n:'VOR ×1 in stazione eretta',how:'Guarda una lettera a parete e ruota il capo a destra-sinistra a ritmo del metronomo, lettera sempre nitida.',w:30,r:20,sets:3,bpm:80,prog:['Piedi uniti → tandem → foam','Movimento verticale','Metronomo più veloce']},
+ {id:'e9',sys:'vest',n:'VOR ×1 in stazione eretta',how:'Guarda una lettera a parete e ruota il capo a destra e sinistra a ritmo del metronomo, lettera sempre nitida.',w:30,r:20,sets:3,bpm:80,prog:['Piedi uniti → tandem → foam','Movimento verticale','Metronomo più veloce']},
  {id:'e10',sys:'vest',n:'Cammino con rotazioni del capo',how:'Cammina in linea retta girando il capo a destra e sinistra ogni 2 passi.',w:40,r:20,sets:3,prog:['Rotazioni verticali','Su linea (tandem walk)']},
  {id:'e11',sys:'vest',n:'Marcia sul posto a occhi chiusi',how:'Marcia sul posto a occhi chiusi, ginocchia alte, braccia avanti. Correggi la rotazione a occhi aperti tra le serie.',w:30,r:20,sets:3,bpm:100,prog:['Da 30 a 60 s','Su foam']},
+ {id:'e15',sys:'cerv',n:'Riposizionamento con laser',how:'Laser sulla testa, bersaglio a 90 cm. Da posizione neutra ruota la testa, poi torna al centro a occhi chiusi; apri gli occhi e correggi.',w:60,r:30,sets:3,prog:['Ritorno da flessione ed estensione','Paziente in piedi, poi su foam']},
+ {id:'e16',sys:'cerv',n:'Tracciare figure con il laser',how:'Con il laser sulla testa segui lentamente e con precisione una linea, un cerchio o un otto disegnati a parete.',w:45,r:20,sets:3,prog:['Figure più piccole','Velocità maggiore']},
+ {id:'e17',sys:'cerv',n:'Coordinazione occhi-testa',how:'Sposta prima gli occhi su un bersaglio laterale, poi ruota la testa mantenendo lo sguardo fermo sul bersaglio.',w:30,r:20,sets:3,prog:['Bersagli verticali','In piedi su foam']},
+ {id:'e18',sys:'cerv',n:'Inseguimento con collo in torsione',how:'Testa ferma, tronco ruotato di 20–45°: segui con gli occhi un bersaglio che si muove orizzontalmente.',w:30,r:20,sets:3,prog:['Torsione maggiore','Bersaglio più veloce']},
+ {id:'e19',sys:'cerv',n:'Flessione cranio-cervicale',how:'Supino, piccolo cenno di "sì" mantenendo la nuca appoggiata. Tieni 10 s senza attivare i muscoli superficiali del collo.',w:10,r:10,sets:10,prog:['Con biofeedback a pressione','Da seduto']},
  {id:'e12',sys:'integr',n:'Tandem walk con doppio compito',how:'Cammino tallone-punta contando all’indietro di 3 da 100.',w:40,r:20,sets:3,prog:['Occhi chiusi per 3 passi','Rotazioni del capo']},
  {id:'e13',sys:'integr',n:'Monopodalico con lanci di palla',how:'Su un piede, passaggi di palla con l’operatore o contro il muro.',w:30,r:20,sets:3,prog:['Lanci laterali','Su foam']},
  {id:'e14',sys:'integr',n:'Reformer · split stance sul carrello',how:'Un piede sulla piattaforma fissa, l’altro sul carrello con molle leggere. Mantieni il bacino neutro mentre il carrello scorre lentamente.',w:30,r:20,sets:3,prog:['Molle più leggere','Occhi chiusi per brevi tratti','Rotazioni del capo']},
@@ -189,62 +248,93 @@ function metrics(S,dur){
     if(i){path+=Math.hypot(S[i][1]-S[i-1][1],S[i][2]-S[i-1][2]); yaw+=S[i][4]*(S[i][0]-S[i-1][0]);}}
   sxx/=n; syy/=n; sxy/=n;
   const area=Math.PI*5.991*Math.sqrt(Math.max(0,sxx*syy-sxy*sxy));
-  // downsampled centered trace ~20 Hz
   const tr=[]; let lt=-1;
   S.forEach(s=>{ if(s[0]-lt>=.05){ tr.push([+(s[1]-mx).toFixed(3),+(s[2]-my).toFixed(3)]); lt=s[0]; }});
   return {rms:+Math.sqrt(sxx+syy).toFixed(3),ml:+Math.sqrt(sxx).toFixed(3),ap:+Math.sqrt(syy).toFixed(3),area:+area.toFixed(3),vel:+(path/Math.max(dur,.1)).toFixed(3),gyro:+Math.sqrt(g2/n).toFixed(2),yaw:+yaw.toFixed(1),sxx,syy,sxy,tr};
 }
-const fmt=(v,d=2)=>v==null||isNaN(v)?'—':(+v).toFixed(d);
+function gaitMetrics(S,dur,dist){
+  // S: [t, av]
+  const n=S.length; if(n<60) return null;
+  const fs=n/Math.max(dur,.1);
+  let m=0; S.forEach(s=>m+=s[1]); m/=n;
+  const raw=S.map(s=>s[1]-m), x=raw.map((v,i)=>{let a=0,c=0;for(let k=-2;k<=2;k++){const j=i+k;if(j>=0&&j<n){a+=raw[j];c++;}}return a/c;});
+  const e0=x.reduce((a,v)=>a+v*v,0)/n || 1e-9;
+  const ac=k=>{let s=0;for(let i=0;i+k<n;i++) s+=x[i]*x[i+k]; return s/(n-k)/e0;};
+  const best=(lo,hi)=>{let bk=-1,bv=-2;for(let k=Math.max(1,Math.round(lo*fs));k<=Math.min(n-2,Math.round(hi*fs));k++){const v=ac(k);if(v>bv){bv=v;bk=k;}}return [bk,bv];};
+  const [k1,ad1]=best(.3,.8); const T=k1/fs; const [k2,ad2]=best(T*1.6,T*2.4);
+  // peaks for step-time variability
+  let sd=Math.sqrt(e0); const pk=[]; const minD=Math.round(T*fs*.6);
+  for(let i=1;i<n-1;i++){ if(x[i]>x[i-1]&&x[i]>=x[i+1]&&x[i]>.3*sd){ if(pk.length&&i-pk[pk.length-1]<minD){ if(x[i]>x[pk[pk.length-1]]) pk[pk.length-1]=i; } else pk.push(i);} }
+  const iv=[]; for(let i=1;i<pk.length;i++) iv.push((pk[i]-pk[i-1])/fs);
+  const mi=iv.reduce((a,b)=>a+b,0)/(iv.length||1); const cv=iv.length>3?Math.sqrt(iv.reduce((a,b)=>a+(b-mi)**2,0)/iv.length)/mi*100:null;
+  return {time:+dur.toFixed(2),speed:+(dist/dur).toFixed(2),cad:+(60/T).toFixed(0),steps:pk.length,cv:cv==null?null:+cv.toFixed(1),reg:+Math.max(0,ad2).toFixed(2),sym:ad2>0?+Math.min(1.2,Math.max(0,ad1/ad2)).toFixed(2):null};
+}
+const fmt=(v,d=2)=>v==null||isNaN(v)?'—':(+v).toFixed(d).replace('.',',');
 function pct(a,b){ if(!a) return null; return (b-a)/a*100; }
 function nice(v){ const e=Math.pow(10,Math.floor(Math.log10(v))); const m=v/e; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*e; }
+const rnd=(a,b)=>a+Math.random()*(b-a);
 
-/* ================= simulation (examples + demo mode) ================= */
+/* ================= simulation helpers ================= */
+const gn=()=>{let u=0;for(let i=0;i<6;i++)u+=Math.random();return (u-3)*1.41;};
 function simTrial(f,dur,yawDrift){
   const S=[]; let x=0,y=0,vx=0,vy=0; const dt=1/50, th=1.3, sg=.32*f;
-  const gn=()=>{let u=0;for(let i=0;i<6;i++)u+=Math.random();return (u-3)*1.41;};
   for(let t=0;t<=dur;t+=dt){ const nx=x+(-th*x)*dt+sg*Math.sqrt(dt)*gn(), ny=y+(-th*y)*dt+sg*1.25*Math.sqrt(dt)*gn();
-    vx=(nx-x)/dt; vy=(ny-y)/dt; x=nx; y=ny;
-    S.push([t,x,y,Math.hypot(vx,vy)*.6+Math.random()*.4,(yawDrift||0)+gn()*3]); }
+    vx=(nx-x)/dt; vy=(ny-y)/dt; x=nx; y=ny; S.push([t,x,y,Math.hypot(vx,vy)*.6+Math.random()*.4,(yawDrift||0)+gn()*3]); }
   return S;
 }
 function seed(){
   const pid=uid(); DB={patients:[{id:pid,name:'Esempio (dati simulati)'}],sessions:[]};
-  const mk=(label,daysAgo,scale)=>{ const P=PROTOS.mctsib; const d=new Date(Date.now()-daysAgo*864e5);
-    DB.sessions.push({id:uid(),pid,date:d.toISOString(),label,proto:'mctsib',example:1,trials:P.conds.map(c=>{
+  const mk=(label,daysAgo,scale)=>{ const P=TESTS.mctsib; const d=new Date(Date.now()-daysAgo*864e5);
+    DB.sessions.push({id:uid(),pid,date:d.toISOString(),label,proto:'mctsib',kind:'sway',example:1,trials:P.conds.map(c=>{
       const f=c.id==='c4'?c.f*scale*1.25:c.f*(c.id==='c1'?1:scale); const S=simTrial(f,P.dur); return {cond:c.id,time:P.dur,full:1,m:metrics(S,P.dur)};})}); };
-  mk('Pre',21,1.35); mk('Post',0,.95); save();
+  mk('Pre',21,1.35); mk('Post',0,.95);
+  const mkR=(label,days,k)=>DB.sessions.push({id:uid(),pid,date:new Date(Date.now()-days*864e5).toISOString(),label,proto:'rom-cerv',kind:'rom',example:1,
+    vals:Object.fromEntries(TESTS['rom-cerv'].moves.map(m=>[m.id,+(m.ref*k*rnd(.85,1.02)).toFixed(1)]))});
+  mkR('Pre',21,.72); mkR('Post',0,.9);
+  save();
 }
 if(!DB||!DB.patients) seed();
+DB.sessions.forEach(s=>{ if(!s.kind) s.kind='sway'; });
 let pid=(store.get('ba:pid')&&DB.patients.find(p=>p.id===store.get('ba:pid')))?store.get('ba:pid'):DB.patients[0]?.id;
 
 /* ================= sensors ================= */
-const SEN={state:'unknown',g:null,cur:{ml:0,ap:0,gyro:0,yaw:0},count:0,sim:false,simT:null};
+const SEN={state:'unknown',g:null,cur:{ml:0,ap:0,gyro:0,yaw:0,av:0},yawInt:0,lt:0,count:0,simT:null};
 function onMotion(e){
   const a=e.accelerationIncludingGravity; if(!a||a.x==null) return;
-  if(!SEN.g) SEN.g=[a.x,a.y,a.z]; else { const k=.25; SEN.g[0]+=k*(a.x-SEN.g[0]); SEN.g[1]+=k*(a.y-SEN.g[1]); SEN.g[2]+=k*(a.z-SEN.g[2]); }
+  if(!SEN.g) SEN.g=[a.x,a.y,a.z]; else { const k=.2; SEN.g[0]+=k*(a.x-SEN.g[0]); SEN.g[1]+=k*(a.y-SEN.g[1]); SEN.g[2]+=k*(a.z-SEN.g[2]); }
   const [gx,gy,gz]=SEN.g, G=Math.hypot(gx,gy,gz)||9.81, R=180/Math.PI;
   const r=e.rotationRate||{}; const wx=r.beta||0, wy=r.gamma||0, wz=r.alpha||0;
-  SEN.cur={ml:Math.asin(Math.max(-1,Math.min(1,gx/G)))*R, ap:Math.asin(Math.max(-1,Math.min(1,gz/G)))*R, gyro:Math.hypot(wx,wy,wz), yaw:(wx*gx+wy*gy+wz*gz)/G};
+  const yawRate=(wx*gx+wy*gy+wz*gz)/G;
+  const now=performance.now(), dt=SEN.lt?(now-SEN.lt)/1000:0; SEN.lt=now; if(dt>0&&dt<.25) SEN.yawInt+=yawRate*dt;
+  const la=e.acceleration&&e.acceleration.x!=null?[e.acceleration.x,e.acceleration.y,e.acceleration.z]:[a.x-gx,a.y-gy,a.z-gz];
+  const av=(la[0]*gx+la[1]*gy+la[2]*gz)/G;
+  if(!SEN.simT) SEN.cur={ml:Math.asin(Math.max(-1,Math.min(1,gx/G)))*R, ap:Math.asin(Math.max(-1,Math.min(1,gz/G)))*R, gyro:Math.hypot(wx,wy,wz), yaw:yawRate, av};
   SEN.count++;
 }
 async function enableSensor(){
   try{
-    if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
-      const p=await DeviceMotionEvent.requestPermission(); if(p!=='granted'){ SEN.state='denied'; return false; }
-    }
     if(typeof DeviceMotionEvent==='undefined'){ SEN.state='none'; return false; }
+    if(typeof DeviceMotionEvent.requestPermission==='function'){ const p=await DeviceMotionEvent.requestPermission(); if(p!=='granted'){ SEN.state='denied'; return false; } }
     window.removeEventListener('devicemotion',onMotion); window.addEventListener('devicemotion',onMotion);
     const c0=SEN.count; await new Promise(r=>setTimeout(r,1200));
     SEN.state = SEN.count>c0+5 ? 'ok' : 'none'; return SEN.state==='ok';
   }catch(e){ SEN.state='none'; return false; }
 }
-// simulation feed
 let simState=null;
-function startSim(f,yawDrift){ stopSim(); simState={x:0,y:0,f,yd:yawDrift||0}; const dt=.02,th=1.3;
-  const gn=()=>{let u=0;for(let i=0;i<6;i++)u+=Math.random();return (u-3)*1.41;};
-  SEN.simT=setInterval(()=>{const s=simState,sg=.32*s.f; const nx=s.x+(-th*s.x)*dt+sg*Math.sqrt(dt)*gn(), ny=s.y+(-th*s.y)*dt+sg*1.25*Math.sqrt(dt)*gn();
-    const v=Math.hypot(nx-s.x,ny-s.y)/dt; s.x=nx; s.y=ny; SEN.cur={ml:nx+2,ap:ny-1,gyro:v*.6+Math.random()*.4,yaw:s.yd+gn()*3};},20); }
+function startSim(mode,o={}){ stopSim(); simState={x:0,y:0,t0:performance.now(),...o}; const dt=.02,th=1.3;
+  SEN.simT=setInterval(()=>{const s=simState;
+    if(mode==='gait'){ const t=(performance.now()-s.t0)/1000, f=s.f||1.8; SEN.cur.av=1.3*Math.sin(2*Math.PI*f*t)+.35*Math.sin(Math.PI*f*t+.7)*(s.asym||1)+gn()*.25+.15*gn()*Math.sin(.3*t); return; }
+    const sg=.32*(s.f||1); const nx=s.x+(-th*s.x)*dt+sg*Math.sqrt(dt)*gn(), ny=s.y+(-th*s.y)*dt+sg*1.25*Math.sqrt(dt)*gn();
+    const v=Math.hypot(nx-s.x,ny-s.y)/dt; s.x=nx; s.y=ny; SEN.cur={ml:nx+2,ap:ny-1,gyro:v*.6+Math.random()*.4,yaw:(s.yd||0)+gn()*3,av:0};},20); }
 function stopSim(){ if(SEN.simT) clearInterval(SEN.simT); SEN.simT=null; }
+// goniometry: zero + angle since zero
+const MO={g0:null,y0:0,t0:0,A:0,max:0};
+const nrm=v=>{const L=Math.hypot(...v)||1;return v.map(x=>x/L);};
+function moZero(simTarget){ MO.g0=SEN.g?nrm(SEN.g):null; MO.y0=SEN.yawInt; MO.t0=performance.now(); MO.A=simTarget||0; MO.max=0; }
+function moSim(){ const t=(performance.now()-MO.t0)/1000; if(t<.6) return Math.abs(gn()*.15); const p=Math.min(1,(t-.6)/1.6); return Math.max(0,MO.A*Math.sin(p*Math.PI/2)+gn()*.2); }
+function moTilt(){ if(CFG.src==='sim'||!MO.g0||!SEN.g) return moSim(); const g=nrm(SEN.g); const d=Math.max(-1,Math.min(1,g[0]*MO.g0[0]+g[1]*MO.g0[1]+g[2]*MO.g0[2])); return Math.acos(d)*180/Math.PI; }
+function moYaw(){ if(CFG.src==='sim') return moSim(); return Math.abs(SEN.yawInt-MO.y0); }
+function moTotal(){ if(CFG.src==='sim') return moSim(); const t=moTilt(), y=moYaw(); return Math.hypot(t,y); }
 
 /* ================= audio / voice ================= */
 let AC=null;
@@ -263,15 +353,15 @@ function ellipsePath(m,sc,c){
   const r1=Math.sqrt(5.991*l1)*sc, r2=Math.sqrt(5.991*l2)*sc;
   return `<ellipse cx="${c}" cy="${c}" rx="${r1.toFixed(1)}" ry="${r2.toFixed(1)}" transform="rotate(${(-th*180/Math.PI).toFixed(1)} ${c} ${c})" fill="none" stroke-width="1.5" stroke-dasharray="4 3"`;
 }
-function statSVG(items){ // items: [{m,color,label}]
+function statSVG(items){
   const Z=220,c=Z/2,pad=22; let mx=.2;
   items.forEach(it=>it.m&&it.m.tr.forEach(p=>{mx=Math.max(mx,Math.abs(p[0]),Math.abs(p[1]))}));
-  const lim=nice(mx*1.05), sc=(c-pad)/lim;
-  let s=`<svg viewBox="0 0 ${Z} ${Z}" role="img" aria-label="Statokinesigramma ML/AP">`;
+  const lim=nice(mx*1.05), sc=(c-pad)/lim, L=String(lim).replace('.',',');
+  let s=`<svg viewBox="0 0 ${Z} ${Z}" width="${Z}" height="${Z}" role="img" aria-label="Statokinesigramma ML/AP">`;
   s+=`<rect x="${pad}" y="${pad}" width="${Z-2*pad}" height="${Z-2*pad}" fill="none" stroke="var(--grid)"/>`;
   s+=`<line x1="${pad}" y1="${c}" x2="${Z-pad}" y2="${c}" stroke="var(--grid)"/><line x1="${c}" y1="${pad}" x2="${c}" y2="${Z-pad}" stroke="var(--grid)"/>`;
-  s+=`<text x="${Z-pad}" y="${c-4}" font-size="9" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">+${lim}°</text>`;
-  s+=`<text x="${pad+2}" y="${c-4}" font-size="9" fill="var(--muted)" font-family="var(--mono)">−${lim}°</text>`;
+  s+=`<text x="${Z-pad}" y="${c-4}" font-size="9" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">+${L}°</text>`;
+  s+=`<text x="${pad+2}" y="${c-4}" font-size="9" fill="var(--muted)" font-family="var(--mono)">-${L}°</text>`;
   s+=`<text x="${c+4}" y="${pad+10}" font-size="9" fill="var(--muted)" font-family="var(--mono)">AP</text>`;
   s+=`<text x="${Z-pad}" y="${c+12}" font-size="9" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">ML</text>`;
   items.forEach(it=>{ if(!it.m) return; const pts=it.m.tr.map(p=>`${(c+p[0]*sc).toFixed(1)},${(c-p[1]*sc).toFixed(1)}`).join(' ');
@@ -279,24 +369,25 @@ function statSVG(items){ // items: [{m,color,label}]
     s+=ellipsePath(it.m,sc,c)+` stroke="${it.color}"/>`; });
   return s+`</svg>`;
 }
-function barsSVG(groups,series,key,unit){ // groups:[{label, vals:[a,b]}]
-  const W=Math.max(320,groups.length*110), H=230, L=40, B=48, T=16, R=8, ih=H-B-T;
+function barsSVG(groups,series,key,unit){
+  const W=Math.max(320,groups.length*100), H=230, L=40, B=48, T=16, R=8, ih=H-B-T;
   let mx=0; groups.forEach(g=>g.vals.forEach(v=>{if(v!=null) mx=Math.max(mx,v)})); const top=nice(mx*1.1||1);
   const gw=(W-L-R)/groups.length, bw=Math.min(28,(gw-24)/series.length);
-  let s=`<svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W,600)}px" role="img" aria-label="Confronto ${key}">`;
-  for(let i=0;i<=4;i++){const v=top*i/4,y=T+ih-ih*i/4; s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${L-6}" y="${y+3}" font-size="10" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">${+v.toFixed(2)}</text>`;}
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="min-width:${Math.min(W,600)}px;width:100%;height:auto" role="img" aria-label="Confronto ${key}">`;
+  for(let i=0;i<=4;i++){const v=top*i/4,y=T+ih-ih*i/4; s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${L-6}" y="${y+3}" font-size="10" fill="var(--muted)" text-anchor="end" font-family="var(--mono)">${String(+v.toFixed(2)).replace('.',',')}</text>`;}
   groups.forEach((g,i)=>{ const gx=L+gw*i+gw/2, x0=gx-(bw*series.length+2*(series.length-1))/2;
-    g.vals.forEach((v,j)=>{ if(v==null) return; const h=ih*v/top, x=x0+j*(bw+2), y=T+ih-h;
-      s+=`<path d="M${x} ${T+ih} V${y+Math.min(4,h)} Q${x} ${y} ${x+Math.min(4,bw/2)} ${y} H${x+bw-Math.min(4,bw/2)} Q${x+bw} ${y} ${x+bw} ${y+Math.min(4,h)} V${T+ih} Z" fill="${series[j].color}"><title>${series[j].label} · ${g.label}: ${fmt(v)} ${unit}</title></path>`;
-      s+=`<text x="${x+bw/2}" y="${y-4}" font-size="9.5" text-anchor="middle" fill="var(--muted)" font-family="var(--mono)">${fmt(v,v<10?2:1)}</text>`; });
-    s+=`<text x="${gx}" y="${H-B+16}" font-size="11" text-anchor="middle" fill="var(--text)">${g.label}</text>`; });
+    g.vals.forEach((v,j)=>{ if(v==null) return; const h=ih*v/top, x=x0+j*(bw+2), y=T+ih-h, r=Math.min(4,h,bw/2);
+      s+=`<path d="M${x} ${T+ih} V${y+r} Q${x} ${y} ${x+r} ${y} H${x+bw-r} Q${x+bw} ${y} ${x+bw} ${y+r} V${T+ih} Z" fill="${series[j].color}"><title>${series[j].label} · ${g.label}: ${fmt(v)} ${unit}</title></path>`;
+      s+=`<text x="${x+bw/2}" y="${y-4}" font-size="9.5" text-anchor="middle" fill="var(--muted)" font-family="var(--mono)">${fmt(v,v<10?2:0)}</text>`; });
+    const lab=g.label.length>16?g.label.slice(0,15)+'…':g.label;
+    s+=`<text x="${gx}" y="${H-B+16}" font-size="11" text-anchor="middle" fill="var(--text)">${lab}</text>`; });
   s+=`<line x1="${L}" x2="${W-R}" y1="${T+ih}" y2="${T+ih}" stroke="var(--muted)" stroke-opacity=".5"/>`;
   return s+`</svg>`;
 }
 
 /* ================= UI helpers ================= */
 const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dstr=iso=>new Date(iso).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'});
 const patient=()=>DB.patients.find(p=>p.id===pid);
 const sessOf=()=>DB.sessions.filter(s=>s.pid===pid).sort((a,b)=>b.date.localeCompare(a.date));
@@ -306,201 +397,495 @@ $('ptNewBtn').onclick=()=>{$('ptNew').hidden=false; $('ptName').focus();};
 $('ptCancel').onclick=()=>{$('ptNew').hidden=true;};
 $('ptAdd').onclick=()=>{ const n=$('ptName').value.trim(); if(!n){ $('ptName').focus(); return; } const p={id:uid(),name:n}; DB.patients.push(p); pid=p.id; store.set('ba:pid',pid); save(); $('ptName').value=''; $('ptNew').hidden=true; renderAll(); };
 let VIEW='test';
-document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{VIEW=b.dataset.v; document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); ['test','hist','cmp','ex'].forEach(v=>$('v-'+v).hidden=v!==VIEW); renderAll(); window.scrollTo(0,0);});
-function segHTML(id,opts,val){ return `<div class="seg" id="${id}" role="group">${opts.map(([v,l])=>`<button class="chip" type="button" data-v="${v}" aria-pressed="${String(v)===String(val)}">${l}</button>`).join('')}</div>`; }
-function bindSeg(id,cb){ const el=$(id); if(!el) return; el.onclick=e=>{const b=e.target.closest('button'); if(!b) return; el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); cb(b.dataset.v);}; }
+function goView(v){ VIEW=v; document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x.dataset.v===v)); ['test','hist','cmp','ex'].forEach(k=>$('v-'+k).hidden=k!==v); renderAll(); window.scrollTo(0,0); }
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>goView(b.dataset.v));
+function segHTML(id,opts,val,multi){ return `<div class="seg" id="${id}" role="group">${opts.map(([v,l])=>`<button class="chip" type="button" data-v="${v}" aria-pressed="${multi?(val||[]).includes(v):String(v)===String(val)}">${l}</button>`).join('')}</div>`; }
+function bindSeg(id,cb,multi){ const el=$(id); if(!el) return; el.onclick=e=>{const b=e.target.closest('button'); if(!b) return;
+  if(multi){ b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true'); cb([...el.querySelectorAll('button[aria-pressed=true]')].map(x=>x.dataset.v)); }
+  else { el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); cb(b.dataset.v); } }; }
+
+/* ================= results: rows / interpretation / suggestions ================= */
+const strip=h=>String(h).replace(/<[^>]+>/g,'');
+function trialOf(s,cid){ return (s.trials||[]).find(t=>t.cond===cid); }
+function swayAnalysis(s){
+  const P=TESTS[s.proto], out={lines:[],sys:[],ratios:null}; const r=cid=>trialOf(s,cid)?.m?.rms;
+  if(s.proto==='mctsib'&&r('c1')){
+    const b=r('c1'), q=[['c2','somato','C2/C1 · senza vista','valori alti: minore uso dell’informazione somatosensoriale (dipendenza visiva)'],['c3','visivo','C3/C1 · superficie instabile','valori alti: minore uso dell’informazione visiva'],['c4','vest','C4/C1 · foam occhi chiusi','valori alti: minore uso dell’informazione vestibolare']];
+    const rows=q.filter(([c])=>r(c)).map(([c,sys,l,h])=>({sys,l,h,v:r(c)/b}));
+    out.ratios=rows; const worst=[...rows].sort((a,b)=>b.v/(b.sys==='vest'?1.6:1)-a.v/(a.sys==='vest'?1.6:1))[0]; if(worst) out.sys=[worst.sys,'integr'];
+    rows.forEach(x=>out.lines.push(`Rapporto ${x.l}: ${fmt(x.v)} (${x.h})`));
+    const c4=trialOf(s,'c4'); if(c4&&!c4.full) out.lines.push(`Prova C4 (foam, occhi chiusi) non completata: interrotta a ${fmt(c4.time,1)} s.`);
+  } else if(s.proto==='romberg'||s.proto==='tandem'){
+    const [a,b]=P.conds.map(c=>r(c.id)); if(a&&b){ out.lines.push(`Quoziente di Romberg (oscillazione occhi chiusi / aperti): <b>${fmt(b/a)}</b>`); out.sys=b/a>1.8?['somato','vest']:['integr']; }
+  } else if(s.proto==='slst'){
+    if(r('s1')&&r('s2')){ const asym=Math.abs(r('s1')-r('s2'))/Math.max(r('s1'),r('s2'))*100; out.lines.push(`Asimmetria Dx/Sx a occhi aperti: <b>${fmt(asym,0)}%</b>`);}
+    out.sys=['somato','integr'];
+  } else if(s.proto==='bess'){
+    const e=s.trials.reduce((a,t)=>a+(t.errors||0),0), ef=s.trials.filter(t=>['b4','b5','b6'].includes(t.cond)).reduce((a,t)=>a+(t.errors||0),0);
+    out.lines.push(`Errori totali BESS: <b>${e}</b> (superficie stabile ${e-ef} · foam ${ef})`); out.sys=ef>e-ef+2?['vest','visivo']:['somato','integr'];
+  } else if(s.proto==='fukuda'){
+    const y=trialOf(s,'f1')?.m?.yaw; if(y!=null){ out.lines.push(`Rotazione: <b>${fmt(Math.abs(y),0)}°</b>${Math.abs(y)>45?' — oltre 45°: indicativa di asimmetria vestibolare.':' — entro 45°.'}`); out.sys=Math.abs(y)>45?['vest']:['integr']; }
+  }
+  return out;
+}
+const jpeMean=a=>a&&a.length?a.reduce((x,t)=>x+t.e,0)/a.length:null;
+function qScore(s){
+  const a=s.ans||[];
+  if(s.proto==='dhi'){ const sc={P:0,E:0,F:0}; DHI_Q.forEach(([k],i)=>sc[k]+=+(a[i]||0)); return {tot:sc.P+sc.E+sc.F,...sc}; }
+  if(s.proto==='ndi'){ const t=a.reduce((x,v)=>x+(+v||0),0); return {tot:t*2}; }
+  if(s.proto==='abc'){ return {tot:a.reduce((x,v)=>x+(+v||0),0)/ABC_Q.length}; }
+}
+function rows(s){
+  const T=TESTS[s.proto], R=[];
+  if(s.kind==='sway'){
+    T.conds.forEach(c=>{const t=trialOf(s,c.id); if(t) R.push({k:c.id,label:c.s+' · oscillazione',v:t.m?.rms,unit:'°',better:'low',dec:2,note:t.full?'':`stop a ${fmt(t.time,1)} s`});});
+    if(T.errors) R.push({k:'err',label:'Errori BESS totali',v:s.trials.reduce((a,t)=>a+(t.errors||0),0),unit:'',better:'low',dec:0});
+    if(T.yaw){ const t=trialOf(s,'f1'); if(t?.m) R.push({k:'yaw',label:'Rotazione Fukuda',v:Math.abs(t.m.yaw),unit:'°',better:'low',dec:0,flag:Math.abs(t.m.yaw)>45}); }
+  }
+  if(s.kind==='jpe'){
+    const all=[]; JPE_DIRS.forEach(([k,n])=>{const a=s.dirs?.[k]; if(a&&a.length){ const m=jpeMean(a); all.push(...a); R.push({k,label:'JPE '+n,v:m,unit:'°',better:'low',dec:1,flag:m>s.thr}); }});
+    if(all.length) R.push({k:'all',label:'Errore medio complessivo',v:jpeMean(all),unit:'°',better:'low',dec:1,flag:jpeMean(all)>s.thr});
+  }
+  if(s.kind==='rom'){
+    if(T.derived) T.derived.forEach(d=>{ const a=s.vals?.[d.a], b=s.vals?.[d.b]; if(a!=null&&b!=null) R.push({k:d.id,label:d.n,v:Math.max(0,a-b),unit:'°',better:'high',dec:0,ref:d.ref}); });
+    else { T.moves.forEach(m=>{ const v=s.vals?.[m.id]; if(v!=null) R.push({k:m.id,label:m.n,v,unit:'°',better:'high',dec:0,ref:m.ref}); });
+      T.moves.filter(m=>m.pair).forEach(m=>{ const a=s.vals?.[m.id], b=s.vals?.[m.pair]; if(a!=null&&b!=null&&Math.max(a,b)>0) R.push({k:'as_'+m.id,label:'Asimmetria '+m.n.split(' ')[0].toLowerCase(),v:Math.abs(a-b)/Math.max(a,b)*100,unit:'%',better:'low',dec:0,flag:Math.abs(a-b)/Math.max(a,b)>.2}); }); }
+  }
+  if(s.kind==='gait'){
+    GAIT_CONDS.forEach(([k,n])=>{ const g=s.conds?.[k]; if(!g) return; const sh=n.split(' (')[0];
+      R.push({k:k+'_v',label:sh+' · velocità',v:g.speed,unit:'m/s',better:'high',dec:2,flag:g.speed<1});
+      R.push({k:k+'_c',label:sh+' · cadenza',v:g.cad,unit:'passi/min',better:null,dec:0});
+      if(g.cv!=null) R.push({k:k+'_cv',label:sh+' · variabilità passo',v:g.cv,unit:'%',better:'low',dec:1});
+      if(g.sym!=null) R.push({k:k+'_s',label:sh+' · simmetria',v:g.sym,unit:'',better:'high',dec:2}); });
+    const a=s.conds?.norm?.speed, d=s.conds?.dual?.speed; if(a&&d) R.push({k:'dtc',label:'Costo del doppio compito',v:(a-d)/a*100,unit:'%',better:'low',dec:0,flag:(a-d)/a>.2});
+  }
+  if(s.kind==='spnt'){
+    const c=s.conds||{}; [['n','Neutro'],['r','Torsione Dx'],['l','Torsione Sx']].forEach(([k,n])=>{ if(c[k]) R.push({k,label:'Saccadi · '+n,v:c[k].sac,unit:'/3',better:'low',dec:0}); });
+    if(c.n&&(c.r||c.l)){ const d=Math.max(c.r?.sac??0,c.l?.sac??0)-c.n.sac; R.push({k:'diff',label:'Differenza torsione - neutro',v:d,unit:'',better:'low',dec:0,flag:d>=1});
+      R.push({k:'sym',label:'Sintomi in torsione',v:Math.max(c.r?.sym??0,c.l?.sym??0),unit:'/10',better:'low',dec:0}); }
+  }
+  if(s.kind==='q'){ const q=qScore(s);
+    if(s.proto==='dhi'){ R.push({k:'tot',label:'DHI totale',v:q.tot,unit:'/100',better:'low',dec:0,flag:q.tot>=36}); R.push({k:'P',label:'Sottoscala fisica',v:q.P,unit:'/28',better:'low',dec:0}); R.push({k:'E',label:'Sottoscala emotiva',v:q.E,unit:'/36',better:'low',dec:0}); R.push({k:'F',label:'Sottoscala funzionale',v:q.F,unit:'/36',better:'low',dec:0}); }
+    if(s.proto==='ndi') R.push({k:'tot',label:'NDI',v:q.tot,unit:'%',better:'low',dec:0,flag:q.tot>=30});
+    if(s.proto==='abc') R.push({k:'tot',label:'ABC',v:q.tot,unit:'%',better:'high',dec:0,flag:q.tot<67});
+  }
+  return R;
+}
+function interp(s){
+  const L=[], R=rows(s), by=k=>R.find(r=>r.k===k);
+  if(s.kind==='sway') return swayAnalysis(s).lines.map(strip);
+  if(s.kind==='jpe'){ const a=by('all'); if(a){ const cm=(s.dist*Math.tan(s.thr*Math.PI/180)); L.push(`Errore medio di riposizionamento ${fmt(a.v,1)}° (soglia ${fmt(s.thr,1)}°, pari a ${fmt(cm,1)} cm a ${s.dist} cm): ${a.flag?'oltre la soglia, indicativo di deficit della propriocezione cervicale.':'nella norma.'}`);
+    R.filter(r=>r.k!=='all'&&r.flag).forEach(r=>L.push(`${r.label}: ${fmt(r.v,1)}°, oltre la soglia.`)); } }
+  if(s.kind==='rom'){ R.filter(r=>r.ref).forEach(r=>{ const p=r.v/r.ref*100; if(p<75) L.push(`${r.label}: ${fmt(r.v,0)}°, ridotta rispetto al valore di riferimento indicativo (circa ${r.ref}°).`); });
+    R.filter(r=>r.k.startsWith('as_')&&r.flag).forEach(r=>L.push(`${r.label}: ${fmt(r.v,0)}% tra destra e sinistra.`)); if(!L.length) L.push('Escursioni entro i valori di riferimento indicativi, senza asimmetrie rilevanti.'); }
+  if(s.kind==='gait'){ const v=s.conds?.norm?.speed; if(v!=null) L.push(`Velocità abituale ${fmt(v)} m/s: ${v>=1?'adeguata alla deambulazione in comunità.':v>=.8?'lievemente ridotta.':'ridotta, associata a maggior rischio di caduta.'}`);
+    const d=by('dtc'); if(d) L.push(`Costo del doppio compito ${fmt(d.v,0)}%: ${d.flag?'elevato, il cammino risente molto del carico cognitivo.':'contenuto.'}`);
+    const cv=s.conds?.norm?.cv; if(cv!=null&&cv>4) L.push(`Variabilità del tempo del passo ${fmt(cv,1)}%: aumentata.`); }
+  if(s.kind==='spnt'){ const d=by('diff'), y=by('sym'); if(d){ const pos=d.v>=1||(y&&y.v>=3); L.push(pos?'Test positivo: l’inseguimento visivo peggiora con il collo in torsione. Suggerisce una componente cervicale (afferenze propriocettive del collo).':'Test negativo: inseguimento simile in posizione neutra e in torsione.'); } }
+  if(s.kind==='q'){ const t=by('tot').v;
+    if(s.proto==='dhi') L.push(`DHI ${fmt(t,0)}/100: ${t<16?'impatto minimo':t<36?'impatto lieve':t<54?'impatto moderato':'impatto grave'} di vertigini e instabilità sulla vita quotidiana.`);
+    if(s.proto==='ndi') L.push(`NDI ${fmt(t,0)}%: ${t<10?'nessuna disabilità':t<30?'disabilità lieve':t<50?'disabilità moderata':t<70?'disabilità grave':'disabilità completa'} legata al collo.`);
+    if(s.proto==='abc') L.push(`ABC ${fmt(t,0)}%: ${t>=80?'buona fiducia nell’equilibrio.':t>=67?'fiducia moderata.':'fiducia ridotta, associata a maggior rischio di caduta.'}`); }
+  return L;
+}
+function suggest(s){
+  const R=rows(s), f=k=>R.find(r=>r.k===k);
+  if(s.kind==='sway') return swayAnalysis(s).sys;
+  if(s.kind==='jpe') return f('all')?.flag?['cerv','integr']:[];
+  if(s.kind==='spnt') return f('diff')?.flag?['cerv','visivo']:[];
+  if(s.kind==='gait'){ const o=[]; if(f('dtc')?.flag) o.push('integr'); if(f('norm_v')?.flag) o.push('somato','integr'); return [...new Set(o)]; }
+  if(s.kind==='q'){ const t=f('tot'); if(s.proto==='dhi'&&t.v>=36) return ['vest','integr']; if(s.proto==='ndi'&&t.v>=30) return ['cerv']; if(s.proto==='abc'&&t.v<67) return ['integr','somato']; }
+  return [];
+}
+function delta(r,a,b){ if(a==null||b==null) return null; const abs=r.unit==='%'||r.unit==='/3'||r.unit==='/10'||r.unit===''&&r.dec===0;
+  const d=abs?b-a:pct(a,b); if(d==null) return null; const good=r.better==null?null:(r.better==='low'?d<0:d>0); const stable=abs?Math.abs(d)<(r.unit==='%'?5:1):Math.abs(d)<10;
+  return {d,abs,good,stable,txt:(d>0?'+':'')+fmt(d,0)+(abs?(r.unit==='%'?' punti':''):'%')}; }
+function rowsTable(R){ return `<div class="tbl"><table><thead><tr><th>Misura</th><th>Valore</th></tr></thead><tbody>${R.map(r=>`<tr><td>${r.label}${r.note?` <span class="muted">(${r.note})</span>`:''}</td><td class="mono ${r.flag?'flag':''}">${fmt(r.v,r.dec)}${r.unit?' '+r.unit:''}${r.ref?` <span class="muted">/ rif. ${r.ref}°</span>`:''}</td></tr>`).join('')}</tbody></table></div>`; }
+function sysChips(sys){ return sys.length?`<div class="callout" style="margin-top:10px">Esercizi suggeriti: ${sys.map(x=>`<button class="chip" type="button" data-exsys="${x}">${SYS[x]}</button>`).join(' ')}<span class="hint" style="display:block">Indicazione orientativa: va integrata con la valutazione clinica.</span></div>`:''; }
+function swaySummaryHTML(s){
+  const P=TESTS[s.proto], A=swayAnalysis(s);
+  let h=`<div class="tbl"><table><thead><tr><th>Condizione</th><th>RMS °</th><th>Area °²</th><th>Vel °/s</th>${P.errors?'<th>Errori</th>':''}${P.yaw?'<th>Rotaz. °</th>':''}<th>Tempo</th></tr></thead><tbody>`+
+    P.conds.map(c=>{const t=trialOf(s,c.id); if(!t) return ''; const m=t.m||{};
+      return `<tr><td>${c.s}</td><td class="mono">${fmt(m.rms)}</td><td class="mono">${fmt(m.area)}</td><td class="mono">${fmt(m.vel)}</td>${P.errors?`<td class="mono">${t.errors??0}</td>`:''}${P.yaw?`<td class="mono">${fmt(Math.abs(m.yaw),0)}</td>`:''}<td class="mono">${t.full?'✓':fmt(t.time,1)+' s'}</td></tr>`;}).join('')+`</tbody></table></div>`;
+  if(A.ratios) h+=`<div style="margin-top:10px">${A.ratios.map(r=>`<div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:6px 0"><span>${r.l} <span class="hint" style="display:block;margin:0">${r.h}</span></span><b class="mono">${fmt(r.v)}</b></div>`).join('')}</div>`;
+  A.lines.filter(l=>!l.startsWith('Rapporto')).forEach(l=>h+=`<p style="margin:8px 0 0">${l}</p>`);
+  return h+sysChips(A.sys);
+}
+function detailHTML(s){
+  if(s.kind==='sway'){ const P=TESTS[s.proto]; return swaySummaryHTML(s)+`<div class="plots">${P.conds.map(c=>{const t=trialOf(s,c.id); return t&&t.m?`<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:t.m,color:'var(--dopo)'}])}</div>`:'';}).join('')}</div>`; }
+  let h=rowsTable(rows(s));
+  if(s.kind==='jpe') h+=`<div class="hint">Singole prove: ${JPE_DIRS.filter(([k])=>s.dirs?.[k]).map(([k,n])=>`${n} ${s.dirs[k].map(t=>fmt(t.e,1)).join(' · ')}°`).join(' — ')}</div>`;
+  h+=interp(s).map(l=>`<p style="margin:8px 0 0">${l}</p>`).join('');
+  return h+sysChips(suggest(s));
+}
+function bindExLinks(root){ root.querySelectorAll('[data-exsys]').forEach(b=>b.onclick=()=>{ EXF=b.dataset.exsys; ['run','rep'].forEach(o=>{ if(!$(o).hidden){ $(o).hidden=true; } }); stopAll(); goView('ex'); }); }
 
 /* ================= VIEW: test setup ================= */
-const CFG=Object.assign({proto:'mctsib',label:'Pre',pre:5,src:'sensor',durOv:0},store.get('ba:cfg')||{});
+const CFG=Object.assign({cat:'eq',proto:'mctsib',label:'Pre',pre:5,src:'sensor',durOv:0,jpeDist:90,jpeN:6,jpeDirs:['rdx','rsx','fl','ex'],jpeThr:4.5,gaitDist:10,gaitConds:['norm','dual'],spntDur:20,spntTgt:'1'},store.get('ba:cfg')||{});
+const saveCfg=()=>store.set('ba:cfg',CFG);
+const needsSensor=T=>T.kind==='sway'||T.kind==='rom'||T.kind==='gait'||(T.kind==='jpe'&&T.mode==='sensor');
 function renderTest(){
-  const P=PROTOS[CFG.proto];
+  if(!TESTS[CFG.proto]||TESTS[CFG.proto].cat!==CFG.cat){ CFG.proto=Object.keys(TESTS).find(k=>TESTS[k].cat===CFG.cat); }
+  const T=TESTS[CFG.proto];
   const st={unknown:['','Sensore non ancora verificato'],ok:['ok','Sensore di movimento attivo'],denied:['no','Permesso ai sensori negato'],none:['no','Sensore non disponibile in questa vista']}[SEN.state];
+  let set=`<div class="field"><span class="lab">Etichetta sessione</span>${segHTML('sLabel',[['Pre','Pre'],['Post','Post'],['Controllo','Controllo'],['Follow-up','Follow-up']],CFG.label)}</div>`;
+  if(T.kind==='sway') set+=`<div class="field"><span class="lab">Durata per condizione</span>${segHTML('sDur',[[0,`Standard (${T.dur} s)`],[10,'10 s'],[20,'20 s'],[30,'30 s'],[60,'60 s']],CFG.durOv)}</div>`;
+  if(T.kind==='sway'||T.kind==='gait') set+=`<div class="field"><span class="lab">Tempo per posizionarsi</span>${segHTML('sPre',[[3,'3 s'],[5,'5 s'],[10,'10 s']],CFG.pre)}</div>`;
+  if(T.kind==='jpe'){
+    set+=`<div class="field"><span class="lab">Direzioni</span>${segHTML('sDirs',JPE_DIRS,CFG.jpeDirs,1)}</div>`;
+    set+=`<div class="field"><span class="lab">Ripetizioni per direzione</span>${segHTML('sN',[[3,'3'],[5,'5'],[6,'6']],CFG.jpeN)}</div>`;
+    set+=`<div class="field"><label for="sThr">Soglia di normalità (°)</label><div class="row"><input type="number" id="sThr" step="0.1" min="1" max="15" value="${CFG.jpeThr}"><span class="muted" id="sThrCm"></span></div></div>`;
+    if(T.mode==='laser') set+=`<div class="field"><label for="sDist">Distanza dal bersaglio (cm)</label><input type="number" id="sDist" step="5" min="40" max="300" value="${CFG.jpeDist}"></div>`;
+  }
+  if(T.kind==='gait'){
+    set+=`<div class="field"><label for="sGd">Distanza percorsa (m)</label><input type="number" id="sGd" step="1" min="3" max="40" value="${CFG.gaitDist}"></div>`;
+    set+=`<div class="field"><span class="lab">Condizioni</span>${segHTML('sGc',GAIT_CONDS,CFG.gaitConds,1)}</div>`;
+  }
+  if(T.kind==='spnt'){
+    set+=`<div class="field"><span class="lab">Durata per condizione</span>${segHTML('sSd',[[15,'15 s'],[20,'20 s'],[30,'30 s']],CFG.spntDur)}</div>`;
+    set+=`<div class="field"><span class="lab">Bersaglio sullo schermo</span>${segHTML('sSt',[['1','Sì, sul telefono'],['0','No, uso il dito o un altro schermo']],CFG.spntTgt)}</div>`;
+  }
+  if(T.kind!=='q') set+=`<div class="field"><span class="lab">Guida vocale</span>${segHTML('sVoice',[['1','Attiva'],['0','Solo segnali acustici']],VOICE?'1':'0')}</div>`;
+  if(needsSensor(T)) set+=`<div class="field"><span class="lab">Sorgente dati</span>${segHTML('sSrc',[['sensor','Sensori del telefono'],['sim','Simulazione (prova)']],CFG.src)}
+      <div class="row" style="margin-top:4px"><span class="status ${st[0]}"><span class="dot"></span>${st[1]}</span><button class="btn ghost small" id="sTest" type="button">Verifica sensore</button></div>
+      ${SEN.state==='none'||SEN.state==='denied'?`<p class="hint">Questa vista non dà accesso ai sensori. Apri l'app dal suo indirizzo su GitHub in Safari o Chrome e consenti l'accesso a movimento e orientamento.</p>`:''}</div>`;
+  const PLACE={sway:'Telefono in verticale, appoggiato allo <b>sterno</b> e tenuto con entrambe le mani, schermo verso l’esaminatore. Stessa posizione, calzature e foam in tutte le prove.',
+    jpe:T.mode==='laser'?'Paziente seduto, schiena appoggiata, laser fissato sulla testa (fascia) e puntato al centro del bersaglio a parete all’altezza degli occhi. Ritorno sempre a occhi chiusi.':'Paziente seduto. Telefono fissato sulla <b>fronte</b> con una fascia, schermo verso l’esterno. Il paziente torna alla posizione neutra a occhi chiusi.',
+    rom:T.place, gait:'Telefono fissato in vita, sulla <b>schiena (L3–L5)</b>, con una fascia o una cintura, schermo verso l’esterno. Percorso piano di 10 m con 2 m in più a inizio e fine per accelerare e rallentare.',
+    spnt:'Paziente seduto su una sedia girevole. L’esaminatore tiene il telefono in orizzontale a circa 50 cm dagli occhi e osserva gli occhi del paziente durante l’inseguimento. In torsione la testa resta ferma e ruota il tronco.',
+    q:'Il paziente risponde da solo, pensando alle ultime settimane. Puoi passargli il telefono.'}[T.kind];
   $('v-test').innerHTML=`
   <h2>Nuova valutazione</h2><p class="muted" style="margin:0">Paziente: <b>${esc(patient()?.name||'—')}</b></p>
-  <div class="block"><div class="lab" style="font-weight:600;margin-bottom:8px">Protocollo</div>
-    <div class="grid">${Object.entries(PROTOS).map(([k,p])=>`<button class="opt" type="button" data-p="${k}" aria-pressed="${k===CFG.proto}"><b>${p.name}</b><small>${p.desc}</small></button>`).join('')}</div></div>
-  <div class="block">
-    <div class="field"><span class="lab">Etichetta sessione</span>${segHTML('sLabel',[['Pre','Pre'],['Post','Post'],['Controllo','Controllo'],['Follow-up','Follow-up']],CFG.label)}</div>
-    <div class="field"><span class="lab">Durata per condizione</span>${segHTML('sDur',[[0,`Standard (${P.dur} s)`],[10,'10 s'],[20,'20 s'],[30,'30 s'],[60,'60 s']],CFG.durOv)}</div>
-    <div class="field"><span class="lab">Tempo per posizionarsi</span>${segHTML('sPre',[[3,'3 s'],[5,'5 s'],[10,'10 s']],CFG.pre)}</div>
-    <div class="field"><span class="lab">Guida vocale</span>${segHTML('sVoice',[['1','Attiva'],['0','Solo segnali acustici']],VOICE?'1':'0')}</div>
-    <div class="field"><span class="lab">Sorgente dati</span>${segHTML('sSrc',[['sensor','Sensori del telefono'],['sim','Simulazione (prova)']],CFG.src)}
-      <div class="row" style="margin-top:4px"><span class="status ${st[0]}"><span class="dot"></span>${st[1]}</span><button class="btn ghost small" id="sTest" type="button">Verifica sensore</button></div>
-      ${SEN.state==='none'||SEN.state==='denied'?`<p class="hint">Alcune viste integrate bloccano giroscopio e accelerometro. Apri l'app come pagina autonoma in Safari/Chrome (file HTML pubblicato su un indirizzo https) per le misure reali. Nel frattempo puoi provare il flusso con la simulazione.</p>`:''}
-    </div>
-  </div>
-  <div class="block callout">
-    <b>Posizionamento</b> — telefono in verticale, appoggiato allo <b>sterno</b> e tenuto con entrambe le mani, schermo rivolto verso l'esaminatore. Stessa posizione in tutte le prove, stesse calzature (o piedi nudi), stesso foam.
-  </div>
-  <div class="row" style="margin-top:16px"><button class="btn primary" id="startSess" type="button" style="flex:1">Inizia ${P.name}</button></div>`;
-  $('v-test').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{CFG.proto=b.dataset.p; store.set('ba:cfg',CFG); renderTest();});
-  bindSeg('sLabel',v=>{CFG.label=v; store.set('ba:cfg',CFG);});
-  bindSeg('sDur',v=>{CFG.durOv=+v; store.set('ba:cfg',CFG);});
-  bindSeg('sPre',v=>{CFG.pre=+v; store.set('ba:cfg',CFG);});
-  bindSeg('sVoice',v=>{VOICE=v==='1'; store.set('ba:voice',VOICE);});
-  bindSeg('sSrc',v=>{CFG.src=v; store.set('ba:cfg',CFG);});
-  $('sTest').onclick=async()=>{ await enableSensor(); renderTest(); };
+  <div class="block"><div class="cats" role="group" aria-label="Categoria">${CATS.map(([k,n])=>`<button class="chip" type="button" data-cat="${k}" aria-pressed="${k===CFG.cat}">${n}</button>`).join('')}</div>
+    <div class="grid" style="margin-top:12px">${Object.entries(TESTS).filter(([,t])=>t.cat===CFG.cat).map(([k,p])=>`<button class="opt" type="button" data-p="${k}" aria-pressed="${k===CFG.proto}"><b>${p.name}</b><small>${p.desc}</small></button>`).join('')}</div></div>
+  <div class="block">${set}</div>
+  <div class="block callout"><b>Preparazione</b> — ${PLACE}</div>
+  <div class="row" style="margin-top:16px"><button class="btn primary" id="startSess" type="button" style="flex:1">Inizia ${T.name}</button></div>`;
+  const v=$('v-test');
+  v.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{CFG.cat=b.dataset.cat; saveCfg(); renderTest();});
+  v.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{CFG.proto=b.dataset.p; saveCfg(); renderTest();});
+  bindSeg('sLabel',x=>{CFG.label=x; saveCfg();}); bindSeg('sDur',x=>{CFG.durOv=+x; saveCfg();}); bindSeg('sPre',x=>{CFG.pre=+x; saveCfg();});
+  bindSeg('sVoice',x=>{VOICE=x==='1'; store.set('ba:voice',VOICE);}); bindSeg('sSrc',x=>{CFG.src=x; saveCfg();});
+  bindSeg('sDirs',x=>{CFG.jpeDirs=x; saveCfg();},1); bindSeg('sN',x=>{CFG.jpeN=+x; saveCfg();});
+  bindSeg('sGc',x=>{CFG.gaitConds=x; saveCfg();},1); bindSeg('sSd',x=>{CFG.spntDur=+x; saveCfg();}); bindSeg('sSt',x=>{CFG.spntTgt=x; saveCfg();});
+  const thrCm=()=>{ if($('sThrCm')) $('sThrCm').textContent=`= ${fmt(CFG.jpeDist*Math.tan(CFG.jpeThr*Math.PI/180),1)} cm a ${CFG.jpeDist} cm`; };
+  if($('sThr')){ $('sThr').oninput=e=>{ const x=parseFloat(e.target.value); if(x>0){CFG.jpeThr=x; saveCfg(); thrCm();} }; thrCm(); }
+  if($('sDist')) $('sDist').oninput=e=>{ const x=parseFloat(e.target.value); if(x>0){CFG.jpeDist=x; saveCfg(); thrCm();} };
+  if($('sGd')) $('sGd').oninput=e=>{ const x=parseFloat(e.target.value); if(x>0){CFG.gaitDist=x; saveCfg();} };
+  if($('sTest')) $('sTest').onclick=async()=>{ await enableSensor(); renderTest(); };
   $('startSess').onclick=async()=>{
     if(!patient()){ $('ptNew').hidden=false; $('ptName').focus(); return; }
+    if(T.kind==='jpe'&&!CFG.jpeDirs.length) return; if(T.kind==='gait'&&!CFG.gaitConds.length) return;
     initAudio();
-    if(CFG.src==='sensor'){ const ok=await enableSensor(); if(!ok){ renderTest(); return; } }
+    if(needsSensor(T)&&CFG.src==='sensor'){ const ok=await enableSensor(); if(!ok){ renderTest(); return; } }
     startSession();
   };
 }
 
-/* ================= RUN (test execution) ================= */
+/* ================= RUN framework ================= */
 let RUN=null, recT=null, rafId=0;
+function stopAll(){ clearInterval(recT); recT=null; cancelAnimationFrame(rafId); stopSim(); }
 function startSession(){
-  const P=PROTOS[CFG.proto];
-  RUN={P,key:CFG.proto,dur:CFG.durOv||P.dur,i:0,phase:'ready',trials:[],sess:{id:uid(),pid,date:new Date().toISOString(),label:CFG.label,proto:CFG.proto,sim:CFG.src==='sim'?1:0,trials:[]}};
+  const T=TESTS[CFG.proto];
+  RUN={T,key:CFG.proto,i:0,phase:'ready',sess:{id:uid(),pid,date:new Date().toISOString(),label:CFG.label,proto:CFG.proto,kind:T.kind,sim:needsSensor(T)&&CFG.src==='sim'?1:0}};
+  const s=RUN.sess;
+  if(T.kind==='sway'){ RUN.dur=CFG.durOv||T.dur; RUN.trials=[]; }
+  if(T.kind==='jpe'){ s.thr=CFG.jpeThr; s.dist=T.mode==='laser'?CFG.jpeDist:null; s.mode=T.mode; s.dirs={}; RUN.dirs=JPE_DIRS.filter(([k])=>CFG.jpeDirs.includes(k)); RUN.n=CFG.jpeN; RUN.di=0; RUN.pt=null; }
+  if(T.kind==='rom'){ s.vals={}; RUN.mi=0; RUN.phase='zero'; }
+  if(T.kind==='gait'){ s.dist=CFG.gaitDist; s.conds={}; RUN.conds=GAIT_CONDS.filter(([k])=>CFG.gaitConds.includes(k)); RUN.ci=0; }
+  if(T.kind==='spnt'){ s.conds={}; RUN.ci=0; }
+  if(T.kind==='q'){ s.ans=[]; }
   $('run').hidden=false; lockScreen(); runRender();
 }
-function endRun(){ stopRec(); stopSim(); $('run').hidden=true; unlockScreen(); RUN=null; renderAll(); }
-function stopRec(){ clearInterval(recT); recT=null; cancelAnimationFrame(rafId); }
+function endRun(){ stopAll(); $('run').hidden=true; unlockScreen(); RUN=null; renderAll(); }
+function hasData(){ const R=RUN, s=R.sess; return (R.trials&&R.trials.length)||Object.keys(s.dirs||{}).length||Object.keys(s.vals||{}).length||Object.keys(s.conds||{}).length||(s.ans||[]).some(x=>x!=null); }
+function head(sub){ return `<div class="ov-top"><span class="eyebrow">${RUN.T.name}${sub?' · '+sub:''}${RUN.sess.sim?' · simulazione':''}</span><button class="btn ghost small" id="rQuit" type="button">Chiudi</button></div>`; }
+function bindQuit(){ const q=$('rQuit'); if(!q) return; q.onclick=()=>{ if(RUN.phase==='done'||!hasData()) return endRun();
+  if(q.dataset.c){ endRun(); return; } q.dataset.c=1; q.textContent='Esci senza salvare?'; setTimeout(()=>{ if(q.isConnected){ q.textContent='Chiudi'; delete q.dataset.c; }},3000); }; }
 function runRender(){
-  const R=RUN, c=R.P.conds[R.i], n=R.P.conds.length, el=$('runIn');
-  const head=`<div class="ov-top"><span class="eyebrow">${R.P.name} · condizione ${R.i+1}/${n}${R.sess.sim?' · simulazione':''}</span><button class="btn ghost small" id="rQuit" type="button">Chiudi</button></div>`;
+  if(RUN.phase==='done') renderDone(); else ({sway:runSway,jpe:runJPE,rom:runROM,gait:runGait,spnt:runSPNT,q:runQ})[RUN.T.kind]();
+  bindQuit();
+}
+function finishSession(){ const R=RUN; if(R.T.kind==='sway') R.sess.trials=R.trials; stopAll(); DB.sessions.push(R.sess); save(); R.phase='done'; runRender(); }
+function renderDone(){
+  const s=RUN.sess, el=$('runIn');
+  el.innerHTML=head()+`<div class="cond">Sessione salvata</div><p class="muted" style="margin:0">${esc(patient()?.name)} · ${s.label} · ${dstr(s.date)}</p>`+detailHTML(s)+
+    `<div class="row" style="margin-top:8px"><button class="btn ghost" id="rHist" type="button">Storico</button><button class="btn ghost" id="rCmp" type="button">Prima / Dopo</button><button class="btn primary" id="rPdf" type="button" style="flex:1">Report PDF</button></div>`;
+  $('rHist').onclick=()=>{endRun(); goView('hist');};
+  $('rCmp').onclick=()=>{CMP.b=s.id; CMP.a=null; endRun(); goView('cmp');};
+  $('rPdf').onclick=()=>openReport(null,s);
+  bindExLinks(el);
+}
+
+/* ---------- sway ---------- */
+function runSway(){
+  const R=RUN, c=R.T.conds[R.i], n=R.T.conds.length, el=$('runIn'), H=head(`condizione ${R.i+1}/${n}`);
   if(R.phase==='ready'){
-    el.innerHTML=head+`<div class="cond">${c.n}</div>
-      <p class="muted" style="margin:0">${c.ec?'Occhi <b>chiusi</b> alla partenza.':'Occhi aperti, sguardo su un punto a parete.'} Durata ${R.dur} s${R.P.yaw?` · metronomo ${R.P.bpm} bpm`:''}. Telefono sullo sterno.</p>
-      ${R.P.errors?`<p class="hint">Errori BESS: mani via dai fianchi, apertura occhi, passo/inciampo/caduta, abduzione/flessione anca > 30°, sollevamento avampiede o tallone, fuori posizione > 5 s.</p>`:''}
+    el.innerHTML=H+`<div class="cond">${c.n}</div>
+      <p class="muted" style="margin:0">${c.ec?'Occhi <b>chiusi</b> alla partenza.':'Occhi aperti, sguardo su un punto a parete.'} Durata ${R.dur} s${R.T.yaw?` · metronomo ${R.T.bpm} bpm`:''}. Telefono sullo sterno.</p>
+      ${R.T.errors?`<p class="hint">Errori BESS: mani via dai fianchi, apertura occhi, passo/inciampo/caduta, abduzione/flessione anca &gt; 30°, sollevamento avampiede o tallone, fuori posizione &gt; 5 s.</p>`:''}
       <div class="row" style="margin-top:auto"><button class="btn primary" id="rGo" type="button" style="flex:1">Avvia (${CFG.pre} s per posizionarsi)</button></div>
       ${R.trials.length?`<button class="btn ghost small" id="rSaveNow" type="button">Termina e salva le ${R.trials.length} condizioni completate</button>`:''}`;
-    $('rGo').onclick=()=>countdown();
+    $('rGo').onclick=()=>swayCount();
     if($('rSaveNow')) $('rSaveNow').onclick=finishSession;
   }
   if(R.phase==='count'||R.phase==='rec'){
-    el.innerHTML=head+`<div class="cond" style="font-size:22px">${c.n}</div>
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${c.n}</div>
       <div class="big" id="rBig">${CFG.pre}</div><div class="muted" id="rSub" style="text-align:center">Posizionati</div>
       <canvas id="live" width="600" height="600"></canvas>
-      <div class="row"><button class="btn ghost" id="rLoss" type="button" style="flex:1">${R.P.yaw?'Stop':'Perdita di equilibrio · stop'}</button><button class="btn ghost small" id="rAbort" type="button">Annulla prova</button></div>`;
-    $('rLoss').onclick=()=>{ if(R.phase==='rec') finishTrial(false); };
-    $('rAbort').onclick=()=>{ stopRec(); stopSim(); R.phase='ready'; say('Prova annullata'); runRender(); };
+      <div class="row"><button class="btn ghost" id="rLoss" type="button" style="flex:1">${R.T.yaw?'Stop':'Perdita di equilibrio · stop'}</button><button class="btn ghost small" id="rAbort" type="button">Annulla prova</button></div>`;
+    $('rLoss').onclick=()=>{ if(R.phase==='rec') swayFinish(false); };
+    $('rAbort').onclick=()=>{ stopAll(); R.phase='ready'; say('Prova annullata'); runRender(); };
   }
   if(R.phase==='result'){
     const t=R.cur, m=t.m;
-    el.innerHTML=head+`<div class="cond" style="font-size:22px">${c.n}</div>
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${c.n}</div>
       ${!t.full?`<div class="callout">Prova interrotta a <b>${fmt(t.time,1)} s</b> su ${R.dur} s.</div>`:''}
       ${m?`<div class="plot">${statSVG([{m,color:'var(--dopo)'}])}</div>
-      <div class="metrics">${R.P.yaw?`<div><b>${fmt(Math.abs(m.yaw),0)}°</b><span>Rotazione ${m.yaw>=0?'(verso sx)':'(verso dx)'}</span></div>`:''}
+      <div class="metrics">${R.T.yaw?`<div><b>${fmt(Math.abs(m.yaw),0)}°</b><span>Rotazione ${m.yaw>=0?'(verso sx)':'(verso dx)'}</span></div>`:''}
         <div><b>${fmt(m.rms)}°</b><span>Oscillazione RMS</span></div><div><b>${fmt(m.area)}</b><span>Area ellisse 95% (°²)</span></div>
         <div><b>${fmt(m.ml)}° / ${fmt(m.ap)}°</b><span>RMS ML / AP</span></div><div><b>${fmt(m.vel)}</b><span>Velocità (°/s)</span></div><div><b>${fmt(m.gyro,1)}</b><span>Giroscopio RMS (°/s)</span></div></div>`:'<p>Dati insufficienti.</p>'}
-      ${R.P.errors?`<div class="block" style="margin-top:0"><div class="lab" style="font-weight:600">Errori BESS</div><div class="stepper"><button class="btn ghost" id="eM" type="button" aria-label="Meno">−</button><output id="eV">${t.errors||0}</output><button class="btn ghost" id="eP" type="button" aria-label="Più">+</button><span class="muted">max 10</span></div></div>`:''}
-      <div class="row"><button class="btn ghost" id="rRedo" type="button">Ripeti</button><button class="btn primary" id="rNext" type="button" style="flex:1">${R.i<R.P.conds.length-1?'Avanti':'Salva sessione'}</button></div>`;
-    if(R.P.errors){ const upd=d=>{t.errors=Math.max(0,Math.min(10,(t.errors||0)+d)); $('eV').textContent=t.errors;}; $('eM').onclick=()=>upd(-1); $('eP').onclick=()=>upd(1); if(!t.full) t.errors=Math.max(t.errors||0,10); $('eV').textContent=t.errors||0; }
+      ${R.T.errors?`<div class="block" style="margin-top:0"><div style="font-weight:600">Errori BESS</div><div class="stepper"><button class="btn ghost" id="eM" type="button" aria-label="Meno">−</button><output id="eV">${t.errors||0}</output><button class="btn ghost" id="eP" type="button" aria-label="Più">+</button><span class="muted">max 10</span></div></div>`:''}
+      <div class="row"><button class="btn ghost" id="rRedo" type="button">Ripeti</button><button class="btn primary" id="rNext" type="button" style="flex:1">${R.i<n-1?'Avanti':'Salva sessione'}</button></div>`;
+    if(R.T.errors){ if(!t.full&&t.errors==null) t.errors=10; const upd=d=>{t.errors=Math.max(0,Math.min(10,(t.errors||0)+d)); $('eV').textContent=t.errors;}; $('eM').onclick=()=>upd(-1); $('eP').onclick=()=>upd(1); $('eV').textContent=t.errors||0; }
     $('rRedo').onclick=()=>{R.phase='ready'; runRender();};
-    $('rNext').onclick=()=>{ R.trials.push(t); if(R.i<R.P.conds.length-1){R.i++; R.phase='ready'; runRender();} else finishSession(); };
+    $('rNext').onclick=()=>{ R.trials.push(t); if(R.i<n-1){R.i++; R.phase='ready'; runRender();} else finishSession(); };
   }
-  if(R.phase==='done'){
-    const s=R.sess; el.innerHTML=head+`<div class="cond">Sessione salvata</div><p class="muted" style="margin:0">${esc(patient()?.name)} · ${s.label} · ${dstr(s.date)}</p>`+sessionSummaryHTML(s)+
-      `<div class="row" style="margin-top:8px"><button class="btn ghost" id="rHist" type="button">Storico</button><button class="btn primary" id="rCmp" type="button" style="flex:1">Confronta prima / dopo</button></div>`;
-    $('rHist').onclick=()=>{endRun(); document.querySelector('[data-v=hist]').click();};
-    $('rCmp').onclick=()=>{CMP.b=s.id; CMP.a=null; endRun(); document.querySelector('[data-v=cmp]').click();};
-    bindExLinks(el);
-  }
-  $('rQuit').onclick=()=>{ if(R.phase==='done'||(!R.trials.length&&R.phase!=='rec')) return endRun();
-    const q=$('rQuit'); if(q.dataset.c){ endRun(); return; } q.dataset.c=1; q.textContent='Esci senza salvare?'; setTimeout(()=>{ if(q.isConnected){ q.textContent='Chiudi'; delete q.dataset.c; }},3000); };
 }
-function countdown(){
-  const R=RUN, c=R.P.conds[R.i]; R.phase='count'; runRender();
-  if(CFG.src==='sim') startSim(c.f*(RUN.key==='fukuda'?1:1), R.P.yaw?(Math.random()<.5?-1:1)*1.3:0);
+function swayCount(){
+  const R=RUN, c=R.T.conds[R.i]; R.phase='count'; runRender();
+  if(CFG.src==='sim') startSim('sway',{f:c.f,yd:R.T.yaw?(Math.random()<.5?-1:1)*1.3:0});
   say(`${c.n}. Posizionati.`);
   let left=CFG.pre; const t0=performance.now();
   const tick=()=>{ if(!RUN||RUN.phase!=='count') return; const rem=CFG.pre-(performance.now()-t0)/1000; const k=Math.ceil(rem);
     if(k!==left){ left=k; if(k>0&&k<=3) beep(660,.08); }
     $('rBig').textContent=Math.max(0,k); drawLive(false);
-    if(rem<=0){ startRec(); return; } rafId=requestAnimationFrame(tick); };
+    if(rem<=0){ swayRec(); return; } rafId=requestAnimationFrame(tick); };
   rafId=requestAnimationFrame(tick);
 }
 let S=[],trail=[];
-function startRec(){
-  const R=RUN, c=R.P.conds[R.i]; R.phase='rec'; S=[]; trail=[]; beep(1175,.22,.45); say(c.ec?'Occhi chiusi. Via.':'Via.');
+function swayRec(){
+  const R=RUN, c=R.T.conds[R.i]; R.phase='rec'; S=[]; trail=[]; beep(1175,.22,.45); say(c.ec?'Occhi chiusi. Via.':'Via.');
   $('rSub').textContent='Registrazione'; const t0=performance.now(); let lastBeat=-1;
   recT=setInterval(()=>{ const t=(performance.now()-t0)/1000, v=SEN.cur; S.push([t,v.ml,v.ap,v.gyro,v.yaw]);
-    if(R.P.yaw){ const b=Math.floor(t*R.P.bpm/60); if(b!==lastBeat){lastBeat=b; beep(b%10===0?1000:760,.05,.25);} }
-    if(t>=R.dur) finishTrial(true); },20);
+    if(R.T.yaw){ const b=Math.floor(t*R.T.bpm/60); if(b!==lastBeat){lastBeat=b; beep(b%10===0?1000:760,.05,.25);} }
+    if(t>=R.dur) swayFinish(true); },20);
   const loop=()=>{ if(!RUN||RUN.phase!=='rec') return; const t=S.length?S[S.length-1][0]:0; $('rBig').textContent=Math.max(0,Math.ceil(R.dur-t)); drawLive(true); rafId=requestAnimationFrame(loop); };
   rafId=requestAnimationFrame(loop);
 }
-function finishTrial(full){
-  const R=RUN; stopRec(); stopSim(); const c=R.P.conds[R.i];
+function swayFinish(full){
+  const R=RUN; stopAll(); const c=R.T.conds[R.i];
   const time=S.length?S[S.length-1][0]:0; beep(880,.12); setTimeout(()=>beep(880,.12),180); say(full?'Stop. Puoi aprire gli occhi.':'Prova interrotta.');
   R.cur={cond:c.id,time:+time.toFixed(1),full:full?1:0,m:metrics(S,time)}; R.phase='result'; runRender();
 }
-function finishSession(){ const R=RUN; R.sess.trials=R.trials; DB.sessions.push(R.sess); save(); R.phase='done'; runRender(); }
 function drawLive(rec){
   const cv=$('live'); if(!cv) return; const x=cv.getContext('2d'), Z=600, c=Z/2, v=SEN.cur;
   if(!drawLive.base||!trail.length) drawLive.base=[v.ml,v.ap]; else { drawLive.base[0]+=.01*(v.ml-drawLive.base[0]); drawLive.base[1]+=.01*(v.ap-drawLive.base[1]); }
   const px=(v.ml-drawLive.base[0]), py=(v.ap-drawLive.base[1]); trail.push([px,py]); if(trail.length>150) trail.shift();
-  const lim=2, sc=(c-30)/lim;
+  const lim=2, sc=(c-30)/lim, cl=q=>Math.max(-lim,Math.min(lim,q));
   x.fillStyle=css('--panel'); x.fillRect(0,0,Z,Z); x.strokeStyle=css('--grid'); x.lineWidth=2;
   [1,2].forEach(r=>{x.beginPath(); x.arc(c,c,r*sc,0,Math.PI*2); x.stroke();});
   x.beginPath(); x.moveTo(30,c); x.lineTo(Z-30,c); x.moveTo(c,30); x.lineTo(c,Z-30); x.stroke();
   x.fillStyle=css('--muted'); x.font='22px JetBrains Mono, monospace'; x.fillText('1°',c+sc+6,c-8); x.fillText('2°',c+2*sc-34,c-8);
-  x.strokeStyle=css('--dopo'); x.globalAlpha=.6; x.lineWidth=3; x.beginPath(); trail.forEach((p,i)=>{const X=c+Math.max(-lim,Math.min(lim,p[0]))*sc,Y=c-Math.max(-lim,Math.min(lim,p[1]))*sc; i?x.lineTo(X,Y):x.moveTo(X,Y);}); x.stroke(); x.globalAlpha=1;
-  x.fillStyle=rec?css('--dopo'):css('--muted'); x.beginPath(); x.arc(c+Math.max(-lim,Math.min(lim,px))*sc,c-Math.max(-lim,Math.min(lim,py))*sc,14,0,Math.PI*2); x.fill();
+  x.strokeStyle=css('--dopo'); x.globalAlpha=.6; x.lineWidth=3; x.beginPath(); trail.forEach((p,i)=>{const X=c+cl(p[0])*sc,Y=c-cl(p[1])*sc; i?x.lineTo(X,Y):x.moveTo(X,Y);}); x.stroke(); x.globalAlpha=1;
+  x.fillStyle=rec?css('--dopo'):css('--muted'); x.beginPath(); x.arc(c+cl(px)*sc,c-cl(py)*sc,14,0,Math.PI*2); x.fill();
 }
 
-/* ================= session summary + suggestions ================= */
-function trialOf(s,cid){ return s.trials.find(t=>t.cond===cid); }
-function analysis(s){
-  const P=PROTOS[s.proto], out={lines:[],sys:[]}; const r=cid=>trialOf(s,cid)?.m?.rms;
-  if(s.proto==='mctsib'&&r('c1')){
-    const b=r('c1'), q=[['c2','somato','C2/C1 · senza vista','valori alti: minore uso dell’informazione somatosensoriale (dipendenza visiva)'],['c3','visivo','C3/C1 · superficie instabile','valori alti: minore uso dell’informazione visiva'],['c4','vest','C4/C1 · foam occhi chiusi','valori alti: minore uso dell’informazione vestibolare']];
-    const rows=q.filter(([c])=>r(c)).map(([c,sys,l,h])=>({sys,l,h,v:r(c)/b}));
-    out.ratios=rows; const worst=[...rows].sort((a,b)=>b.v/(b.sys==='vest'?1.6:1)-a.v/(a.sys==='vest'?1.6:1))[0]; if(worst) out.sys=[worst.sys,'integr'];
-  } else if((s.proto==='romberg'||s.proto==='tandem')){
-    const [a,b]=P.conds.map(c=>r(c.id)); if(a&&b){ out.lines.push(`Quoziente di Romberg (RMS OC/OA): <b>${fmt(b/a)}</b>`); out.sys=b/a>1.8?['somato','vest']:['integr']; }
-  } else if(s.proto==='slst'){
-    const g=cid=>r(cid); if(g('s1')&&g('s2')){ const asym=Math.abs(g('s1')-g('s2'))/Math.max(g('s1'),g('s2'))*100; out.lines.push(`Asimmetria Dx/Sx a occhi aperti: <b>${fmt(asym,0)}%</b>`);}
-    out.sys=['somato','integr'];
-  } else if(s.proto==='bess'){
-    const e=s.trials.reduce((a,t)=>a+(t.errors||0),0), ef=s.trials.filter(t=>['b4','b5','b6'].includes(t.cond)).reduce((a,t)=>a+(t.errors||0),0);
-    out.lines.push(`Errori totali BESS: <b>${e}</b> (stabile ${e-ef} · foam ${ef})`); out.sys=ef>e-ef+2?['vest','visivo']:['somato','integr'];
-  } else if(s.proto==='fukuda'){
-    const y=trialOf(s,'f1')?.m?.yaw; if(y!=null){ out.lines.push(`Rotazione: <b>${fmt(Math.abs(y),0)}°</b> — oltre 45° è considerato indicativo di asimmetria vestibolare.`); out.sys=Math.abs(y)>45?['vest']:['integr']; }
+/* ---------- JPE ---------- */
+function runJPE(){
+  const R=RUN, s=R.sess, [dk,dn]=R.dirs[R.di], arr=s.dirs[dk]||(s.dirs[dk]=[]), ti=arr.length, el=$('runIn');
+  const H=head(`${dn} · prova ${Math.min(ti+1,R.n)}/${R.n}`);
+  const prev=arr.length?`<div class="hint">Prove ${dn.toLowerCase()}: ${arr.map(t=>`<b class="mono">${fmt(t.e,1)}°</b>`).join(' · ')} — media <b class="mono">${fmt(jpeMean(arr),1)}°</b></div>`:'';
+  const moveTxt={rdx:'ruota la testa a destra',rsx:'ruota la testa a sinistra',fl:'flette la testa in avanti',ex:'estende la testa indietro'}[dk];
+  if(s.mode==='laser'){
+    el.innerHTML=H+`<div class="cond">${dn}</div><p class="muted" style="margin:0">Laser al centro a occhi aperti. Il paziente chiude gli occhi, ${moveTxt} fino al massimo confortevole e torna alla posizione di partenza. <b>Tocca il bersaglio</b> dove si ferma il punto del laser, oppure inserisci i cm.</p>
+      <canvas id="tgt" width="600" height="600" aria-label="Bersaglio: tocca dove si è fermato il laser"></canvas>
+      <div class="row"><label class="muted" for="jx">Orizz. (cm, + destra)</label><input type="number" id="jx" step="0.5" value="${R.pt?R.pt[0]:''}"><label class="muted" for="jy">Vert. (cm, + alto)</label><input type="number" id="jy" step="0.5" value="${R.pt?R.pt[1]:''}"></div>
+      <div class="metrics"><div><b id="jE">—</b><span>Errore (°)</span></div><div><b id="jC">—</b><span>Distanza dal centro (cm)</span></div></div>
+      ${prev}
+      <div class="row"><button class="btn ghost" id="jUndo" type="button" ${arr.length?'':'aria-disabled="true"'}>Annulla ultima</button><button class="btn primary" id="jSave" type="button" style="flex:1" aria-disabled="true">Salva prova</button></div>`;
+    const cv=$('tgt'), ctx=cv.getContext('2d'), Z=600, c=Z/2, LIM=20, sc=(c-20)/LIM;
+    const thrCm=s.dist*Math.tan(s.thr*Math.PI/180);
+    const draw=()=>{ ctx.fillStyle=css('--panel'); ctx.fillRect(0,0,Z,Z); ctx.strokeStyle=css('--grid'); ctx.lineWidth=2;
+      [5,10,15,20].forEach(r=>{ctx.beginPath(); ctx.arc(c,c,r*sc,0,Math.PI*2); ctx.stroke();});
+      ctx.beginPath(); ctx.moveTo(20,c); ctx.lineTo(Z-20,c); ctx.moveTo(c,20); ctx.lineTo(c,Z-20); ctx.stroke();
+      ctx.fillStyle=css('--muted'); ctx.font='20px JetBrains Mono, monospace'; [5,10,15].forEach(r=>ctx.fillText(r+' cm',c+r*sc+4,c-6));
+      ctx.setLineDash([10,8]); ctx.strokeStyle=css('--bad'); ctx.beginPath(); ctx.arc(c,c,thrCm*sc,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle=css('--bad'); ctx.fillText('soglia',c+4,c-thrCm*sc-6);
+      ctx.fillStyle=css('--muted'); arr.forEach(t=>{ ctx.globalAlpha=.5; ctx.beginPath(); ctx.arc(c+t.x*sc,c-t.y*sc,8,0,Math.PI*2); ctx.fill(); }); ctx.globalAlpha=1;
+      if(R.pt){ ctx.fillStyle=css('--dopo'); ctx.beginPath(); ctx.arc(c+R.pt[0]*sc,c-R.pt[1]*sc,12,0,Math.PI*2); ctx.fill(); } };
+    const upd=()=>{ if(R.pt){ const d=Math.hypot(R.pt[0],R.pt[1]); $('jE').textContent=fmt(Math.atan(d/s.dist)*180/Math.PI,1)+'°'; $('jC').textContent=fmt(d,1); $('jSave').removeAttribute('aria-disabled'); } draw(); };
+    cv.addEventListener('pointerdown',e=>{ const r=cv.getBoundingClientRect(); const X=(e.clientX-r.left)/r.width*Z, Y=(e.clientY-r.top)/r.height*Z;
+      R.pt=[Math.round((X-c)/sc*2)/2, Math.round((c-Y)/sc*2)/2]; $('jx').value=R.pt[0]; $('jy').value=R.pt[1]; upd(); });
+    const inp=()=>{ const a=parseFloat($('jx').value), b=parseFloat($('jy').value); if(!isNaN(a)||!isNaN(b)){ R.pt=[isNaN(a)?0:a,isNaN(b)?0:b]; upd(); } };
+    $('jx').oninput=inp; $('jy').oninput=inp; upd();
+    $('jSave').onclick=()=>{ if(!R.pt) return; const d=Math.hypot(R.pt[0],R.pt[1]); arr.push({x:R.pt[0],y:R.pt[1],e:+(Math.atan(d/s.dist)*180/Math.PI).toFixed(2)}); R.pt=null; beep(990,.06); jpeNext(); };
+    $('jUndo').onclick=()=>{ arr.pop(); runRender(); };
+  } else {
+    if(R.phase==='move'){
+      el.innerHTML=H+`<div class="cond">${dn}</div><p class="muted" style="margin:0">Occhi chiusi: il paziente ${moveTxt} e torna alla posizione di partenza. Quando dice "fatto", tocca <b>Registra ritorno</b>.</p>
+        <div class="big" id="jLive">0,0°</div><div class="muted" style="text-align:center">distanza dalla posizione neutra</div>${prev}
+        <div class="row" style="margin-top:auto"><button class="btn ghost" id="jRez" type="button">Rifai lo zero</button><button class="btn primary" id="jRec" type="button" style="flex:1">Registra ritorno</button></div>`;
+      const loop=()=>{ if(!RUN||RUN.phase!=='move'||!$('jLive')) return; $('jLive').textContent=fmt(moTotal(),1)+'°'; rafId=requestAnimationFrame(loop); }; loop();
+      $('jRez').onclick=()=>{ cancelAnimationFrame(rafId); R.phase='zero'; runRender(); };
+      $('jRec').onclick=()=>{ cancelAnimationFrame(rafId); const e=moTotal(); arr.push({e:+e.toFixed(2)}); beep(990,.06); say('Registrato. Apri gli occhi e torna in posizione neutra.'); R.phase='zero'; jpeNext(); };
+    } else {
+      el.innerHTML=H+`<div class="cond">${dn}</div><p class="muted" style="margin:0">Paziente in posizione neutra, sguardo avanti, occhi aperti. Tocca <b>Azzera</b>: da quel momento la posizione è il riferimento.</p>${prev}
+        <div class="row" style="margin-top:auto"><button class="btn ghost" id="jUndo" type="button" ${arr.length?'':'aria-disabled="true"'}>Annulla ultima</button><button class="btn primary" id="jZero" type="button" style="flex:1">Azzera in posizione neutra</button></div>`;
+      $('jZero').onclick=()=>{ moZero(rnd(1.2,6.5)); R.phase='move'; beep(660,.08); say('Chiudi gli occhi, esegui il movimento e torna al centro.'); runRender(); };
+      $('jUndo').onclick=()=>{ arr.pop(); runRender(); };
+    }
   }
-  return out;
 }
-function sessionSummaryHTML(s){
-  const P=PROTOS[s.proto], A=analysis(s);
-  let h=`<div class="tbl"><table><thead><tr><th>Condizione</th><th>RMS °</th><th>Area °²</th><th>Vel °/s</th>${P.errors?'<th>Errori</th>':''}${P.yaw?'<th>Rotaz. °</th>':''}<th>Tempo</th></tr></thead><tbody>`+
-    P.conds.map(c=>{const t=trialOf(s,c.id); if(!t) return ''; const m=t.m||{};
-      return `<tr><td>${c.s}</td><td class="mono">${fmt(m.rms)}</td><td class="mono">${fmt(m.area)}</td><td class="mono">${fmt(m.vel)}</td>${P.errors?`<td class="mono">${t.errors??0}</td>`:''}${P.yaw?`<td class="mono">${fmt(Math.abs(m.yaw),0)}</td>`:''}<td class="mono">${t.full?'✓':fmt(t.time,1)+' s'}</td></tr>`;}).join('')+`</tbody></table></div>`;
-  if(A.ratios) h+=`<div style="margin-top:10px">${A.ratios.map(r=>`<div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:6px 0"><span>${r.l} <span class="hint" style="display:block;margin:0">${r.h}</span></span><b class="mono">${fmt(r.v)}</b></div>`).join('')}</div>`;
-  A.lines.forEach(l=>h+=`<p style="margin:8px 0 0">${l}</p>`);
-  if(A.sys.length) h+=`<div class="callout" style="margin-top:10px">Esercizi di integrazione suggeriti: ${A.sys.map(x=>`<button class="chip" type="button" data-exsys="${x}">${SYS[x]}</button>`).join(' ')}<span class="hint" style="display:block">Indicazione orientativa basata sulle condizioni con maggiore oscillazione: va integrata con la valutazione clinica.</span></div>`;
-  return h;
+function jpeNext(){ const R=RUN, [dk]=R.dirs[R.di]; if(R.sess.dirs[dk].length>=R.n){ if(R.di<R.dirs.length-1){ R.di++; R.phase='zero'; say('Prossima direzione: '+R.dirs[R.di][1]); } else return finishSession(); } runRender(); }
+
+/* ---------- ROM ---------- */
+function runROM(){
+  const R=RUN, s=R.sess, T=R.T, m=T.moves[R.mi], el=$('runIn'), H=head(`${R.mi+1}/${T.moves.length}`);
+  const done=T.moves.filter(x=>s.vals[x.id]!=null).map(x=>`${x.n} <b class="mono">${fmt(s.vals[x.id],0)}°</b>`).join(' · ');
+  const how=m.m==='yaw'?'Il telefono misura la rotazione con il giroscopio: mantieni il busto fermo.':'Il telefono misura l’inclinazione rispetto alla posizione neutra.';
+  if(R.phase==='zero'){
+    el.innerHTML=H+`<div class="cond">${m.n}</div><p class="muted" style="margin:0">${T.place} ${how}</p>
+      <p style="margin:0">Paziente in posizione neutra. Tocca <b>Azzera</b>, poi chiedi il movimento massimo e tieni la posizione 2 secondi.</p>
+      ${done?`<div class="hint">${done}</div>`:''}
+      <div class="row" style="margin-top:auto">${R.mi>0?`<button class="btn ghost" id="mBack" type="button">Indietro</button>`:''}<button class="btn ghost" id="mSkip" type="button">Salta</button><button class="btn primary" id="mZero" type="button" style="flex:1">Azzera in posizione neutra</button></div>`;
+    $('mZero').onclick=()=>{ moZero(m.ref*rnd(.7,1.02)); R.phase='move'; beep(660,.08); say(m.n); runRender(); };
+    $('mSkip').onclick=()=>romNext();
+    if($('mBack')) $('mBack').onclick=()=>{ R.mi--; runRender(); };
+  } else if(R.phase==='move'){
+    el.innerHTML=H+`<div class="cond">${m.n}</div><div class="big" id="mLive">0°</div><div class="muted" style="text-align:center">massimo raggiunto: <b class="mono" id="mMax">0°</b> · riferimento indicativo ${m.ref}°</div>
+      <div class="row" style="margin-top:auto"><button class="btn ghost" id="mRez" type="button">Rifai lo zero</button><button class="btn primary" id="mRec" type="button" style="flex:1">Registra</button></div>`;
+    const loop=()=>{ if(!RUN||RUN.phase!=='move'||!$('mLive')) return; const v=m.m==='yaw'?moYaw():moTilt(); MO.max=Math.max(MO.max,v); $('mLive').textContent=fmt(v,0)+'°'; $('mMax').textContent=fmt(MO.max,0)+'°'; rafId=requestAnimationFrame(loop); }; loop();
+    $('mRez').onclick=()=>{ cancelAnimationFrame(rafId); R.phase='zero'; runRender(); };
+    $('mRec').onclick=()=>{ cancelAnimationFrame(rafId); s.vals[m.id]=+MO.max.toFixed(1); beep(990,.06); R.phase='res'; runRender(); };
+  } else {
+    el.innerHTML=H+`<div class="cond">${m.n}</div><div class="big">${fmt(s.vals[m.id],0)}°</div><div class="muted" style="text-align:center">riferimento indicativo ${m.ref}°</div>
+      <div class="row" style="margin-top:auto"><button class="btn ghost" id="mRedo" type="button">Ripeti</button><button class="btn primary" id="mNext" type="button" style="flex:1">${R.mi<T.moves.length-1?'Avanti':'Salva sessione'}</button></div>`;
+    $('mRedo').onclick=()=>{ R.phase='zero'; runRender(); };
+    $('mNext').onclick=()=>romNext();
+  }
 }
-function bindExLinks(root){ root.querySelectorAll('[data-exsys]').forEach(b=>b.onclick=()=>{ EXF=b.dataset.exsys; if(!$('run').hidden) endRun(); document.querySelector('[data-v=ex]').click(); }); }
+function romNext(){ const R=RUN; if(R.mi<R.T.moves.length-1){ R.mi++; R.phase='zero'; runRender(); } else if(Object.keys(R.sess.vals).length) finishSession(); else endRun(); }
+
+/* ---------- GAIT ---------- */
+const GSIM={norm:[1.85,1.25],fast:[2.15,1.7],dual:[1.65,.98],head:[1.7,1.05]};
+function runGait(){
+  const R=RUN, s=R.sess, [ck,cn]=R.conds[R.ci], el=$('runIn'), H=head(`condizione ${R.ci+1}/${R.conds.length}`);
+  if(R.phase==='ready'){
+    el.innerHTML=H+`<div class="cond">${cn}</div><p class="muted" style="margin:0">Percorso di ${s.dist} m. Il paziente parte 2 m prima della linea di partenza. Tocca <b>Avvia</b>, al "via" parte; tocca <b>Stop</b> quando supera la linea d'arrivo.${ck==='dual'?' Durante il cammino conta all’indietro di 3 partendo da 100.':''}${ck==='head'?' Durante il cammino ruota il capo a destra e sinistra ogni 2 passi.':''}</p>
+      <div class="row" style="margin-top:auto"><button class="btn primary" id="gGo" type="button" style="flex:1">Avvia (${CFG.pre} s)</button></div>`;
+    $('gGo').onclick=()=>gaitCount();
+  }
+  if(R.phase==='count'||R.phase==='rec'){
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${cn}</div><div class="big" id="gBig">${CFG.pre}</div><div class="muted" id="gSub" style="text-align:center">Pronto</div>
+      <div class="row" style="margin-top:auto"><button class="btn primary" id="gStop" type="button" style="flex:1;padding:22px">Stop · traguardo</button><button class="btn ghost small" id="gAbort" type="button">Annulla</button></div>`;
+    $('gStop').onclick=()=>{ if(R.phase==='rec') gaitFinish(); };
+    $('gAbort').onclick=()=>{ stopAll(); R.phase='ready'; runRender(); };
+  }
+  if(R.phase==='result'){
+    const g=R.cur;
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${cn}</div>`+(g?`<div class="metrics">
+      <div><b>${fmt(g.speed)}</b><span>Velocità (m/s)</span></div><div><b>${fmt(g.time,1)} s</b><span>Tempo</span></div>
+      <div><b>${fmt(g.cad,0)}</b><span>Cadenza (passi/min)</span></div><div><b>${g.steps}</b><span>Passi rilevati</span></div>
+      <div><b>${fmt(g.cv,1)}%</b><span>Variabilità passo</span></div><div><b>${fmt(g.sym)}</b><span>Simmetria (1 = simmetrico)</span></div><div><b>${fmt(g.reg)}</b><span>Regolarità del ciclo</span></div></div>`:'<p>Registrazione troppo breve: ripeti la prova.</p>')+
+      `<div class="row" style="margin-top:auto"><button class="btn ghost" id="gRedo" type="button">Ripeti</button><button class="btn primary" id="gNext" type="button" style="flex:1" ${g?'':'aria-disabled="true"'}>${R.ci<R.conds.length-1?'Avanti':'Salva sessione'}</button></div>`;
+    $('gRedo').onclick=()=>{ R.phase='ready'; runRender(); };
+    $('gNext').onclick=()=>{ s.conds[ck]=g; if(R.ci<R.conds.length-1){ R.ci++; R.phase='ready'; runRender(); } else finishSession(); };
+  }
+}
+let GS=[];
+function gaitCount(){
+  const R=RUN; R.phase='count'; runRender(); const [ck,cn]=R.conds[R.ci]; say(cn+'. Pronto.');
+  const t0=performance.now(); let left=CFG.pre;
+  const tick=()=>{ if(!RUN||RUN.phase!=='count') return; const rem=CFG.pre-(performance.now()-t0)/1000, k=Math.ceil(rem); if(k!==left){left=k; if(k>0&&k<=3) beep(660,.08);} $('gBig').textContent=Math.max(0,k);
+    if(rem<=0){ gaitRec(); return; } rafId=requestAnimationFrame(tick); }; rafId=requestAnimationFrame(tick);
+}
+function gaitRec(){
+  const R=RUN, [ck]=R.conds[R.ci]; R.phase='rec'; GS=[]; beep(1175,.22,.45); say('Via.'); $('gSub').textContent='Registrazione · tocca Stop al traguardo';
+  if(CFG.src==='sim') startSim('gait',{f:GSIM[ck][0]*rnd(.95,1.05),asym:rnd(.6,1.6)});
+  const simEnd=CFG.src==='sim'?R.sess.dist/(GSIM[ck][1]*rnd(.9,1.1)):1e9;
+  const t0=performance.now();
+  recT=setInterval(()=>{ const t=(performance.now()-t0)/1000; GS.push([t,SEN.cur.av]); if(t>=simEnd||t>=90) gaitFinish(); },20);
+  const loop=()=>{ if(!RUN||RUN.phase!=='rec') return; const t=GS.length?GS[GS.length-1][0]:0; $('gBig').textContent=fmt(t,1); rafId=requestAnimationFrame(loop); }; loop();
+}
+function gaitFinish(){ const R=RUN; stopAll(); beep(880,.12); setTimeout(()=>beep(880,.12),180); say('Stop.'); const t=GS.length?GS[GS.length-1][0]:0; R.cur=gaitMetrics(GS,t,R.sess.dist); R.phase='result'; runRender(); }
+
+/* ---------- SPNT ---------- */
+const SAC=[['0','0 · fluido'],['1','1 · saccadi occasionali'],['2','2 · saccadi frequenti'],['3','3 · quasi solo a scatti']];
+function runSPNT(){
+  const R=RUN, s=R.sess, c=SPNT_CONDS[R.ci], el=$('runIn'), H=head(`${R.ci+1}/3`);
+  if(R.phase==='ready'){
+    el.innerHTML=H+`<div class="cond">${c.n}</div><p style="margin:0">${c.ins}</p>
+      <p class="muted" style="margin:0">Il paziente segue con gli occhi il bersaglio che si muove da un lato all'altro, senza muovere la testa. Tu osserva gli occhi: un inseguimento fluido è normale; le "correzioni a scatti" (saccadi di recupero) indicano un inseguimento alterato.</p>
+      <div class="row" style="margin-top:auto"><button class="btn primary" id="pGo" type="button" style="flex:1">Avvia ${CFG.spntDur} s</button></div>`;
+    $('pGo').onclick=()=>{ R.phase='rec'; say(c.n+'. Segui il bersaglio con gli occhi.'); runRender(); };
+  }
+  if(R.phase==='rec'){
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${c.n}</div>${CFG.spntTgt==='1'?'<canvas id="spc" width="800" height="400"></canvas>':'<p class="muted">Muovi il dito o un bersaglio davanti al paziente, da un lato all’altro, lentamente.</p>'}
+      <div class="big" id="pBig" style="font-size:56px">${CFG.spntDur}</div><div class="row"><button class="btn ghost" id="pStop" type="button" style="flex:1">Fine</button></div>`;
+    const t0=performance.now(), cv=$('spc'), x=cv&&cv.getContext('2d');
+    const loop=()=>{ if(!RUN||RUN.phase!=='rec') return; const t=(performance.now()-t0)/1000; $('pBig').textContent=Math.max(0,Math.ceil(CFG.spntDur-t));
+      if(x){ const W=800,Hh=400; x.fillStyle='#000'; x.fillRect(0,0,W,Hh); const px=W/2+Math.sin(2*Math.PI*t/5)*(W/2-40); x.fillStyle='#F4B62C'; x.beginPath(); x.arc(px,Hh/2,16,0,Math.PI*2); x.fill(); x.fillStyle='#000'; x.beginPath(); x.arc(px,Hh/2,3,0,Math.PI*2); x.fill(); }
+      if(t>=CFG.spntDur){ beep(880,.12); R.phase='rate'; runRender(); return; } rafId=requestAnimationFrame(loop); }; loop();
+    $('pStop').onclick=()=>{ cancelAnimationFrame(rafId); R.phase='rate'; runRender(); };
+  }
+  if(R.phase==='rate'){
+    const v=s.conds[c.id]||(s.conds[c.id]={sac:null,sym:0});
+    el.innerHTML=H+`<div class="cond" style="font-size:22px">${c.n}</div>
+      <div class="block" style="margin-top:0"><div style="font-weight:600;margin-bottom:6px">Qualità dell'inseguimento</div>${segHTML('pSac',SAC,v.sac)}</div>
+      <div class="block" style="margin-top:0"><div style="font-weight:600">Sintomi (vertigine, instabilità, nausea) · 0–10</div><div class="stepper"><button class="btn ghost" id="yM" type="button" aria-label="Meno">−</button><output id="yV">${v.sym}</output><button class="btn ghost" id="yP" type="button" aria-label="Più">+</button></div></div>
+      <div class="row" style="margin-top:auto"><button class="btn ghost" id="pRedo" type="button">Ripeti</button><button class="btn primary" id="pNext" type="button" style="flex:1" ${v.sac==null?'aria-disabled="true"':''}>${R.ci<2?'Avanti':'Salva sessione'}</button></div>`;
+    bindSeg('pSac',x=>{ v.sac=+x; $('pNext').removeAttribute('aria-disabled'); });
+    const u=d=>{ v.sym=Math.max(0,Math.min(10,v.sym+d)); $('yV').textContent=v.sym; }; $('yM').onclick=()=>u(-1); $('yP').onclick=()=>u(1);
+    $('pRedo').onclick=()=>{ R.phase='ready'; runRender(); };
+    $('pNext').onclick=()=>{ if(v.sac==null) return; if(R.ci<2){ R.ci++; R.phase='ready'; runRender(); } else finishSession(); };
+  }
+}
+
+/* ---------- Questionnaires ---------- */
+function runQ(){
+  const R=RUN, s=R.sess, el=$('runIn'), k=s.proto;
+  const items = k==='dhi'?DHI_Q.map(([,t])=>({t,o:YN})) : k==='ndi'?NDI_Q.map(([t,o])=>({t,o:o.map((x,i)=>[String(i),x]),col:1})) : ABC_Q.map(t=>({t,o:[0,10,20,30,40,50,60,70,80,90,100].map(v=>[String(v),v+'%'])}));
+  const intro={dhi:'Le domande riguardano i problemi causati da vertigini o instabilità. Rispondi pensando alle ultime settimane.',ndi:'Per ogni sezione scegli la frase che descrive meglio la tua situazione di oggi.',abc:'Quanto ti senti sicuro/a di non perdere l’equilibrio facendo queste attività? 0% = per niente sicuro/a, 100% = completamente sicuro/a.'}[k];
+  el.innerHTML=head()+`<div class="cond">${R.T.name}</div><p class="muted" style="margin:0">${intro}</p><div class="prog" id="qProg"></div>`+
+    items.map((it,i)=>`<div class="q" id="q${i}"><p><span class="n">${i+1}</span>${it.t}</p><div class="seg" data-q="${i}" ${it.col?'style="flex-direction:column;align-items:flex-start"':''}>${it.o.map(([v,l])=>`<button class="chip" type="button" data-v="${v}" aria-pressed="${s.ans[i]===v}">${l}</button>`).join('')}</div></div>`).join('')+
+    `<div class="row" style="padding-bottom:20px"><button class="btn primary" id="qDone" type="button" style="flex:1">Calcola e salva</button></div>`;
+  const prog=()=>{ const n=s.ans.filter(x=>x!=null).length; $('qProg').textContent=`Risposte ${n}/${items.length}`; };
+  el.querySelectorAll('[data-q]').forEach(g=>g.onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const i=+g.dataset.q; s.ans[i]=b.dataset.v; g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); $('q'+i).classList.remove('miss'); prog(); });
+  prog();
+  $('qDone').onclick=()=>{ const miss=items.findIndex((_,i)=>s.ans[i]==null); if(miss>=0){ items.forEach((_,i)=>{ if(s.ans[i]==null) $('q'+i).classList.add('miss'); }); $('q'+miss).scrollIntoView({behavior:'smooth',block:'center'}); $('qProg').textContent=`Mancano ${items.filter((_,i)=>s.ans[i]==null).length} risposte (in rosso)`; return; }
+    for(let i=0;i<items.length;i++) if(s.ans[i]==null) s.ans[i]='0'; finishSession(); };
+}
 
 /* ================= VIEW: history ================= */
 let OPEN=null, DEL=null;
 function renderHist(){
   const L=sessOf();
   $('v-hist').innerHTML=`<h2>Storico</h2><p class="muted" style="margin:0">${esc(patient()?.name||'—')} · ${L.length} sessioni</p>`+
-   (L.length?L.map(s=>{const P=PROTOS[s.proto]; return `<div class="sess"><div class="sess-h"><h3>${P.name} <span class="tag">${esc(s.label)}</span>${s.sim||s.example?' <span class="tag">simulazione</span>':''}</h3><span class="muted mono" style="font-size:12.5px">${dstr(s.date)}</span></div>
-     <div class="row" style="margin-top:6px;font-size:13px">${P.conds.map(c=>{const t=trialOf(s,c.id); return t?`<span class="muted">${c.s} <b class="mono" style="color:var(--text)">${fmt(t.m?.rms)}°</b></span>`:'';}).join('')}</div>
-     <div class="row" style="margin-top:8px"><button class="btn ghost small" data-open="${s.id}" type="button">${OPEN===s.id?'Chiudi':'Dettagli'}</button><button class="btn ghost small" data-cmpb="${s.id}" type="button">Confronta</button>
+   (L.length?L.map(s=>{const T=TESTS[s.proto]; if(!T) return ''; const R=rows(s).slice(0,4); return `<div class="sess"><div class="sess-h"><h3>${T.name} <span class="tag">${esc(s.label)}</span>${s.sim||s.example?' <span class="tag">simulazione</span>':''}</h3><span class="muted mono" style="font-size:12.5px">${dstr(s.date)}</span></div>
+     <div class="row" style="margin-top:6px;font-size:13px;gap:4px 14px">${R.map(r=>`<span class="muted">${r.label} <b class="mono" style="color:var(--text)">${fmt(r.v,r.dec)}${r.unit&&r.unit.length<3?r.unit:''}</b></span>`).join('')}</div>
+     <div class="row" style="margin-top:8px"><button class="btn ghost small" data-open="${s.id}" type="button">${OPEN===s.id?'Chiudi':'Dettagli'}</button><button class="btn ghost small" data-cmpb="${s.id}" type="button">Confronta</button><button class="btn ghost small" data-pdf="${s.id}" type="button">Report PDF</button>
      ${DEL===s.id?`<span class="confirm">Eliminare la sessione? <button class="btn danger small" data-delok="${s.id}" type="button">Elimina</button><button class="btn ghost small" data-delno type="button">No</button></span>`:`<button class="btn danger small" data-del="${s.id}" type="button">Elimina</button>`}</div>
-     ${OPEN===s.id?`<div style="margin-top:10px">${sessionSummaryHTML(s)}<div class="plots">${P.conds.map(c=>{const t=trialOf(s,c.id); return t&&t.m?`<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:t.m,color:'var(--dopo)'}])}</div>`:'';}).join('')}</div></div>`:''}</div>`;}).join('')
+     ${OPEN===s.id?`<div style="margin-top:10px">${detailHTML(s)}</div>`:''}</div>`;}).join('')
    :`<div class="block muted">Nessuna sessione per questo paziente. Avvia una valutazione dalla scheda Valuta.</div>`)+
-   `<div class="block"><h3>Backup dei dati</h3><p class="hint">I dati restano solo su questo dispositivo e in questo browser. Copia il backup e conservalo (note, email a te stesso) per spostarlo o ripristinarlo.</p>
+   `<div class="block"><h3>Backup dei dati</h3><p class="hint">I dati restano solo su questo dispositivo e in questo browser. Copia il backup e conservalo per spostarlo o ripristinarlo.</p>
      <div class="row" style="margin-top:8px"><button class="btn ghost small" id="bkCopy" type="button">Copia backup</button><button class="btn ghost small" id="bkImp" type="button">Importa backup</button><span class="muted" id="bkMsg" style="font-size:13px"></span></div>
-     <textarea id="bkTxt" hidden placeholder="Incolla qui il backup e premi Importa backup"></textarea>
-     ${DB.patients.length>0?`<div class="row" style="margin-top:12px"><button class="btn danger small" id="ptDel" type="button">Elimina paziente e sue sessioni</button></div>`:''}</div>`;
-  const v=$('v-hist');
+     <textarea id="bkTxt" class="code" hidden placeholder="Incolla qui il backup e premi Importa backup"></textarea>
+     ${patient()?`<div class="row" style="margin-top:12px"><button class="btn danger small" id="ptDel" type="button">Elimina paziente e sue sessioni</button></div>`:''}</div>`;
+  const v=$('v-hist'), byId=id=>DB.sessions.find(s=>s.id===id);
   v.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{OPEN=OPEN===b.dataset.open?null:b.dataset.open; renderHist();});
-  v.querySelectorAll('[data-cmpb]').forEach(b=>b.onclick=()=>{CMP.b=b.dataset.cmpb; CMP.a=null; document.querySelector('[data-v=cmp]').click();});
+  v.querySelectorAll('[data-cmpb]').forEach(b=>b.onclick=()=>{CMP.b=b.dataset.cmpb; CMP.a=null; goView('cmp');});
+  v.querySelectorAll('[data-pdf]').forEach(b=>b.onclick=()=>openReport(null,byId(b.dataset.pdf)));
   v.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{DEL=b.dataset.del; renderHist();});
   v.querySelectorAll('[data-delno]').forEach(b=>b.onclick=()=>{DEL=null; renderHist();});
   v.querySelectorAll('[data-delok]').forEach(b=>b.onclick=()=>{DB.sessions=DB.sessions.filter(s=>s.id!==b.dataset.delok); DEL=null; save(); renderHist();});
   bindExLinks(v);
   $('bkCopy').onclick=()=>{ const t=JSON.stringify(DB); const ta=$('bkTxt'); ta.hidden=false; ta.value=t;
-    navigator.clipboard?.writeText(t).then(()=>$('bkMsg').textContent='Backup copiato negli appunti').catch(()=>{ta.select(); $('bkMsg').textContent='Seleziona e copia il testo qui sotto';}) ?? (ta.select(), $('bkMsg').textContent='Seleziona e copia il testo qui sotto'); };
+    const fb=()=>{ta.select(); $('bkMsg').textContent='Seleziona e copia il testo qui sotto';};
+    try{ navigator.clipboard.writeText(t).then(()=>$('bkMsg').textContent='Backup copiato negli appunti').catch(fb); }catch(e){ fb(); } };
   $('bkImp').onclick=()=>{ const ta=$('bkTxt'); if(ta.hidden||!ta.value.trim()){ ta.hidden=false; ta.value=''; ta.focus(); $('bkMsg').textContent='Incolla il backup, poi premi di nuovo Importa'; return; }
     try{ const d=JSON.parse(ta.value); if(!d.patients||!d.sessions) throw 0; const ids=new Set(DB.sessions.map(s=>s.id)), pids=new Set(DB.patients.map(p=>p.id));
-      d.patients.forEach(p=>{if(!pids.has(p.id)) DB.patients.push(p)}); d.sessions.forEach(s=>{if(!ids.has(s.id)) DB.sessions.push(s)}); save(); $('bkMsg').textContent='Backup importato'; renderPt(); renderHist(); }
+      d.patients.forEach(p=>{if(!pids.has(p.id)) DB.patients.push(p)}); d.sessions.forEach(s=>{ if(!s.kind) s.kind='sway'; if(!ids.has(s.id)) DB.sessions.push(s)}); save(); $('bkMsg').textContent='Backup importato'; renderPt(); renderHist(); }
     catch(e){ $('bkMsg').textContent='Testo non valido: incolla il backup completo copiato da questa app'; } };
   if($('ptDel')) $('ptDel').onclick=e=>{ const b=e.target; if(!b.dataset.c){ b.dataset.c=1; b.textContent=`Confermi? Elimina ${patient()?.name}`; return; }
     DB.sessions=DB.sessions.filter(s=>s.pid!==pid); DB.patients=DB.patients.filter(p=>p.id!==pid); pid=DB.patients[0]?.id; store.set('ba:pid',pid); save(); renderAll(); };
@@ -508,34 +893,49 @@ function renderHist(){
 
 /* ================= VIEW: compare ================= */
 const CMP={a:null,b:null,key:'rms'};
-function renderCmp(){
-  const L=sessOf(); const v=$('v-cmp');
-  if(L.length<2){ v.innerHTML=`<h2>Prima / Dopo</h2><div class="block muted">Servono almeno due sessioni dello stesso paziente con lo stesso protocollo.</div>`; return; }
+function pairFor(L){
   let B=L.find(s=>s.id===CMP.b)||L[0]; let A=L.find(s=>s.id===CMP.a&&s.id!==B.id);
   if(!A||A.proto!==B.proto) A=L.find(s=>s.id!==B.id&&s.proto===B.proto&&s.date<=B.date)||L.find(s=>s.id!==B.id&&s.proto===B.proto);
-  CMP.b=B.id; CMP.a=A?.id;
-  if(A&&A.date>B.date){ const t=A; A=B; B=t; }
-  const opt=(sel,excl)=>L.filter(s=>s.id!==excl).map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${dstr(s.date)} · ${PROTOS[s.proto].name} · ${esc(s.label)}</option>`).join('');
+  CMP.b=B.id; CMP.a=A?.id; if(A&&A.date>B.date){ const t=A; A=B; B=t; } return [A,B];
+}
+function deltaCell(r,a,b){ const x=delta(r,a,b); if(!x) return '<td class="mono">—</td>';
+  return `<td class="mono ${x.good==null||x.stable?'':x.good?'down':'up'}">${x.txt}</td>`; }
+function renderCmp(){
+  const L=sessOf(); const v=$('v-cmp');
+  if(L.length<2){ v.innerHTML=`<h2>Prima / Dopo</h2><div class="block muted">Servono almeno due sessioni dello stesso paziente con lo stesso test.</div>`; return; }
+  const [A,B]=pairFor(L);
+  const opt=(sel,excl)=>L.filter(s=>s.id!==excl).map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${dstr(s.date)} · ${TESTS[s.proto]?.name} · ${esc(s.label)}</option>`).join('');
   let h=`<h2>Prima / Dopo</h2><p class="muted" style="margin:0">${esc(patient()?.name)}</p>
    <div class="block"><div class="row"><div class="field" style="border:0;flex:1;min-width:220px"><label for="cA"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--prima);margin-right:6px"></i>Prima</label><select id="cA">${opt(A?.id,B.id)}</select></div>
    <div class="field" style="border:0;flex:1;min-width:220px"><label for="cB"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--dopo);margin-right:6px"></i>Dopo</label><select id="cB">${opt(B.id,null)}</select></div></div></div>`;
-  if(!A||A.proto!==B.proto){ h+=`<div class="block muted">Scegli due sessioni con lo stesso protocollo (${PROTOS[B.proto].name}).</div>`; v.innerHTML=h; bindCmp(); return; }
-  const P=PROTOS[B.proto], conds=P.conds.filter(c=>trialOf(A,c.id)&&trialOf(B,c.id));
-  const K={rms:['Oscillazione RMS','°'],area:['Area ellisse 95%','°²'],vel:['Velocità','°/s']}; if(P.errors) K.err=['Errori BESS','']; if(P.yaw) K.yaw=['Rotazione','°'];
-  const val=(t,k)=>k==='err'?(t.errors??0):k==='yaw'?Math.abs(t.m?.yaw??0):t.m?.[k];
-  if(!K[CMP.key]) CMP.key='rms';
-  h+=`<div class="block"><div class="row" style="justify-content:space-between"><h3>${K[CMP.key][0]} per condizione</h3>${segHTML('cKey',Object.entries(K).map(([k,v])=>[k,v[0]]),CMP.key)}</div>
-    <div class="legend" style="margin-top:8px"><span><i style="background:var(--prima)"></i>Prima · ${dstr(A.date)}</span><span><i style="background:var(--dopo)"></i>Dopo · ${dstr(B.date)}</span></div>
-    <div class="tbl" style="margin-top:6px">${barsSVG(conds.map(c=>({label:c.s,vals:[val(trialOf(A,c.id),CMP.key),val(trialOf(B,c.id),CMP.key)]})),[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}],K[CMP.key][0],K[CMP.key][1])}</div>
-    <div class="tbl" style="margin-top:10px"><table><thead><tr><th>Condizione</th><th>Prima</th><th>Dopo</th><th>Variazione</th></tr></thead><tbody>${conds.map(c=>{const a=val(trialOf(A,c.id),CMP.key),b=val(trialOf(B,c.id),CMP.key),p=pct(a,b);
-      return `<tr><td>${c.s}</td><td class="mono">${fmt(a)}</td><td class="mono">${fmt(b)}</td><td class="mono ${p==null?'':p<0?'down':'up'}">${p==null?'—':(p>0?'+':'')+fmt(p,0)+'%'}</td></tr>`;}).join('')}</tbody></table></div>
-    <p class="hint">Valori più bassi = minore oscillazione. Variazione negativa (verde) = miglioramento.</p></div>`;
-  h+=`<div class="block"><h3>Statokinesigrammi</h3><div class="legend" style="margin-top:6px"><span><i style="background:var(--prima)"></i>Prima</span><span><i style="background:var(--dopo)"></i>Dopo</span><span class="muted">tratteggio = ellisse 95%</span></div>
-    <div class="plots">${conds.map(c=>{const a=trialOf(A,c.id),b=trialOf(B,c.id); return `<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:a.m,color:'var(--prima)'},{m:b.m,color:'var(--dopo)'}])}<div class="met mono">RMS ${fmt(a.m?.rms)} → ${fmt(b.m?.rms)}°</div></div>`;}).join('')}</div></div>`;
-  const aA=analysis(A), aB=analysis(B);
-  if(aA.ratios&&aB.ratios) h+=`<div class="block"><h3>Rapporti di integrazione sensoriale</h3><div class="tbl"><table><thead><tr><th>Rapporto</th><th>Prima</th><th>Dopo</th></tr></thead><tbody>${aB.ratios.map((r,i)=>`<tr><td>${r.l}</td><td class="mono">${fmt(aA.ratios[i]?.v)}</td><td class="mono">${fmt(r.v)}</td></tr>`).join('')}</tbody></table></div></div>`;
-  if(aB.sys.length) h+=`<div class="callout" style="margin-top:14px">Esercizi suggeriti dopo l'ultima sessione: ${aB.sys.map(x=>`<button class="chip" type="button" data-exsys="${x}">${SYS[x]}</button>`).join(' ')}</div>`;
+  if(!A||A.proto!==B.proto){ h+=`<div class="block muted">Scegli due sessioni con lo stesso test (${TESTS[B.proto].name}).</div>`; v.innerHTML=h; bindCmp(); return; }
+  const legend=`<div class="legend" style="margin-top:8px"><span><i style="background:var(--prima)"></i>Prima · ${dstr(A.date)}</span><span><i style="background:var(--dopo)"></i>Dopo · ${dstr(B.date)}</span></div>`;
+  if(B.kind==='sway'){
+    const P=TESTS[B.proto], conds=P.conds.filter(c=>trialOf(A,c.id)&&trialOf(B,c.id));
+    const K={rms:['Oscillazione RMS','°'],area:['Area ellisse 95%','°²'],vel:['Velocità','°/s']}; if(P.errors) K.err=['Errori BESS','']; if(P.yaw) K.yaw=['Rotazione','°'];
+    const val=(t,k)=>k==='err'?(t.errors??0):k==='yaw'?Math.abs(t.m?.yaw??0):t.m?.[k];
+    if(!K[CMP.key]) CMP.key='rms';
+    h+=`<div class="block"><div class="row" style="justify-content:space-between"><h3>${K[CMP.key][0]} per condizione</h3>${segHTML('cKey',Object.entries(K).map(([k,x])=>[k,x[0]]),CMP.key)}</div>${legend}
+      <div class="tbl" style="margin-top:6px">${barsSVG(conds.map(c=>({label:c.s,vals:[val(trialOf(A,c.id),CMP.key),val(trialOf(B,c.id),CMP.key)]})),[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}],K[CMP.key][0],K[CMP.key][1])}</div>
+      <div class="tbl" style="margin-top:10px"><table><thead><tr><th>Condizione</th><th>Prima</th><th>Dopo</th><th>Variazione</th></tr></thead><tbody>${conds.map(c=>{const a=val(trialOf(A,c.id),CMP.key),b=val(trialOf(B,c.id),CMP.key);
+        return `<tr><td>${c.s}</td><td class="mono">${fmt(a)}</td><td class="mono">${fmt(b)}</td>${deltaCell({better:'low'},a,b)}</tr>`;}).join('')}</tbody></table></div>
+      <p class="hint">Valori più bassi = minore oscillazione. Variazione verde = miglioramento.</p></div>`;
+    h+=`<div class="block"><h3>Statokinesigrammi</h3><div class="legend" style="margin-top:6px"><span><i style="background:var(--prima)"></i>Prima</span><span><i style="background:var(--dopo)"></i>Dopo</span><span class="muted">tratteggio = ellisse 95%</span></div>
+      <div class="plots">${conds.map(c=>{const a=trialOf(A,c.id),b=trialOf(B,c.id); return `<div class="plot"><div class="cap">${c.s}</div>${statSVG([{m:a.m,color:'var(--prima)'},{m:b.m,color:'var(--dopo)'}])}<div class="met mono">RMS ${fmt(a.m?.rms)} → ${fmt(b.m?.rms)}°</div></div>`;}).join('')}</div></div>`;
+    const aA=swayAnalysis(A), aB=swayAnalysis(B);
+    if(aA.ratios&&aB.ratios) h+=`<div class="block"><h3>Rapporti di integrazione sensoriale</h3><div class="tbl"><table><thead><tr><th>Rapporto</th><th>Prima</th><th>Dopo</th></tr></thead><tbody>${aB.ratios.map((r,i)=>`<tr><td>${r.l}</td><td class="mono">${fmt(aA.ratios[i]?.v)}</td><td class="mono">${fmt(r.v)}</td></tr>`).join('')}</tbody></table></div></div>`;
+  } else {
+    const RA=rows(A), RB=rows(B), M=RB.map(r=>({r,a:RA.find(x=>x.k===r.k)?.v,b:r.v}));
+    const deg=M.filter(x=>x.r.unit==='°'&&x.a!=null);
+    if(deg.length>=2) h+=`<div class="block"><h3>${TESTS[B.proto].name}</h3>${legend}<div class="tbl" style="margin-top:6px">${barsSVG(deg.map(x=>({label:x.r.label.replace('JPE ',''),vals:[x.a,x.b]})),[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}],'gradi','°')}</div></div>`;
+    h+=`<div class="block"><div class="tbl"><table><thead><tr><th>Misura</th><th>Prima</th><th>Dopo</th><th>Variazione</th></tr></thead><tbody>${M.map(x=>`<tr><td>${x.r.label}</td><td class="mono">${fmt(x.a,x.r.dec)}</td><td class="mono">${fmt(x.b,x.r.dec)}</td>${deltaCell(x.r,x.a,x.b)}</tr>`).join('')}</tbody></table></div>
+      <p class="hint">${{jpe:'Errore più basso = migliore propriocezione.',rom:'Gradi più alti = maggiore mobilità; asimmetria più bassa = migliore.',gait:'Velocità e simmetria più alte, variabilità e costo del doppio compito più bassi = miglioramento.',spnt:'Punteggi più bassi = inseguimento più fluido.',q:B.proto==='abc'?'Percentuale più alta = maggiore fiducia.':'Punteggio più basso = minore impatto.'}[B.kind]} Variazione verde = miglioramento.</p></div>`;
+    h+=interp(B).map(l=>`<p style="margin:8px 0 0">${l}</p>`).join('');
+  }
+  h+=sysChips(suggest(B));
+  h+=`<div class="row" style="margin-top:14px"><button class="btn primary" id="cPdf" type="button" style="flex:1">Report PDF prima / dopo</button></div>`;
   v.innerHTML=h; bindCmp(); bindSeg('cKey',k=>{CMP.key=k; renderCmp();}); bindExLinks(v);
+  $('cPdf').onclick=()=>openReport(A,B);
 }
 function bindCmp(){ $('cA').onchange=e=>{CMP.a=e.target.value; renderCmp();}; $('cB').onchange=e=>{CMP.b=e.target.value; CMP.a=null; renderCmp();}; }
 
@@ -543,13 +943,13 @@ function bindCmp(){ $('cA').onchange=e=>{CMP.a=e.target.value; renderCmp();}; $(
 let EXF='all';
 function renderEx(){
   const list=EXS.filter(e=>EXF==='all'||e.sys===EXF);
-  $('v-ex').innerHTML=`<h2>Esercizi di integrazione</h2><p class="muted" style="margin:0 0 10px">Raggruppati per il sistema sensoriale su cui si vuole spostare il carico. Ogni esercizio ha un timer guidato con serie e recuperi.</p>
+  $('v-ex').innerHTML=`<h2>Esercizi</h2><p class="muted" style="margin:0 0 10px">Raggruppati per il sistema da allenare. Ogni esercizio ha un timer guidato con serie e recuperi.</p>
    ${segHTML('exF',[['all','Tutti'],...Object.entries(SYS)],EXF)}
    <div class="grid" style="margin-top:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${list.map(e=>`<div class="ex"><span class="sys">${SYS[e.sys]}</span><h3>${e.n}</h3><p>${e.how}</p>
      <div class="mono muted" style="font-size:12.5px">${e.sets} × ${e.w} s · recupero ${e.r} s${e.bpm?` · ${e.bpm} bpm`:''}</div>
      <ul>${e.prog.map(p=>`<li>${p}</li>`).join('')}</ul><button class="btn ghost small" data-ex="${e.id}" type="button" style="margin-top:auto">Avvia timer</button></div>`).join('')}</div>
    <p class="hint" style="margin-top:14px">Eseguire sempre in sicurezza (parete, angolo o operatore vicino), specie a occhi chiusi e su foam.</p>`;
-  bindSeg('exF',v=>{EXF=v; renderEx();});
+  bindSeg('exF',x=>{EXF=x; renderEx();});
   $('v-ex').querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{initAudio(); startTimer(EXS.find(e=>e.id===b.dataset.ex));});
 }
 let TM=null;
@@ -584,8 +984,153 @@ function tmLoop(){
   requestAnimationFrame(tmLoop);
 }
 
+/* ================= REPORT PDF ================= */
+let REP=null;
+function openReport(A,B){
+  REP={A,B,ex:new Set(),note:'',blob:null};
+  const sug=suggest(B); EXS.forEach(e=>{ if(sug.includes(e.sys)) REP.ex.add(e.id); });
+  repRender(); $('rep').hidden=false;
+}
+function repRender(){
+  const {A,B}=REP, T=TESTS[B.proto];
+  $('repIn').innerHTML=`<div class="ov-top"><span class="eyebrow">Report PDF per il paziente</span><button class="btn ghost small" id="rpX" type="button">Chiudi</button></div>
+   <div class="cond">${T.name}</div><p class="muted" style="margin:0">${esc(patient()?.name)} · ${A?`prima ${dstr(A.date)} (${esc(A.label)}) → dopo ${dstr(B.date)} (${esc(B.label)})`:`${dstr(B.date)} · ${esc(B.label)}`}</p>
+   <div class="block" style="margin-top:0"><div style="font-weight:600">Esercizi da includere</div><p class="hint" style="margin:2px 0 6px">Già selezionati quelli suggeriti dai risultati.</p>
+     ${Object.entries(SYS).map(([k,n])=>`<div class="sys" style="margin-top:10px">${n}</div>`+EXS.filter(e=>e.sys===k).map(e=>`<label class="chk"><input type="checkbox" data-e="${e.id}" ${REP.ex.has(e.id)?'checked':''}><span><b>${e.n}</b><br><span class="muted">${e.sets} × ${e.w} s · recupero ${e.r} s</span></span></label>`).join('')).join('')}</div>
+   <div class="block" style="margin-top:0"><label for="rpNote" style="font-weight:600">Note per il paziente (facoltative)</label><textarea id="rpNote" placeholder="Es. eseguire gli esercizi 1 volta al giorno, prossimo controllo tra 4 settimane">${esc(REP.note)}</textarea></div>
+   <div class="row"><button class="btn primary" id="rpGo" type="button" style="flex:1">Crea PDF</button></div>
+   <div id="rpOut"></div>`;
+  $('rpX').onclick=()=>{ $('rep').hidden=true; REP=null; };
+  $('repIn').querySelectorAll('[data-e]').forEach(c=>c.onchange=()=>{ c.checked?REP.ex.add(c.dataset.e):REP.ex.delete(c.dataset.e); });
+  $('rpNote').oninput=e=>REP.note=e.target.value;
+  $('rpGo').onclick=async()=>{
+    const out=$('rpOut'); out.innerHTML='<p class="muted">Creo il PDF…</p>';
+    if(!window.PDFLib){ out.innerHTML='<p class="flag">Il generatore di PDF non si è caricato: serve la connessione a internet. Riprova tra poco.</p>'; return; }
+    try{
+      const bytes=await buildPDF(REP.A,REP.B,[...REP.ex],REP.note);
+      const name=`Report_${(patient()?.name||'paziente').replace(/[^\w]+/g,'_')}_${TESTS[REP.B.proto].name.replace(/[^\w]+/g,'_')}_${REP.B.date.slice(0,10)}.pdf`;
+      REP.file=new File([bytes],name,{type:'application/pdf'});
+      const canShare=!!(navigator.canShare&&navigator.canShare({files:[REP.file]}));
+      out.innerHTML=`<div class="callout">PDF pronto: <b>${esc(name)}</b></div><div class="row" style="margin-top:10px">${canShare?'<button class="btn primary" id="rpShare" type="button" style="flex:1">Condividi (WhatsApp, email…)</button>':''}<button class="btn ghost" id="rpDl" type="button" style="flex:1">Scarica / Apri</button></div><p class="hint" id="rpMsg"></p>`;
+      if($('rpShare')) $('rpShare').onclick=async()=>{ try{ await navigator.share({files:[REP.file],title:'Report di valutazione'}); }catch(e){ if(e&&e.name!=='AbortError') $('rpMsg').textContent='Condivisione non riuscita: usa Scarica / Apri.'; } };
+      $('rpDl').onclick=()=>{ const u=URL.createObjectURL(REP.file); const a=document.createElement('a'); a.href=u; a.download=name; a.target='_blank'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),60000);
+        $('rpMsg').textContent='Se il file non si apre, usa l’app dal suo indirizzo su GitHub: alcune viste integrate bloccano i download.'; };
+    }catch(e){ console.error(e); out.innerHTML=`<p class="flag">Non sono riuscito a creare il PDF (${esc(e.message||e)}).</p>`; }
+  };
+}
+const PDFCOL={'var(--prima)':'#3F72C4','var(--dopo)':'#C98400','var(--grid)':'#E3E6E8','var(--muted)':'#5D6772','var(--text)':'#15191D','var(--mono)':'monospace'};
+function svgToPng(svg){
+  return new Promise((res,rej)=>{
+    let s=svg.replace(/var\(--[a-z]+\)/g,m=>PDFCOL[m]||'#000').replace(/style="[^"]*"/,'');
+    if(!/xmlns=/.test(s)) s=s.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '); s=s.replace(/(<svg[^>]*>)/,'$1<style>text{font-family:Helvetica,Arial,sans-serif}</style>').replace(/font-family="monospace"/g,'font-family="Helvetica,Arial,sans-serif"');
+    const w=+(/width="(\d+)"/.exec(s)||[0,400])[1], h=+(/height="(\d+)"/.exec(s)||[0,300])[1];
+    const img=new Image(); img.onload=()=>{ const k=3, c=document.createElement('canvas'); c.width=w*k; c.height=h*k; const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height); res({data:c.toDataURL('image/png'),w,h}); };
+    img.onerror=()=>rej(new Error('grafico non convertibile')); img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
+  });
+}
+const WIN='€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ';
+function safe(t){ return String(t??'').replace(/→/g,'->').replace(/[−]/g,'-').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/✓/g,'ok').replace(/Δ/g,'Var.').replace(/ | /g,' ').split('').map(c=>c.charCodeAt(0)<=255&&!(c.charCodeAt(0)>=0x80&&c.charCodeAt(0)<0xA0)||WIN.includes(c)?c:'?').join(''); }
+async function buildPDF(A,B,exIds,note){
+  const {PDFDocument,StandardFonts,rgb}=window.PDFLib; const T=TESTS[B.proto];
+  const pdf=await PDFDocument.create(); pdf.setTitle(safe(`Report ${T.name} - ${patient()?.name||''}`)); pdf.setAuthor(STUDIO.name); pdf.setCreator('Audit dell\'Equilibrio');
+  const F=await pdf.embedFont(StandardFonts.Helvetica), FB=await pdf.embedFont(StandardFonts.HelveticaBold);
+  const logo=await pdf.embedPng(LOGO);
+  const C=(h)=>{const n=parseInt(h.slice(1),16);return rgb((n>>16&255)/255,(n>>8&255)/255,(n&255)/255);};
+  const INK=C('#15191D'), MUT=C('#5D6772'), ACC=C('#C98400'), BLUE=C('#3F72C4'), GOOD=C('#2B7A4B'), BAD=C('#B83A34'), LINE=C('#DCE0E2'), SOFT=C('#F6F1E4');
+  const PW=595.28, PH=841.89, M=46, CW=PW-2*M; let page, y;
+  const wrap=(str,font,size,w)=>{ const out=[]; safe(str).split('\n').forEach(par=>{ let line=''; par.split(' ').forEach(word=>{ const t=line?line+' '+word:word; if(font.widthOfTextAtSize(t,size)>w&&line){ out.push(line); line=word; } else line=t; }); out.push(line); }); return out; };
+  const newPage=()=>{ page=pdf.addPage([PW,PH]); y=PH-M; if(pdf.getPageCount()>1){ page.drawText(safe(`${STUDIO.name} · ${T.name} · ${patient()?.name||''}`),{x:M,y:PH-32,size:8,font:F,color:MUT}); page.drawLine({start:{x:M,y:PH-38},end:{x:PW-M,y:PH-38},thickness:.5,color:LINE}); y=PH-58; } };
+  const ensure=h=>{ if(y-h<70) newPage(); };
+  const text=(str,o={})=>{ const size=o.size||10, font=o.bold?FB:F, lh=o.lh||1.42, x=o.x||M, w=o.w||CW; wrap(str,font,size,w).forEach(l=>{ ensure(size*lh); page.drawText(l,{x,y:y-size,size,font,color:o.color||INK}); y-=size*lh; }); };
+  const gap=g=>{ y-=g; };
+  const h2=t=>{ ensure(40); gap(10); page.drawText(safe(t),{x:M,y:y-13,size:13,font:FB,color:INK}); y-=19; page.drawLine({start:{x:M,y},end:{x:M+28,y},thickness:2,color:ACC}); y-=10; };
+  // header
+  newPage();
+  page.drawImage(logo,{x:M,y:PH-M-64,width:64,height:64});
+  page.drawText(safe(STUDIO.name),{x:M+78,y:PH-M-20,size:16,font:FB,color:INK});
+  page.drawText(safe(STUDIO.sub),{x:M+78,y:PH-M-36,size:10.5,font:F,color:INK});
+  page.drawText(safe(STUDIO.addr),{x:M+78,y:PH-M-50,size:9,font:F,color:MUT});
+  const rt=safe('Report di valutazione'), dt=safe(new Date().toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'}));
+  page.drawText(rt,{x:PW-M-FB.widthOfTextAtSize(rt,10),y:PH-M-20,size:10,font:FB,color:ACC});
+  page.drawText(dt,{x:PW-M-F.widthOfTextAtSize(dt,9),y:PH-M-34,size:9,font:F,color:MUT});
+  y=PH-M-78; page.drawLine({start:{x:M,y},end:{x:PW-M,y},thickness:.8,color:LINE}); y-=24;
+  page.drawText(safe(T.name),{x:M,y:y-18,size:20,font:FB,color:INK}); y-=30;
+  text(`Paziente: ${patient()?.name||''}`,{size:11,bold:true});
+  text(A?`Prima: ${dstr(A.date)} (${A.label})    Dopo: ${dstr(B.date)} (${B.label})`:`Data: ${dstr(B.date)}    Sessione: ${B.label}`,{size:10,color:MUT});
+  if(A?.sim||B.sim||A?.example||B.example) text('Attenzione: report creato con dati simulati di prova.',{size:9,color:BAD});
+  // results table
+  h2('Risultati');
+  const RB=rows(B), RA=A?rows(A):null;
+  const cols=A?[['Misura',.42],['Prima',.15],['Dopo',.15],['Variazione',.13],['Esito',.15]]:[['Misura',.5],['Valore',.2],['Note',.3]];
+  const cx=[]; let acc=M; cols.forEach(([,w])=>{cx.push(acc); acc+=w*CW;});
+  ensure(22); cols.forEach(([n],i)=>page.drawText(safe(n),{x:cx[i]+(i?0:0),y:y-9,size:8.5,font:FB,color:MUT})); y-=14; page.drawLine({start:{x:M,y},end:{x:PW-M,y},thickness:.6,color:LINE}); y-=4;
+  const fv=(v,r)=>v==null?'-':fmt(v,r.dec)+(r.unit?' '+r.unit:'');
+  let nImp=0,nWor=0;
+  RB.forEach(r=>{
+    const lab=wrap(r.label+(r.note?` (${r.note})`:''),F,9.5,cols[0][1]*CW-8); const hh=Math.max(lab.length,1)*12+6; ensure(hh);
+    lab.forEach((l,i)=>page.drawText(l,{x:cx[0],y:y-10-i*12,size:9.5,font:F,color:INK}));
+    if(A){ const a=RA.find(x=>x.k===r.k)?.v, b=r.v, x=delta(r,a,b);
+      page.drawText(safe(fv(a,r)),{x:cx[1],y:y-10,size:9.5,font:F,color:INK}); page.drawText(safe(fv(b,r)),{x:cx[2],y:y-10,size:9.5,font:FB,color:INK});
+      page.drawText(safe(x?x.txt:'-'),{x:cx[3],y:y-10,size:9.5,font:F,color:!x||x.good==null||x.stable?INK:x.good?GOOD:BAD});
+      const es=!x||x.good==null?'-':x.stable?'stabile':x.good?'migliorato':'peggiorato'; if(es==='migliorato') nImp++; if(es==='peggiorato') nWor++;
+      page.drawText(safe(es),{x:cx[4],y:y-10,size:9.5,font:F,color:es==='migliorato'?GOOD:es==='peggiorato'?BAD:MUT});
+    } else {
+      page.drawText(safe(fv(r.v,r)),{x:cx[1],y:y-10,size:9.5,font:FB,color:r.flag?BAD:INK});
+      const nt=r.ref?`riferimento circa ${r.ref}°`:r.flag?'da approfondire':''; page.drawText(safe(nt),{x:cx[2],y:y-10,size:8.5,font:F,color:r.flag?BAD:MUT});
+    }
+    y-=hh; page.drawLine({start:{x:M,y:y+2},end:{x:PW-M,y:y+2},thickness:.3,color:LINE});
+  });
+  if(A) { gap(4); text('Variazioni entro il 10% (o entro 5 punti per le percentuali) sono considerate stabili: rientrano nella normale variabilità della misura.',{size:8,color:MUT}); }
+  // interpretation
+  h2('Cosa significano');
+  const lines=interp(B);
+  if(A&&(nImp||nWor)) lines.unshift(`Rispetto alla valutazione del ${dstr(A.date)}: ${nImp} ${nImp===1?'misura migliorata':'misure migliorate'}${nWor?`, ${nWor} ${nWor===1?'peggiorata':'peggiorate'}`:''}.`);
+  if(!lines.length) lines.push('Valori registrati per il monitoraggio nel tempo.');
+  lines.forEach(l=>{ const w=wrap(l,F,10,CW-14); ensure(w.length*14); page.drawCircle({x:M+3,y:y-6.5,size:1.8,color:ACC}); w.forEach(t=>{ page.drawText(t,{x:M+12,y:y-10,size:10,font:F,color:INK}); y-=14; }); y-=3; });
+  // charts
+  const imgs=[];
+  if(B.kind==='sway'){
+    const conds=T.conds.filter(c=>trialOf(B,c.id)&&(!A||trialOf(A,c.id)));
+    if(A){ imgs.push({svg:barsSVG(conds.map(c=>({label:c.s,vals:[trialOf(A,c.id).m?.rms,trialOf(B,c.id).m?.rms]})),[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}],'RMS','°'),full:1,cap:'Oscillazione RMS (°) per condizione'}); }
+    conds.forEach(c=>imgs.push({svg:statSVG(A?[{m:trialOf(A,c.id).m,color:'var(--prima)'},{m:trialOf(B,c.id).m,color:'var(--dopo)'}]:[{m:trialOf(B,c.id).m,color:'var(--dopo)'}]),cap:c.s}));
+  } else if(B.kind==='rom'||B.kind==='jpe'){
+    const deg=RB.filter(r=>r.unit==='°'); if(deg.length>=2) imgs.push({svg:barsSVG(deg.map(r=>({label:r.label.replace('JPE ',''),vals:A?[RA.find(x=>x.k===r.k)?.v,r.v]:[r.v]})),A?[{label:'Prima',color:'var(--prima)'},{label:'Dopo',color:'var(--dopo)'}]:[{label:'Valore',color:'var(--dopo)'}],'gradi','°'),full:1,cap:B.kind==='rom'?'Escursione articolare (°)':'Errore di riposizionamento (°)'});
+  }
+  if(imgs.length){
+    ensure(320); h2('Grafici');
+    if(A){ ensure(16); page.drawRectangle({x:M,y:y-9,width:9,height:9,color:BLUE}); page.drawText(safe(`Prima (${dstr(A.date)})`),{x:M+13,y:y-8,size:9,font:F,color:INK}); page.drawRectangle({x:M+150,y:y-9,width:9,height:9,color:ACC}); page.drawText(safe(`Dopo (${dstr(B.date)})`),{x:M+163,y:y-8,size:9,font:F,color:INK}); y-=20; }
+    let col=0; const small=imgs.filter(i=>!i.full).length>2?3:2, sw=(CW-(small-1)*12)/small;
+    for(const im of imgs){
+      const p=await svgToPng(im.svg); const e=await pdf.embedPng(p.data);
+      if(im.full){ if(col){ y-=rowH; col=0; } const w=Math.min(CW,p.w*1.15), h=w*p.h/p.w; ensure(h+18); page.drawText(safe(im.cap),{x:M,y:y-9,size:9,font:FB,color:INK}); page.drawImage(e,{x:M+(CW-w)/2,y:y-14-h,width:w,height:h}); y-=h+24; }
+      else { const w=sw, h=w*p.h/p.w; if(col===0) ensure(h+18); var rowH=h+22; const x=M+col*(sw+12); page.drawText(safe(im.cap),{x,y:y-9,size:8.5,font:FB,color:INK}); page.drawImage(e,{x,y:y-12-h,width:w,height:h}); col++; if(col===small){ col=0; y-=rowH; } }
+    }
+    if(col) y-=rowH;
+    if(B.kind==='sway') text('Statokinesigrammi: percorso del tronco visto dall’alto (ML = destra-sinistra, AP = avanti-indietro). Il tratteggio racchiude il 95% dell’oscillazione: più è piccolo, più la postura è stabile.',{size:8.5,color:MUT});
+  }
+  // exercises
+  const EX=EXS.filter(e=>exIds.includes(e.id));
+  if(EX.length){ h2('Il tuo programma di esercizi');
+    EX.forEach((e,i)=>{ const how=wrap(e.how,F,9.5,CW-14), pr=wrap('Quando diventa facile: '+e.prog.join('; ')+'.',F,8.5,CW-14); ensure(18+how.length*13+pr.length*11+8);
+      page.drawText(safe(`${i+1}. ${e.n}`),{x:M,y:y-10,size:10.5,font:FB,color:INK}); const ds=safe(`${e.sets} serie x ${e.w} s · recupero ${e.r} s${e.bpm?` · ${e.bpm} bpm`:''}`); page.drawText(ds,{x:PW-M-F.widthOfTextAtSize(ds,9),y:y-10,size:9,font:F,color:ACC}); y-=16;
+      how.forEach(t=>{ page.drawText(t,{x:M+12,y:y-9,size:9.5,font:F,color:INK}); y-=13; }); pr.forEach(t=>{ page.drawText(t,{x:M+12,y:y-8,size:8.5,font:F,color:MUT}); y-=11; }); y-=6; });
+    text('Esegui gli esercizi in sicurezza, vicino a una parete o a un appoggio, soprattutto a occhi chiusi o su superfici morbide. Interrompi se compaiono vertigini intense, nausea o dolore.',{size:8.5,color:MUT});
+  }
+  if(note&&note.trim()){ h2('Note'); const w=wrap(note.trim(),F,10,CW-20); ensure(w.length*14+16); page.drawRectangle({x:M,y:y-w.length*14-12,width:CW,height:w.length*14+12,color:SOFT}); y-=6; w.forEach(t=>{ page.drawText(t,{x:M+10,y:y-10,size:10,font:F,color:INK}); y-=14; }); y-=10; }
+  // signature
+  ensure(50); gap(18); page.drawText(safe('Paolo Stati · Osteopata D.O. BSc'),{x:PW-M-FB.widthOfTextAtSize(safe('Paolo Stati · Osteopata D.O. BSc'),10),y:y-10,size:10,font:FB,color:INK});
+  // footers
+  const pages=pdf.getPages(), n=pages.length;
+  pages.forEach((p,i)=>{ p.drawLine({start:{x:M,y:48},end:{x:PW-M,y:48},thickness:.5,color:LINE});
+    p.drawText(safe(`${STUDIO.name} · ${STUDIO.sub} · ${STUDIO.addr}`),{x:M,y:36,size:7.5,font:F,color:MUT});
+    const pg=safe(`Pagina ${i+1} di ${n}`); p.drawText(pg,{x:PW-M-F.widthOfTextAtSize(pg,7.5),y:36,size:7.5,font:F,color:MUT});
+    p.drawText(safe('Misure rilevate con i sensori dello smartphone: hanno valore di monitoraggio nel tempo e non sostituiscono una diagnosi medica.'),{x:M,y:26,size:6.8,font:F,color:MUT}); });
+  return await pdf.save();
+}
+
 /* ================= boot ================= */
 function renderAll(){ renderPt(); if(VIEW==='test') renderTest(); if(VIEW==='hist') renderHist(); if(VIEW==='cmp') renderCmp(); if(VIEW==='ex') renderEx(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rep').hidden){ $('rep').hidden=true; } } });
 renderAll();
 })();
 </script>
