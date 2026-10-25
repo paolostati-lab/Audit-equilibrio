@@ -1,0 +1,544 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style><title>Palestra Oculomotoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0E1114; --panel:#171B20; --panel2:#1E232A; --line:#29303A;
+  --text:#E7EAEE; --muted:#8E98A4; --accent:#F4B62C; --accent-ink:#1A1405;
+  --red:#E5484D; --teal:#3CCFBE;
+  --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--text);}
+body{font-family:var(--body);font-size:15px;line-height:1.5;}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 64px;}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;border-bottom:1px solid var(--line);padding-bottom:18px;}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1 span{color:var(--accent)}
+.lede{color:var(--muted);max-width:60ch;margin:8px 0 0}
+.reticle{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+section.cat{margin-top:34px}
+.cat-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:12px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0;letter-spacing:.01em}
+.cat-head p{margin:0;color:var(--muted);font-size:14px;max-width:62ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,background .15s}
+.card:hover{border-color:#3a4350;background:var(--panel2)}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card svg{width:100%;height:auto;aspect-ratio:5/3;display:block;background:#0B0D10;border-radius:6px}
+.card b{font-family:var(--display);font-weight:600;font-size:17px;line-height:1.15}
+.card small{color:var(--muted);font-size:12.5px;line-height:1.3}
+.note{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px;max-width:75ch}
+
+/* sheet */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:640px){.backdrop{align-items:center}}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:14px 14px 0 0;width:100%;max-width:520px;max-height:88vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+@media (min-width:640px){.sheet{border-radius:14px;padding:22px}}
+.sheet h3{font-family:var(--display);font-size:26px;margin:0;font-weight:700}
+.sheet .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.sheet .desc{color:var(--muted);margin:6px 0 16px;font-size:14px}
+.ctrl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.ctrl label{font-weight:500}
+.ctrl output{font-family:var(--mono);font-size:13px;color:var(--accent);font-variant-numeric:tabular-nums}
+.ctrl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+.seg{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.actions{display:flex;gap:10px;margin-top:18px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;padding:12px 18px;border-radius:10px;font-weight:600;font-family:var(--display);font-size:18px;letter-spacing:.02em}
+.btn.primary{background:var(--accent);color:var(--accent-ink);flex:1}
+.btn.ghost{border:1px solid var(--line);color:var(--text)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* player */
+#player{position:fixed;inset:0;z-index:40;background:#000}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;font-family:var(--mono);font-size:13px;color:#fff;background:linear-gradient(rgba(0,0,0,.55),transparent);opacity:.5;transition:opacity .2s}
+.hud:hover,.hud:focus-within{opacity:1}
+.hud .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--display);font-size:16px}
+.hud button{all:unset;cursor:pointer;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:12.5px;color:#fff;background:rgba(0,0,0,.35)}
+.hud button:focus-visible{outline:2px solid var(--accent)}
+.hud .tm{font-variant-numeric:tabular-nums;min-width:5ch;text-align:right}
+.instr{position:absolute;left:0;right:0;bottom:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px));text-align:center;font-size:14px;color:rgba(255,255,255,.75);background:linear-gradient(transparent,rgba(0,0,0,.55));pointer-events:none}
+.endcard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(10,12,14,.92);padding:16px;text-align:center}
+.endcard h4{font-family:var(--display);font-size:34px;margin:0}
+.endcard p{margin:0;color:var(--muted)}
+.endcard .actions{width:100%;max-width:340px}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+
+</head><body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="reticle">Allenamento visuo-oculomotorio</div>
+      <h1>Palestra <span>Oculomotoria</span></h1>
+      <p class="lede">Inseguimento lento, saccadi, stimoli optocinetici e stabilizzazione dello sguardo. Scegli un esercizio, regola i parametri e avvia a schermo intero. Tocca lo schermo per mettere in pausa.</p>
+    </div>
+  </header>
+  <main id="home"></main>
+  <p class="note">Strumento di supporto all'esercizio, da usare sotto indicazione del professionista. Gli stimoli optocinetici e il VOR possono provocare vertigine o nausea: iniziare con velocità basse e sessioni brevi, interrompere ai sintomi. Evitare stimoli ad alto contrasto in soggetti con fotosensibilità.</p>
+</div>
+
+<div id="sheetRoot" hidden></div>
+
+<div id="player" hidden>
+  <canvas id="cv"></canvas>
+  <div class="hud">
+    <span class="nm" id="hudName"></span>
+    <span class="tm" id="hudTime">0:00</span>
+    <button id="hudPause" type="button">Pausa</button>
+    <button id="hudExit" type="button">Esci</button>
+  </div>
+  <div class="instr" id="instr"></div>
+  <div class="endcard" id="endcard" hidden>
+    <h4>Completato</h4>
+    <p id="endInfo"></p>
+    <div class="actions">
+      <button class="btn ghost" id="endClose" type="button">Chiudi</button>
+      <button class="btn primary" id="endAgain" type="button">Ripeti</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+const TAU = Math.PI*2;
+const LETTERS = "CDEFHKLNPRTUVZ";
+
+/* ---------- catalogue ---------- */
+const CATS = [
+ {id:'pursuit', name:'Inseguimento lento', sub:'Smooth pursuit — seguire il bersaglio solo con gli occhi, testa ferma.'},
+ {id:'saccade', name:'Saccadi', sub:'Salti rapidi e precisi dello sguardo tra bersagli, testa ferma.'},
+ {id:'okn', name:'Stimoli optocinetici', sub:'Flusso di bande in movimento: osservare lo schermo, fissare un punto o inseguire un bersaglio sopra le bande.'},
+ {id:'vor', name:'Stabilizzazione dello sguardo', sub:'VOR ×1 e ×2 a metronomo — la lettera deve restare nitida mentre la testa si muove. Include i piani dei canali verticali (LARP e RALP).'},
+ {id:'conv', name:'Convergenza', sub:'Vergenza e accomodazione. Il telefono si tiene in mano: la distanza dagli occhi fa parte dell\u2019esercizio.'},
+];
+const EX = [
+ {id:'p-h',cat:'pursuit',name:'Orizzontale',path:'h',desc:'Il bersaglio oscilla da sinistra a destra con moto sinusoidale.'},
+ {id:'p-v',cat:'pursuit',name:'Verticale',path:'v',desc:'Oscillazione alto–basso.'},
+ {id:'p-d1',cat:'pursuit',name:'Diagonale ↗',path:'d1',desc:'Diagonale dal basso-sinistra all’alto-destra.'},
+ {id:'p-d2',cat:'pursuit',name:'Diagonale ↘',path:'d2',desc:'Diagonale dall’alto-sinistra al basso-destra.'},
+ {id:'p-c',cat:'pursuit',name:'Circolare',path:'c',desc:'Traiettoria circolare, senso selezionabile.'},
+ {id:'p-8',cat:'pursuit',name:'Otto',path:'8',desc:'Traiettoria a otto orizzontale (lemniscata).'},
+ {id:'p-r',cat:'pursuit',name:'Imprevedibile',path:'r',desc:'Traiettoria fluida ma non ripetitiva: riduce l’anticipazione predittiva.'},
+ {id:'s-h',cat:'saccade',name:'Orizzontali',pat:'h',desc:'Il bersaglio salta tra destra e sinistra.'},
+ {id:'s-v',cat:'saccade',name:'Verticali',pat:'v',desc:'Il bersaglio salta tra alto e basso.'},
+ {id:'s-d',cat:'saccade',name:'Diagonali',pat:'d',desc:'Salti tra i quattro angoli, in diagonale.'},
+ {id:'s-r',cat:'saccade',name:'Casuali',pat:'r',desc:'Posizione e tempo imprevedibili: saccadi riflesse, non anticipate.'},
+ {id:'s-a',cat:'saccade',name:'Antisaccadi',pat:'a',desc:'Compare un segnale rosso: guarda subito dal lato opposto e leggi la lettera che appare lì per un attimo. Allena il controllo inibitorio.'},
+ {id:'o-l',cat:'okn',name:'Verso sinistra',dir:'l',desc:'Bande verticali che scorrono verso sinistra.'},
+ {id:'o-r',cat:'okn',name:'Verso destra',dir:'r',desc:'Bande verticali che scorrono verso destra.'},
+ {id:'o-u',cat:'okn',name:'Verso l’alto',dir:'u',desc:'Bande orizzontali che salgono.'},
+ {id:'o-d',cat:'okn',name:'Verso il basso',dir:'d',desc:'Bande orizzontali che scendono.'},
+ {id:'o-rot',cat:'okn',name:'Rotatorio',dir:'rot',desc:'Settori radiali in rotazione (stimolo sul piano frontale).'},
+ {id:'o-dots',cat:'okn',name:'Puntini rotanti',dir:'dots',desc:'Campo di puntini su sfondo nero che ruota intorno al centro (stimolo di rotazione sul piano frontale). Un solo punto al centro resta fermo: fissalo per tutto l\u2019esercizio senza seguire i puntini.'},
+ {id:'v1-h',cat:'vor',name:'VOR ×1 orizzontale',vor:1,axis:'h',desc:'Lettera ferma al centro. Ruota la testa a destra e sinistra a ogni battito, mantenendo la lettera a fuoco.'},
+ {id:'v1-v',cat:'vor',name:'VOR ×1 verticale',vor:1,axis:'v',desc:'Lettera ferma al centro. Flessione–estensione del capo a ogni battito, lettera sempre nitida.'},
+ {id:'v2-h',cat:'vor',name:'VOR ×2 orizzontale',vor:2,axis:'h',desc:'La lettera si sposta orizzontalmente a ritmo: muovi la testa in direzione opposta mantenendo lo sguardo sulla lettera.'},
+ {id:'v2-v',cat:'vor',name:'VOR ×2 verticale',vor:2,axis:'v',desc:'La lettera si sposta in verticale: muovi la testa in direzione opposta.'},
+ {id:'v1-larp',cat:'vor',name:'VOR ×1 piano LARP',vor:1,axis:'larp',desc:'Canali anteriore sinistro e posteriore destro. Ruota la testa di 45° a DESTRA rispetto al tronco, lettera davanti al naso, e fai il movimento del "sì" a ogni battito. Fase verso il basso (testa in avanti) = anteriore sinistro; verso l\u2019alto (testa indietro) = posteriore destro.'},
+ {id:'v1-ralp',cat:'vor',name:'VOR ×1 piano RALP',vor:1,axis:'ralp',desc:'Canali anteriore destro e posteriore sinistro. Ruota la testa di 45° a SINISTRA rispetto al tronco, lettera davanti al naso, e fai il movimento del "sì" a ogni battito. Fase verso il basso = anteriore destro; verso l\u2019alto (testa indietro) = posteriore sinistro.'},
+ {id:'v2-larp',cat:'vor',name:'VOR ×2 piano LARP',vor:2,axis:'larp',desc:'Testa ruotata di 45° a DESTRA. La lettera si sposta in verticale a ritmo: muovi la testa nel "sì" in direzione opposta, sguardo sempre sulla lettera.'},
+ {id:'v2-ralp',cat:'vor',name:'VOR ×2 piano RALP',vor:2,axis:'ralp',desc:'Testa ruotata di 45° a SINISTRA. La lettera si sposta in verticale a ritmo: muovi la testa nel "sì" in direzione opposta, sguardo sempre sulla lettera.'},
+ {id:'c-push',cat:'conv',name:'Avvicinamento al naso',conv:'push',desc:'Telefono a braccio teso, all\u2019altezza degli occhi. Segui le fasi: AVVICINA lentamente il telefono al naso, TIENI, ALLONTANA. La lettera deve restare singola e nitida: se si sdoppia, fermati e torna indietro finché torna singola, poi riprova.'},
+ {id:'c-jump',cat:'conv',name:'Vicino – lontano',conv:'jump',desc:'Telefono a 30–40 cm, un bersaglio a parete a circa 3 m. Al segnale alterna lo sguardo: lettera sul telefono (VICINO) e bersaglio a parete (LONTANO). Ogni volta l\u2019immagine deve tornare singola e nitida il più in fretta possibile.'},
+ {id:'c-ecc',cat:'conv',name:'Cerchi eccentrici',conv:'ecc',desc:'Telefono a circa 40 cm. Metti la punta di una penna tra gli occhi e lo schermo e fissala: le due figure diventano tre. Tieni nitida quella centrale, che appare in rilievo, con entrambi i puntini visibili (sopra e sotto). Più distanti sono le figure, più convergenza serve.'},
+];
+const INSTR = {
+  pursuit:'Testa ferma · segui il bersaglio con gli occhi · leggi le lettere ad alta voce',
+  saccade:'Testa ferma · sposta lo sguardo il più velocemente possibile sul nuovo bersaglio',
+  sa:'Guarda subito dal lato OPPOSTO al segnale rosso e leggi la lettera',
+  okn:'Osserva le bande che scorrono · respira normalmente',
+  oknfix:'Fissa il punto centrale · non inseguire le bande',
+  vor1:'Muovi la testa a ogni battito · la lettera deve restare nitida',
+  vor2:'Testa in direzione opposta alla lettera · sguardo sempre sulla lettera',
+  oknt:'Segui il bersaglio con gli occhi · ignora le bande in movimento',
+  dots:'Fissa il punto centrale fermo · lascia ruotare i puntini intorno',
+  larp:'Testa ruotata 45° a DESTRA · movimento del "sì" · lettera sempre nitida',
+  ralp:'Testa ruotata 45° a SINISTRA · movimento del "sì" · lettera sempre nitida',
+  push:'Segui le fasi · la lettera deve restare singola e nitida',
+  jump:'Al segnale alterna lo sguardo tra telefono e parete',
+  ecc:'Fissa la punta della penna · tieni nitida la figura centrale in rilievo',
+};
+
+/* ---------- controls ---------- */
+const C = {
+ dur:{t:'range',label:'Durata',min:15,max:300,step:15,fmt:v=>`${Math.floor(v/60)}:${String(v%60).padStart(2,'0')}`},
+ hz:{t:'range',label:'Velocità',min:.1,max:1.2,step:.05,fmt:v=>`${(+v).toFixed(2)} Hz`},
+ amp:{t:'range',label:'Ampiezza',min:20,max:100,step:5,fmt:v=>`${v}%`},
+ size:{t:'range',label:'Dimensione bersaglio',min:6,max:40,step:1,fmt:v=>`${v}`},
+ target:{t:'seg',label:'Bersaglio',opts:[['dot','Punto'],['letter','Lettera']]},
+ color:{t:'seg',label:'Colore bersaglio',opts:[['#F4B62C','Ambra'],['#E5484D','Rosso'],['#3CCFBE','Verde acqua'],['#FFFFFF','Bianco'],['#111111','Nero']]},
+ bg:{t:'seg',label:'Sfondo',opts:[['#000000','Nero'],['#3A3F45','Grigio'],['#F2F2F0','Chiaro']]},
+ dirc:{t:'seg',label:'Senso',opts:[['cw','Orario'],['ccw','Antiorario']]},
+ iv:{t:'range',label:'Intervallo tra salti',min:300,max:3000,step:50,fmt:v=>`${v} ms`},
+ jit:{t:'seg',label:'Ritmo',opts:[['0','Regolare'],['1','Variabile']]},
+ ghost:{t:'seg',label:'Bersagli fissi visibili',opts:[['0','No'],['1','Sì']]},
+ flash:{t:'range',label:'Durata lettera',min:200,max:1200,step:50,fmt:v=>`${v} ms`},
+ ospd:{t:'range',label:'Velocità bande',min:40,max:900,step:20,fmt:v=>`${v} px/s`},
+ ow:{t:'range',label:'Larghezza bande',min:20,max:200,step:5,fmt:v=>`${v} px`},
+ opal:{t:'seg',label:'Colori',opts:[['bw','Bianco/nero'],['rw','Rosso/bianco'],['low','Basso contrasto']]},
+ fix:{t:'seg',label:'Bersaglio sopra le bande',opts:[['0','Nessuno'],['1','Punto fisso (soppressione)'],['h','Inseguimento orizzontale'],['v','Inseguimento verticale'],['c','Inseguimento circolare'],['8','Inseguimento a otto']]},
+ ct:{t:'range',label:'Durata avvicinamento / allontanamento',min:2,max:8,step:1,fmt:v=>`${v} s`},
+ hold:{t:'range',label:'Tenuta vicino',min:1,max:6,step:1,fmt:v=>`${v} s`},
+ sep:{t:'range',label:'Distanza tra le figure',min:20,max:70,step:2,fmt:v=>`${v}%`},
+ dcol:{t:'seg',label:'Colore puntini',opts:[['#FFFFFF','Bianco'],['#F4B62C','Ambra'],['#3CCFBE','Verde acqua'],['#E5484D','Rosso'],['#7A7F86','Grigio (basso contrasto)']]},
+ ccol:{t:'seg',label:'Colore punto centrale',opts:[['#E5484D','Rosso'],['#F4B62C','Ambra'],['#3CCFBE','Verde acqua'],['#FFFFFF','Bianco']]},
+ dsz:{t:'range',label:'Dimensione puntini',min:1,max:8,step:1,fmt:v=>`${v}`},
+ dn:{t:'range',label:'Quantità puntini',min:50,max:600,step:25,fmt:v=>`${v}`},
+ rspd:{t:'range',label:'Velocità rotazione',min:5,max:180,step:5,fmt:v=>`${v} °/s`},
+ sect:{t:'range',label:'Numero settori',min:6,max:32,step:2,fmt:v=>`${v}`},
+ bpm:{t:'range',label:'Metronomo',min:40,max:200,step:5,fmt:v=>`${v} bpm`},
+ snd:{t:'seg',label:'Suono',opts:[['1','Attivo'],['0','Muto']]},
+};
+const CTRLS = {
+ pursuit:['dur','hz','amp','target','size','color','bg'],
+ pursuitC:['dur','hz','amp','dirc','target','size','color','bg'],
+ saccade:['dur','iv','jit','amp','ghost','target','size','color','bg'],
+ anti:['dur','iv','flash','amp','size','bg'],
+ okn:['dur','ospd','ow','opal','fix','hz','amp','target','size','color'],
+ rot:['dur','rspd','sect','dirc','opal','fix','hz','amp','target','size','color'],
+ dots:['dur','rspd','dirc','dcol','dsz','dn','ccol'],
+ push:['dur','ct','hold','size','snd','bg'],
+ jump:['dur','iv','size','snd','bg'],
+ ecc:['dur','sep','bg'],
+ vor1:['dur','bpm','snd','size','color','bg'],
+ vor2:['dur','bpm','amp','snd','size','color','bg'],
+};
+const BASE = {dur:60,hz:.3,amp:80,size:14,target:'letter',color:'#F4B62C',bg:'#000000',dirc:'cw',iv:1000,jit:'0',ghost:'0',flash:500,ospd:200,ow:60,opal:'bw',fix:'0',rspd:40,sect:16,bpm:60,snd:'1',ct:4,hold:2,sep:36,dcol:'#FFFFFF',ccol:'#E5484D',dsz:3,dn:250};
+function ctrlSet(ex){
+  if(ex.cat==='pursuit') return ex.path==='c'?CTRLS.pursuitC:CTRLS.pursuit;
+  if(ex.cat==='saccade') return ex.pat==='a'?CTRLS.anti:CTRLS.saccade;
+  if(ex.cat==='okn') return ex.dir==='dots'?CTRLS.dots:ex.dir==='rot'?CTRLS.rot:CTRLS.okn;
+  if(ex.cat==='conv') return CTRLS[ex.conv];
+  return ex.vor===1?CTRLS.vor1:CTRLS.vor2;
+}
+function defaults(ex){
+  const d={...BASE};
+  if(ex.cat==='vor'){ d.size=22; d.amp=40; }
+  if(ex.cat==='saccade'&&ex.pat==='r'){ d.jit='1'; }
+  if(ex.pat==='a'){ d.iv=1200; d.size=18; }
+  if(ex.cat==='okn'){ d.hz=.2; d.amp=60; d.target='dot'; d.size=12; }
+  if(ex.conv==='push'){ d.size=8; d.bg='#F2F2F0'; d.color='#111111'; }
+  if(ex.conv==='jump'){ d.iv=2500; d.size=9; d.bg='#F2F2F0'; d.color='#111111'; }
+  return d;
+}
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+function loadSettings(ex){ return {...defaults(ex), ...(store.get('po:'+ex.id)||{})}; }
+
+/* ---------- path math ---------- */
+function pursuitPos(path,p,dir){
+  switch(path){
+    case 'h': return [Math.sin(p),0];
+    case 'v': return [0,Math.sin(p)];
+    case 'd1': return [Math.sin(p),-Math.sin(p)];
+    case 'd2': return [Math.sin(p),Math.sin(p)];
+    case 'c': return [Math.cos(p), (dir==='ccw'?-1:1)*Math.sin(p)];
+    case '8': return [Math.sin(p),.5*Math.sin(2*p)];
+    case 'r': return [.62*Math.sin(p)+.38*Math.sin(2.31*p+1.1), .6*Math.sin(1.37*p+.5)+.4*Math.sin(2.83*p+2)];
+  }
+  return [0,0];
+}
+
+/* ---------- previews ---------- */
+function preview(ex){
+  const W=100,H=60,cx=50,cy=30,ax=38,ay=20;
+  const A='#F4B62C', M='#5b6570';
+  let s='';
+  if(ex.cat==='pursuit'){
+    const n=ex.path==='r'?420:120, span=ex.path==='r'?TAU*4:TAU, pts=[];
+    const sq=['c','d1','d2'].includes(ex.path);
+    for(let i=0;i<=n;i++){const [x,y]=pursuitPos(ex.path,i/n*span,'cw');pts.push(`${(cx+x*(sq?ay:ax)).toFixed(1)},${(cy+y*ay).toFixed(1)}`);}
+    s+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${M}" stroke-width="1.2"/>`;
+    const [x,y]=pursuitPos(ex.path,.9,'cw');
+    s+=`<circle cx="${cx+x*(sq?ay:ax)}" cy="${cy+y*ay}" r="3.2" fill="${A}"/>`;
+  } else if(ex.cat==='saccade'){
+    let P={h:[[-1,0],[1,0]],v:[[0,-1],[0,1]],d:[[-1,-1],[1,1],[1,-1],[-1,1]],r:[[-.7,-.4],[.5,.8],[.9,-.7],[-.2,.3],[-.9,.6]],a:[[-1,0],[1,0]]}[ex.pat];
+    if(ex.pat==='a'){
+      s+=`<circle cx="${cx}" cy="${cy}" r="2" fill="${M}"/><circle cx="${cx-ax}" cy="${cy}" r="3.4" fill="#E5484D"/>`;
+      s+=`<path d="M${cx-8} ${cy} L${cx+ax-8} ${cy}" stroke="${M}" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/><text x="${cx+ax}" y="${cy+4}" fill="${A}" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text>`;
+    } else {
+      s+=`<polyline points="${P.map(([x,y])=>`${cx+x*ax},${cy+y*ay}`).join(' ')}" fill="none" stroke="${M}" stroke-width="1" stroke-dasharray="3 3"/>`;
+      P.forEach(([x,y],i)=>{s+=`<circle cx="${cx+x*ax}" cy="${cy+y*ay}" r="${i===1?3.4:2.4}" fill="${i===1?A:M}"/>`;});
+    }
+  } else if(ex.cat==='okn'){
+    if(ex.dir==='dots'){
+      for(let i=0;i<46;i++){ const a=(i*137.5)*Math.PI/180, r=4+Math.sqrt(i/46)*26; s+=`<circle cx="${(cx+Math.cos(a)*r*1.6).toFixed(1)}" cy="${(cy+Math.sin(a)*r).toFixed(1)}" r="1.3" fill="#cfd4da"/>`; }
+      s+=`<circle cx="${cx}" cy="${cy}" r="3.2" fill="#E5484D"/><path d="M${cx+34} ${cy-16} a36 36 0 0 1 0 32" stroke="${A}" stroke-width="1.6" fill="none"/>`;
+    } else if(ex.dir==='rot'){
+      for(let i=0;i<12;i+=2){const a0=i/12*TAU,a1=(i+1)/12*TAU,r=26;s+=`<path d="M${cx} ${cy} L${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A${r} ${r} 0 0 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} Z" fill="#cfd4da"/>`;}
+      s+=`<path d="M${cx+30} ${cy-14} a32 32 0 0 1 0 28" stroke="${A}" stroke-width="1.6" fill="none"/>`;
+    } else {
+      const horiz = ex.dir==='l'||ex.dir==='r';
+      for(let i=0;i<10;i+=2){ s+= horiz?`<rect x="${i*10}" y="0" width="10" height="60" fill="#cfd4da"/>`:`<rect x="0" y="${i*6}" width="100" height="6" fill="#cfd4da"/>`; }
+      const ar={l:`M70 30 H30 M38 22 L30 30 L38 38`,r:`M30 30 H70 M62 22 L70 30 L62 38`,u:`M50 48 V12 M42 20 L50 12 L58 20`,d:`M50 12 V48 M42 40 L50 48 L58 40`}[ex.dir];
+      s+=`<path d="${ar}" stroke="${A}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+  } else if(ex.cat==='conv'){
+    if(ex.conv==='push'){ s+=`<path d="M12 30 H80" stroke="${M}" stroke-width="1.2" stroke-dasharray="3 3"/><path d="M20 24 L12 30 L20 36" stroke="${A}" stroke-width="1.6" fill="none"/><rect x="80" y="18" width="10" height="24" rx="2" fill="none" stroke="${A}" stroke-width="1.6"/><circle cx="10" cy="22" r="2.5" fill="${M}"/><circle cx="10" cy="38" r="2.5" fill="${M}"/>`; }
+    else if(ex.conv==='jump'){ s+=`<rect x="14" y="20" width="12" height="22" rx="2" fill="none" stroke="${A}" stroke-width="1.6"/><text x="20" y="35" font-size="9" fill="${A}" text-anchor="middle" font-family="sans-serif" font-weight="700">E</text><circle cx="84" cy="30" r="5" fill="${M}"/><path d="M32 30 H74 M68 25 L74 30 L68 35 M38 25 L32 30 L38 35" stroke="${M}" stroke-width="1.2" fill="none"/>`; }
+    else { [30,70].forEach((x,i)=>{ s+=`<circle cx="${x}" cy="30" r="15" fill="none" stroke="#cfd4da" stroke-width="2"/><circle cx="${x+(i?-4:4)}" cy="30" r="6" fill="none" stroke="${A}" stroke-width="2"/>`; }); }
+  } else {
+    const h=ex.axis==='h', vp=ex.axis==='larp'||ex.axis==='ralp';
+    if(vp){ s+=`<text x="${cx}" y="${cy+6}" fill="${A}" font-size="17" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text><path d="M14 8 V52 M9 14 L14 8 L19 14 M9 46 L14 52 L19 46" stroke="${M}" stroke-width="1.4" fill="none"/><text x="${W-6}" y="12" fill="${M}" font-size="9" text-anchor="end" font-family="monospace">×${ex.vor}</text><text x="${W-6}" y="54" fill="${A}" font-size="10" text-anchor="end" font-family="monospace" font-weight="700">${ex.axis.toUpperCase()}</text><text x="24" y="54" fill="${M}" font-size="8.5" font-family="sans-serif">testa 45° ${ex.axis==='larp'?'dx':'sx'}</text>`; return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${s}</svg>`; }
+    s+=`<text x="${cx}" y="${cy+6}" fill="${A}" font-size="17" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text>`;
+    s+= h?`<path d="M18 50 H82 M24 45 L18 50 L24 55 M76 45 L82 50 L76 55" stroke="${M}" stroke-width="1.4" fill="none"/>`
+         :`<path d="M14 8 V52 M9 14 L14 8 L19 14 M9 46 L14 52 L19 46" stroke="${M}" stroke-width="1.4" fill="none"/>`;
+    if(ex.vor===2) s+= h?`<path d="M34 14 H66" stroke="${A}" stroke-width="1" stroke-dasharray="2 3"/>`:`<path d="M72 10 V50" stroke="${A}" stroke-width="1" stroke-dasharray="2 3"/>`;
+    s+=`<text x="${W-6}" y="12" fill="${M}" font-size="9" text-anchor="end" font-family="monospace">×${ex.vor}</text>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${s}</svg>`;
+}
+
+/* ---------- home ---------- */
+const home=document.getElementById('home');
+home.innerHTML = CATS.map(c=>`
+  <section class="cat"><div class="cat-head"><h2>${c.name}</h2><p>${c.sub}</p></div>
+  <div class="grid">${EX.filter(e=>e.cat===c.id).map(e=>`
+    <button class="card" data-id="${e.id}" type="button">${preview(e)}<b>${e.name}</b></button>`).join('')}</div></section>`).join('');
+home.addEventListener('click',e=>{const b=e.target.closest('.card'); if(b) openSheet(EX.find(x=>x.id===b.dataset.id));});
+
+/* ---------- sheet ---------- */
+const sheetRoot=document.getElementById('sheetRoot');
+let current=null, settings=null;
+function openSheet(ex){
+  current=ex; settings=loadSettings(ex);
+  const cat=CATS.find(c=>c.id===ex.cat);
+  sheetRoot.innerHTML=`<div class="backdrop" id="bd"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shT">
+    <div class="kicker">${cat.name}</div><h3 id="shT">${ex.name}</h3><p class="desc">${ex.desc}</p>
+    ${ctrlSet(ex).map(k=>ctrlHTML(k)).join('')}
+    <div class="actions"><button class="btn ghost" id="shClose" type="button">Annulla</button><button class="btn primary" id="shGo" type="button">Avvia</button></div>
+  </div></div>`;
+  sheetRoot.hidden=false;
+  sheetRoot.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{settings[inp.dataset.k]=+inp.value; inp.parentElement.querySelector('output').textContent=C[inp.dataset.k].fmt(+inp.value);}));
+  sheetRoot.querySelectorAll('.seg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; settings[seg.dataset.k]=b.dataset.v; seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
+  document.getElementById('bd').addEventListener('click',e=>{if(e.target.id==='bd') closeSheet();});
+  document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('shGo').onclick=()=>{store.set('po:'+ex.id,settings); closeSheet(); startPlayer();};
+  document.getElementById('shGo').focus();
+}
+function ctrlHTML(k){
+  const c=C[k], v=settings[k], id='c-'+k;
+  if(c.t==='range') return `<div class="ctrl"><label for="${id}">${c.label}</label><output>${c.fmt(v)}</output><input id="${id}" type="range" data-k="${k}" min="${c.min}" max="${c.max}" step="${c.step}" value="${v}"></div>`;
+  return `<div class="ctrl"><label>${c.label}</label><span></span><div class="seg" id="${id}" data-k="${k}" role="group" aria-label="${c.label}">${c.opts.map(([val,lab])=>`<button type="button" data-v="${val}" aria-pressed="${String(val)===String(v)}">${lab}</button>`).join('')}</div></div>`;
+}
+function closeSheet(){ sheetRoot.hidden=true; sheetRoot.innerHTML=''; }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ if(!player.hidden) exitPlayer(); else if(!sheetRoot.hidden) closeSheet(); }
+  if(e.key===' ' && !player.hidden){ e.preventDefault(); togglePause(); }
+});
+
+/* ---------- player ---------- */
+const player=document.getElementById('player'), cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+const hudTime=document.getElementById('hudTime'), hudPause=document.getElementById('hudPause'), endcard=document.getElementById('endcard');
+let W=0,H=0,dpr=1, raf=0, last=0, el=0, paused=false, done=false, S=null, audio=null, wake=null;
+function resize(){ dpr=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+window.addEventListener('resize',()=>{ if(!player.hidden) resize(); });
+
+function beep(hi){
+  if(!audio||settings.snd!=='1') return;
+  const o=audio.createOscillator(), g=audio.createGain(), t=audio.currentTime;
+  o.frequency.value=hi?1320:880; o.type='sine';
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(.35,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+.07);
+  o.connect(g).connect(audio.destination); o.start(t); o.stop(t+.08);
+}
+const rl=(prev)=>{let c; do{c=LETTERS[Math.floor(Math.random()*LETTERS.length)];}while(c===prev); return c;};
+
+function startPlayer(){
+  const ex=current;
+  document.getElementById('hudName').textContent=ex.name;
+  const ins = ex.cat==='pursuit'?INSTR.pursuit: ex.cat==='saccade'?(ex.pat==='a'?INSTR.sa:INSTR.saccade): ex.cat==='okn'?(ex.dir==='dots'?INSTR.dots:settings.fix==='1'?INSTR.oknfix:settings.fix&&settings.fix!=='0'?INSTR.oknt:INSTR.okn): ex.cat==='conv'?INSTR[ex.conv]: (INSTR[ex.axis]||(ex.vor===1?INSTR.vor1:INSTR.vor2));
+  document.getElementById('instr').textContent=ins;
+  player.hidden=false; endcard.hidden=true; resize();
+  if(ex.cat==='vor'||ex.cat==='conv'){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume&&audio.resume(); }catch(e){ audio=null; } }
+  try{ const r=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); r&&r.catch&&r.catch(()=>{}); }catch(e){}
+  try{ navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){}
+  S={letter:rl(), lastLetterT:0, cph:'', jph:-1, idx:0, next:0, pos:[0,0], prevBeat:-1, anti:{phase:'fix',until:0,side:1}};
+  el=-3; paused=false; done=false; hudPause.textContent='Pausa';
+  last=performance.now(); cancelAnimationFrame(raf); raf=requestAnimationFrame(loop);
+}
+function exitPlayer(){
+  cancelAnimationFrame(raf); player.hidden=true;
+  try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  try{ wake&&wake.release(); wake=null; }catch(e){}
+}
+function togglePause(){ if(done) return; paused=!paused; hudPause.textContent=paused?'Riprendi':'Pausa'; }
+hudPause.onclick=e=>{e.stopPropagation(); togglePause();};
+document.getElementById('hudExit').onclick=e=>{e.stopPropagation(); exitPlayer();};
+cv.addEventListener('click',togglePause);
+document.getElementById('endClose').onclick=exitPlayer;
+document.getElementById('endAgain').onclick=()=>startPlayer();
+
+function loop(now){
+  const dt=Math.min(.1,(now-last)/1000); last=now;
+  if(!paused&&!done) el+=dt;
+  const dur=settings.dur;
+  if(el>=dur && !done){ done=true; endcard.hidden=false; document.getElementById('endInfo').textContent=`${current.name} · ${C.dur.fmt(dur)}`; }
+  const rem=Math.max(0,dur-Math.max(0,el));
+  hudTime.textContent=`${Math.floor(rem/60)}:${String(Math.floor(rem%60)).padStart(2,'0')}`;
+  draw(Math.max(0,el), el<0);
+  if(!player.hidden) raf=requestAnimationFrame(loop);
+}
+
+function drawTarget(x,y,col,size,letter,asLetter){
+  if(asLetter){
+    ctx.fillStyle=col; ctx.font=`700 ${Math.round(size*2.6)}px Barlow, Arial, sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(letter,x,y+size*.08);
+  } else {
+    ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,size,0,TAU); ctx.fill();
+    ctx.fillStyle=settings.bg==='#F2F2F0'?'#F2F2F0':'#000'; ctx.beginPath(); ctx.arc(x,y,Math.max(1.5,size*.18),0,TAU); ctx.fill();
+  }
+}
+function countdown(t){
+  ctx.fillStyle=settings.bg==='#F2F2F0'?'#222':'#fff';
+  ctx.globalAlpha=.8; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(String(Math.ceil(-el)),W/2,H/2); ctx.globalAlpha=1;
+}
+
+function draw(t,pre){
+  const ex=current, s=settings;
+  const margin=s.size*2.8+10, hx=(W/2-margin)*s.amp/100, hy=(H/2-margin-40)*s.amp/100, hm=Math.min(hx,hy);
+  const cx=W/2, cy=H/2;
+
+  if(ex.cat==='okn'){ drawOKN(t,pre); return; }
+  ctx.fillStyle=s.bg; ctx.fillRect(0,0,W,H);
+  if(pre){ countdown(); return; }
+  const asL=s.target==='letter';
+
+  if(ex.cat==='pursuit'){
+    const p=TAU*s.hz*t, [ux,uy]=pursuitPos(ex.path,p,s.dirc);
+    const sq=['c','d1','d2'].includes(ex.path);
+    if(t-S.lastLetterT>1.4){ S.letter=rl(S.letter); S.lastLetterT=t; }
+    drawTarget(cx+ux*(sq?hm:hx), cy+uy*(sq?hm:hy), s.color, s.size, S.letter, asL);
+    return;
+  }
+
+  if(ex.cat==='saccade' && ex.pat!=='a'){
+    const ms=t*1000;
+    const fixed={h:[[-1,0],[1,0]],v:[[0,-1],[0,1]],d:[[-1,-1],[1,1],[1,-1],[-1,1]]}[ex.pat];
+    if(ms>=S.next){
+      S.idx++;
+      if(ex.pat==='r'){ let q; do{ q=[Math.random()*2-1,Math.random()*2-1]; }while(Math.hypot(q[0]-S.pos[0],q[1]-S.pos[1])<.6); S.pos=q; }
+      else S.pos=fixed[S.idx%fixed.length];
+      S.letter=rl(S.letter);
+      S.next=ms+s.iv*(s.jit==='1'?(.6+Math.random()*.8):1);
+    }
+    if(s.ghost==='1' && fixed){ ctx.globalAlpha=.28; fixed.forEach(([x,y])=>{ ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(cx+x*hx,cy+y*hy,Math.max(3,s.size*.35),0,TAU); ctx.fill(); }); ctx.globalAlpha=1; }
+    drawTarget(cx+S.pos[0]*hx, cy+S.pos[1]*hy, s.color, s.size, S.letter, asL);
+    return;
+  }
+
+  if(ex.pat==='a'){
+    const ms=t*1000, A=S.anti, fc=s.bg==='#F2F2F0'?'#333':'#bbb';
+    if(ms>=A.until){
+      if(A.phase==='fix'){ A.phase='cue'; A.side=Math.random()<.5?-1:1; A.until=ms+220; }
+      else if(A.phase==='cue'){ A.phase='gap'; A.until=ms+120; S.letter=rl(S.letter); }
+      else if(A.phase==='gap'){ A.phase='letter'; A.until=ms+s.flash; }
+      else { A.phase='fix'; A.until=ms+s.iv*(.8+Math.random()*.4); }
+    }
+    if(A.phase==='fix'||A.phase==='cue'||A.phase==='gap'){ ctx.fillStyle=fc; ctx.fillRect(cx-8,cy-1.5,16,3); ctx.fillRect(cx-1.5,cy-8,3,16); }
+    if(A.phase==='cue'){ ctx.fillStyle='#E5484D'; ctx.beginPath(); ctx.arc(cx+A.side*hx,cy,s.size*1.2,0,TAU); ctx.fill(); }
+    if(A.phase==='letter'){ drawTarget(cx-A.side*hx,cy,'#F4B62C',s.size,S.letter,true); }
+    return;
+  }
+
+  if(ex.cat==='conv'){ drawConv(t); return; }
+  if(ex.cat==='vor'){
+    const beatLen=60/s.bpm, beat=Math.floor(t/beatLen);
+    if(beat!==S.prevBeat){ S.prevBeat=beat; beep(beat%4===0); if(beat%2===0) S.letter=rl(S.letter); }
+    const frac=(t/beatLen)%1, side=beat%2===0?1:-1;
+    let x=cx,y=cy;
+    if(ex.vor===2){ const u=Math.cos(Math.PI*t/beatLen); if(ex.axis==='h') x=cx+u*hx; else y=cy+u*hy; }
+    if(ex.axis==='larp'||ex.axis==='ralp'){ const ink0=s.bg==='#F2F2F0'?'rgba(0,0,0,.7)':'rgba(255,255,255,.7)'; ctx.fillStyle=ink0; ctx.font='600 15px Barlow, Arial, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(`Testa ruotata 45° a ${ex.axis==='larp'?'DESTRA':'SINISTRA'} · piano ${ex.axis.toUpperCase()}`, cx, 78); }
+    // beat cue: pulse ring + head direction
+    const ink=s.bg==='#F2F2F0'?'rgba(0,0,0,':'rgba(255,255,255,';
+    ctx.strokeStyle=ink+(0.5*(1-frac)).toFixed(2)+')'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(x,y,s.size*2.2+frac*s.size*2,0,TAU); ctx.stroke();
+    drawTarget(x,y,s.color,s.size,S.letter,true);
+    // head direction arrow (for VOR×2 head goes opposite of target)
+    const hdir = ex.vor===1 ? side : (Math.sin(Math.PI*t/beatLen)>=0?1:-1);
+    ctx.fillStyle=ink+'0.55)'; ctx.font='500 14px Barlow, Arial, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const lbl = ex.axis==='h' ? (hdir>0?'testa →':'← testa') : (hdir>0?'testa ↓':'testa ↑');
+    ctx.fillText(lbl, cx, H-70);
+  }
+}
+
+function drawOKN(t,pre){
+  const s=settings, ex=current;
+  const pal={bw:['#FFFFFF','#000000'],rw:['#D7262E','#FFFFFF'],low:['#7A7F86','#55595F']}[s.opal];
+  ctx.fillStyle=pal[1]; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=pal[0];
+  if(ex.dir==='dots'){
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+    const R=Math.hypot(W,H)/2;
+    if(!S.dots||S.dots.n!==s.dn||S.dots.R!==R){ const d=[]; for(let i=0;i<s.dn;i++) d.push([Math.sqrt(Math.random())*R,Math.random()*TAU]); S.dots={n:s.dn,R,d}; }
+    const a0=(s.dirc==='ccw'?-1:1)*t*s.rspd*Math.PI/180, cx=W/2, cy=H/2;
+    ctx.fillStyle=s.dcol;
+    for(const [r,a] of S.dots.d){ if(r<14) continue; const x=cx+r*Math.cos(a+a0), y=cy+r*Math.sin(a+a0); ctx.beginPath(); ctx.arc(x,y,s.dsz,0,TAU); ctx.fill(); }
+    if(pre){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(String(Math.ceil(-el)),W/2,H/2); return; }
+    ctx.fillStyle=s.ccol; ctx.beginPath(); ctx.arc(cx,cy,Math.max(6,s.dsz*2.2),0,TAU); ctx.fill();
+    return;
+  }
+  if(ex.dir==='rot'){
+    const n=s.sect, a=(s.dirc==='ccw'?-1:1)*t*s.rspd*Math.PI/180, R=Math.hypot(W,H), cx=W/2, cy=H/2;
+    for(let i=0;i<n;i+=2){ const a0=a+i/n*TAU, a1=a+(i+1)/n*TAU; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,a0,a1); ctx.closePath(); ctx.fill(); }
+  } else {
+    const w=s.ow, per=w*2, off=((t*s.ospd)%per+per)%per;
+    const horiz=ex.dir==='l'||ex.dir==='r', sgn=(ex.dir==='r'||ex.dir==='d')?1:-1;
+    const o=sgn*off, len=horiz?W:H;
+    for(let p=-per+(o%per); p<len+per; p+=per){ if(horiz) ctx.fillRect(p,0,w,H); else ctx.fillRect(0,p,W,w); }
+  }
+  if(pre){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(String(Math.ceil(-el)),W/2,H/2); return; }
+  if(s.fix==='1'){ ctx.fillStyle='#F4B62C'; ctx.strokeStyle='#000'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(W/2,H/2,9,0,TAU); ctx.fill(); ctx.stroke(); }
+  else if(s.fix&&s.fix!=='0'){
+    const margin=s.size*2.8+10, hx=(W/2-margin)*s.amp/100, hy=(H/2-margin-40)*s.amp/100, hm=Math.min(hx,hy);
+    const [ux,uy]=pursuitPos(s.fix,TAU*s.hz*t,s.dirc||'cw'); const sq=s.fix==='c';
+    const x=W/2+ux*(sq?hm:hx), y=H/2+uy*(sq?hm:hy);
+    if(t-S.lastLetterT>1.4){ S.letter=rl(S.letter); S.lastLetterT=t; }
+    ctx.lineWidth=5; ctx.strokeStyle='#000';
+    if(s.target==='letter'){ ctx.font=`700 ${Math.round(s.size*2.6)}px Barlow, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.lineJoin='round'; ctx.strokeText(S.letter,x,y+s.size*.08); ctx.fillStyle=s.color; ctx.fillText(S.letter,x,y+s.size*.08); }
+    else { ctx.beginPath(); ctx.arc(x,y,s.size+2,0,TAU); ctx.fillStyle='#000'; ctx.fill(); ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(x,y,s.size,0,TAU); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(x,y,Math.max(1.5,s.size*.18),0,TAU); ctx.fill(); }
+  }
+}
+
+function drawConv(t){
+  const s=settings, ex=current, cx=W/2, cy=H/2, light=s.bg==='#F2F2F0', ink=light?'#15191D':'#E7EAEE', mut=light?'rgba(0,0,0,.55)':'rgba(255,255,255,.6)';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  if(ex.conv==='push'){
+    const a=s.ct, h=s.hold, cyc=2*a+h, u=t%cyc, k=Math.floor(t/cyc);
+    const ph=u<a?'AVVICINA':u<a+h?'TIENI':'ALLONTANA', frac=u<a?u/a:u<a+h?1:1-(u-a-h)/a;
+    if(ph!==S.cph){ S.cph=ph; beep(ph==='TIENI'); if(ph==='AVVICINA') S.letter=rl(S.letter); }
+    drawTarget(cx,cy,s.color,s.size,S.letter,true);
+    ctx.fillStyle=ink; ctx.font='700 26px "Barlow Semi Condensed", Arial, sans-serif'; ctx.fillText(ph,cx,cy-110);
+    const bw=Math.min(260,W-80); ctx.fillStyle=mut; ctx.globalAlpha=.35; ctx.fillRect(cx-bw/2,cy+100,bw,8); ctx.globalAlpha=1; ctx.fillStyle=s.color==='#111111'&&!light?'#F4B62C':s.color; ctx.fillRect(cx-bw/2,cy+100,bw*frac,8);
+    ctx.fillStyle=mut; ctx.font='500 13px Barlow, Arial, sans-serif'; ctx.fillText('lontano',cx-bw/2+24,cy+124); ctx.fillText('vicino al naso',cx+bw/2-40,cy+124); ctx.fillText(`ripetizione ${k+1}`,cx,cy+150);
+    return;
+  }
+  if(ex.conv==='jump'){
+    const iv=s.iv/1000, j=Math.floor(t/iv), near=j%2===0;
+    if(j!==S.jph){ S.jph=j; beep(near); if(near) S.letter=rl(S.letter); }
+    if(near){ drawTarget(cx,cy,s.color,s.size,S.letter,true); ctx.fillStyle=mut; ctx.font='600 16px Barlow, Arial, sans-serif'; ctx.fillText('VICINO · leggi la lettera',cx,cy-90); }
+    else { ctx.fillStyle=mut; ctx.font='700 30px "Barlow Semi Condensed", Arial, sans-serif'; ctx.fillText('LONTANO',cx,cy-10); ctx.font='500 15px Barlow, Arial, sans-serif'; ctx.fillText('guarda il bersaglio a parete',cx,cy+22); }
+    return;
+  }
+  // eccentric circles
+  const R=Math.min(W*.16,H*.2,110), r=R*.42, d=R*.18, sepPx=Math.max(W*s.sep/200,R*1.25);
+  [[-1,1],[1,-1]].forEach(([side,off],i)=>{ const x=cx+side*sepPx;
+    ctx.lineWidth=Math.max(3,R*.06); ctx.strokeStyle=light?'#2B3138':'#DDE2E7'; ctx.beginPath(); ctx.arc(x,cy,R,0,TAU); ctx.stroke();
+    ctx.strokeStyle=light?'#C98400':'#F4B62C'; ctx.beginPath(); ctx.arc(x+off*d,cy,r,0,TAU); ctx.stroke();
+    ctx.fillStyle=light?'#2B3138':'#DDE2E7'; ctx.beginPath(); ctx.arc(x,i?cy+R+18:cy-R-18,5,0,TAU); ctx.fill(); });
+  ctx.fillStyle=mut; ctx.font='500 14px Barlow, Arial, sans-serif'; ctx.fillText('Figura centrale nitida e in rilievo · entrambi i puntini visibili',cx,H-110);
+}
+})();
+</script>
+</body></html>
