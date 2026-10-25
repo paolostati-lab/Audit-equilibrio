@@ -1,4 +1,4 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style><title>Audit dell'Equilibrio</title>
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#F3F4F2"><style>html,body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style><title>Audit dell'Equilibrio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
@@ -110,14 +110,80 @@ th{font-weight:600;color:var(--muted);font-size:12.5px}
 .chk input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent)}
 .prog{position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2;font-family:var(--mono);font-size:13px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
 
+nav.tabs button{font-size:15px;padding:12px 2px}
+.brand a.guide{font-size:12.5px;color:var(--accent);text-decoration:none;font-weight:600}
+/* screen-exercise previews in library */
+.ex .pv{display:block;width:100%;height:auto;aspect-ratio:5/3;background:#0B0D10;border-radius:6px}
+.ex .pv svg{width:100%;height:100%;display:block}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.tag2{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
+/* oculomotor settings sheet */
+.oc-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:640px){.oc-backdrop{align-items:center}}
+.oc-sheet{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:14px 14px 0 0;width:100%;max-width:520px;max-height:88vh;overflow:auto;box-sizing:border-box;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+@media (min-width:640px){.oc-sheet{border-radius:14px;padding:22px}}
+.oc-sheet h3{font-family:var(--display);font-size:24px;margin:0;font-weight:700}
+.oc-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.oc-desc{color:var(--muted);margin:6px 0 14px;font-size:14px}
+.oc-ctrl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.oc-ctrl label{font-weight:500;font-size:14px}
+.oc-ctrl output{font-family:var(--mono);font-size:13px;color:var(--accent);font-variant-numeric:tabular-nums}
+.oc-ctrl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+.oc-seg{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.oc-seg button{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;color:var(--muted);background:var(--panel)}
+.oc-seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.oc-seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.oc-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.oc-actions .primary{flex:1}
+/* oculomotor player */
+#player{position:fixed;inset:0;z-index:40;background:#000}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
+.oc-hud{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;font-family:var(--mono);font-size:13px;color:#fff;background:linear-gradient(rgba(0,0,0,.55),transparent);opacity:.55;transition:opacity .2s}
+.oc-hud:hover,.oc-hud:focus-within{opacity:1}
+.oc-hud .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--display);font-size:16px}
+.oc-hud button{all:unset;cursor:pointer;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:12.5px;color:#fff;background:rgba(0,0,0,.35)}
+.oc-hud .tm{font-variant-numeric:tabular-nums;min-width:5ch;text-align:right}
+.oc-instr{position:absolute;left:0;right:0;bottom:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px));text-align:center;font-size:14px;color:rgba(255,255,255,.78);background:linear-gradient(transparent,rgba(0,0,0,.55));pointer-events:none}
+.oc-endcard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(10,12,14,.92);color:#E7EAEE;padding:16px;text-align:center}
+.oc-endcard h4{font-family:var(--display);font-size:34px;margin:0}
+.oc-endcard p{margin:0;color:#8E98A4}
+.oc-endcard .row{width:100%;max-width:340px}
+.oc-endcard .btn.ghost{background:transparent;color:#E7EAEE;border-color:#3a414b}
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;max-width:calc(100% - 32px);box-sizing:border-box;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+/* program + patient */
+.pitem{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.pitem:first-child{border-top:0}
+.pitem .num{font-family:var(--mono);font-size:13px;color:var(--muted);width:2ch;padding-top:2px}
+.pitem .ttl{font-weight:600}
+.pitem .dose{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.pitem .side{display:flex;gap:4px}
+.mini{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;font-size:14px;color:var(--text);background:var(--panel)}
+.mini:focus-visible{outline:2px solid var(--accent)}
+.dosebar{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px}
+.dosebar .stepper{gap:6px}
+.dosebar .stepper output{font-size:15px;min-width:2.5ch}
+.dosebar .stepper .mini{width:26px;height:26px}
+.qr{display:flex;justify-content:center;padding:10px;background:#fff;border-radius:10px;width:max-content;max-width:100%;margin:10px auto 0}
+.qr canvas,.qr img{max-width:220px;height:auto}
+input.link{width:100%;font-family:var(--mono);font-size:12px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.pcard.done{border-color:var(--good)}
+.pcard .hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pcard h3{font-size:20px}
+.pcard .ok{color:var(--good);font-weight:600;font-size:13px;white-space:nowrap}
+.meter{height:8px;border-radius:99px;background:var(--grid);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--good);border-radius:99px}
+.plink{font-size:12.5px;color:var(--muted)}
+.plink a{color:var(--muted)}
+</style>
 </head><body>
 <div class="wrap">
   <header class="top">
     <div class="brand"><img src="data:image/png;base64,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" alt="Paolo Stati Osteopata"><div>
       <div class="eyebrow">Paolo Stati Osteopata · Centro Parioli</div>
-      <h1>Audit <span>dell'Equilibrio</span></h1></div></div>
+      <h1>Audit <span>dell'Equilibrio</span></h1><a class="guide" href="https://paolostati-lab.github.io/Audit-equilibrio/guida.html" target="_blank" rel="noopener">Guida clinica ↗</a></div></div>
     <div class="pt">
       <label for="ptSel" class="muted" style="font-size:13px">Paziente</label>
       <select id="ptSel"></select>
@@ -131,19 +197,466 @@ th{font-weight:600;color:var(--muted);font-size:12.5px}
   <section class="view" id="v-hist" hidden></section>
   <section class="view" id="v-cmp" hidden></section>
   <section class="view" id="v-ex" hidden></section>
+  <section class="view" id="v-prog" hidden></section>
+  <section class="view" id="v-pat" hidden></section>
 </div>
 
 <nav class="tabs" role="tablist">
   <button role="tab" data-v="test" aria-selected="true" type="button">Valuta</button>
   <button role="tab" data-v="hist" aria-selected="false" type="button">Storico</button>
-  <button role="tab" data-v="cmp" aria-selected="false" type="button">Prima / Dopo</button>
+  <button role="tab" data-v="cmp" aria-selected="false" type="button">Confronto</button>
   <button role="tab" data-v="ex" aria-selected="false" type="button">Esercizi</button>
+  <button role="tab" data-v="prog" aria-selected="false" type="button">Programma</button>
 </nav>
 
 <div class="ov" id="run" hidden><div class="ov-in" id="runIn"></div></div>
 <div class="ov" id="tmr" hidden><div class="ov-in" id="tmrIn"></div></div>
 <div class="ov" id="rep" hidden><div class="ov-in" id="repIn"></div></div>
+<div id="sheetRoot" hidden></div>
+<div id="player" hidden>
+  <canvas id="cv"></canvas>
+  <div class="oc-hud"><span class="nm" id="hudName"></span><span class="tm" id="hudTime">0:00</span><button id="hudPause" type="button">Pausa</button><button id="hudExit" type="button">Esci</button></div>
+  <div class="oc-instr" id="instr"></div>
+  <div class="oc-endcard" id="endcard" hidden><h4>Completato</h4><p id="endInfo"></p>
+    <div class="row"><button class="btn ghost" id="endClose" type="button" style="flex:1">Chiudi</button><button class="btn primary" id="endAgain" type="button" style="flex:1">Ripeti</button></div></div>
+</div>
+<script>
+(() => {
+const TAU = Math.PI*2;
+const LETTERS = "CDEFHKLNPRTUVZ";
+
+/* ---------- catalogue ---------- */
+const CATS = [
+ {id:'pursuit', name:'Inseguimento lento', sub:'Smooth pursuit — seguire il bersaglio solo con gli occhi, testa ferma.'},
+ {id:'saccade', name:'Saccadi', sub:'Salti rapidi e precisi dello sguardo tra bersagli, testa ferma.'},
+ {id:'okn', name:'Stimoli optocinetici', sub:'Flusso di bande in movimento: osservare lo schermo, fissare un punto o inseguire un bersaglio sopra le bande.'},
+ {id:'vor', name:'Stabilizzazione dello sguardo', sub:'VOR ×1 e ×2 a metronomo — la lettera deve restare nitida mentre la testa si muove. Include i piani dei canali verticali (LARP e RALP).'},
+ {id:'conv', name:'Convergenza', sub:'Vergenza e accomodazione. Il telefono si tiene in mano: la distanza dagli occhi fa parte dell\u2019esercizio.'},
+];
+const EX = [
+ {id:'p-h',cat:'pursuit',name:'Orizzontale',path:'h',desc:'Il bersaglio oscilla da sinistra a destra con moto sinusoidale.'},
+ {id:'p-v',cat:'pursuit',name:'Verticale',path:'v',desc:'Oscillazione alto–basso.'},
+ {id:'p-d1',cat:'pursuit',name:'Diagonale ↗',path:'d1',desc:'Diagonale dal basso-sinistra all’alto-destra.'},
+ {id:'p-d2',cat:'pursuit',name:'Diagonale ↘',path:'d2',desc:'Diagonale dall’alto-sinistra al basso-destra.'},
+ {id:'p-c',cat:'pursuit',name:'Circolare',path:'c',desc:'Traiettoria circolare, senso selezionabile.'},
+ {id:'p-8',cat:'pursuit',name:'Otto',path:'8',desc:'Traiettoria a otto orizzontale (lemniscata).'},
+ {id:'p-r',cat:'pursuit',name:'Imprevedibile',path:'r',desc:'Traiettoria fluida ma non ripetitiva: riduce l’anticipazione predittiva.'},
+ {id:'s-h',cat:'saccade',name:'Orizzontali',pat:'h',desc:'Il bersaglio salta tra destra e sinistra.'},
+ {id:'s-v',cat:'saccade',name:'Verticali',pat:'v',desc:'Il bersaglio salta tra alto e basso.'},
+ {id:'s-d',cat:'saccade',name:'Diagonali',pat:'d',desc:'Salti tra i quattro angoli, in diagonale.'},
+ {id:'s-r',cat:'saccade',name:'Casuali',pat:'r',desc:'Posizione e tempo imprevedibili: saccadi riflesse, non anticipate.'},
+ {id:'s-a',cat:'saccade',name:'Antisaccadi',pat:'a',desc:'Compare un segnale rosso: guarda subito dal lato opposto e leggi la lettera che appare lì per un attimo. Allena il controllo inibitorio.'},
+ {id:'o-l',cat:'okn',name:'Verso sinistra',dir:'l',desc:'Bande verticali che scorrono verso sinistra.'},
+ {id:'o-r',cat:'okn',name:'Verso destra',dir:'r',desc:'Bande verticali che scorrono verso destra.'},
+ {id:'o-u',cat:'okn',name:'Verso l’alto',dir:'u',desc:'Bande orizzontali che salgono.'},
+ {id:'o-d',cat:'okn',name:'Verso il basso',dir:'d',desc:'Bande orizzontali che scendono.'},
+ {id:'o-rot',cat:'okn',name:'Rotatorio',dir:'rot',desc:'Settori radiali in rotazione (stimolo sul piano frontale).'},
+ {id:'o-dots',cat:'okn',name:'Puntini rotanti',dir:'dots',desc:'Campo di puntini su sfondo nero che ruota intorno al centro (stimolo di rotazione sul piano frontale). Un solo punto al centro resta fermo: fissalo per tutto l\u2019esercizio senza seguire i puntini.'},
+ {id:'v1-h',cat:'vor',name:'VOR ×1 orizzontale',vor:1,axis:'h',desc:'Lettera ferma al centro. Ruota la testa a destra e sinistra a ogni battito, mantenendo la lettera a fuoco.'},
+ {id:'v1-v',cat:'vor',name:'VOR ×1 verticale',vor:1,axis:'v',desc:'Lettera ferma al centro. Flessione–estensione del capo a ogni battito, lettera sempre nitida.'},
+ {id:'v2-h',cat:'vor',name:'VOR ×2 orizzontale',vor:2,axis:'h',desc:'La lettera si sposta orizzontalmente a ritmo: muovi la testa in direzione opposta mantenendo lo sguardo sulla lettera.'},
+ {id:'v2-v',cat:'vor',name:'VOR ×2 verticale',vor:2,axis:'v',desc:'La lettera si sposta in verticale: muovi la testa in direzione opposta.'},
+ {id:'v1-larp',cat:'vor',name:'VOR ×1 piano LARP',vor:1,axis:'larp',desc:'Canali anteriore sinistro e posteriore destro. Ruota la testa di 45° a DESTRA rispetto al tronco, lettera davanti al naso, e fai il movimento del "sì" a ogni battito. Fase verso il basso (testa in avanti) = anteriore sinistro; verso l\u2019alto (testa indietro) = posteriore destro.'},
+ {id:'v1-ralp',cat:'vor',name:'VOR ×1 piano RALP',vor:1,axis:'ralp',desc:'Canali anteriore destro e posteriore sinistro. Ruota la testa di 45° a SINISTRA rispetto al tronco, lettera davanti al naso, e fai il movimento del "sì" a ogni battito. Fase verso il basso = anteriore destro; verso l\u2019alto (testa indietro) = posteriore sinistro.'},
+ {id:'v2-larp',cat:'vor',name:'VOR ×2 piano LARP',vor:2,axis:'larp',desc:'Testa ruotata di 45° a DESTRA. La lettera si sposta in verticale a ritmo: muovi la testa nel "sì" in direzione opposta, sguardo sempre sulla lettera.'},
+ {id:'v2-ralp',cat:'vor',name:'VOR ×2 piano RALP',vor:2,axis:'ralp',desc:'Testa ruotata di 45° a SINISTRA. La lettera si sposta in verticale a ritmo: muovi la testa nel "sì" in direzione opposta, sguardo sempre sulla lettera.'},
+ {id:'c-push',cat:'conv',name:'Avvicinamento al naso',conv:'push',desc:'Telefono a braccio teso, all\u2019altezza degli occhi. Segui le fasi: AVVICINA lentamente il telefono al naso, TIENI, ALLONTANA. La lettera deve restare singola e nitida: se si sdoppia, fermati e torna indietro finché torna singola, poi riprova.'},
+ {id:'c-jump',cat:'conv',name:'Vicino – lontano',conv:'jump',desc:'Telefono a 30–40 cm, un bersaglio a parete a circa 3 m. Al segnale alterna lo sguardo: lettera sul telefono (VICINO) e bersaglio a parete (LONTANO). Ogni volta l\u2019immagine deve tornare singola e nitida il più in fretta possibile.'},
+ {id:'c-ecc',cat:'conv',name:'Cerchi eccentrici',conv:'ecc',desc:'Telefono a circa 40 cm. Metti la punta di una penna tra gli occhi e lo schermo e fissala: le due figure diventano tre. Tieni nitida quella centrale, che appare in rilievo, con entrambi i puntini visibili (sopra e sotto). Più distanti sono le figure, più convergenza serve.'},
+];
+const INSTR = {
+  pursuit:'Testa ferma · segui il bersaglio con gli occhi · leggi le lettere ad alta voce',
+  saccade:'Testa ferma · sposta lo sguardo il più velocemente possibile sul nuovo bersaglio',
+  sa:'Guarda subito dal lato OPPOSTO al segnale rosso e leggi la lettera',
+  okn:'Osserva le bande che scorrono · respira normalmente',
+  oknfix:'Fissa il punto centrale · non inseguire le bande',
+  vor1:'Muovi la testa a ogni battito · la lettera deve restare nitida',
+  vor2:'Testa in direzione opposta alla lettera · sguardo sempre sulla lettera',
+  oknt:'Segui il bersaglio con gli occhi · ignora le bande in movimento',
+  dots:'Fissa il punto centrale fermo · lascia ruotare i puntini intorno',
+  larp:'Testa ruotata 45° a DESTRA · movimento del "sì" · lettera sempre nitida',
+  ralp:'Testa ruotata 45° a SINISTRA · movimento del "sì" · lettera sempre nitida',
+  push:'Segui le fasi · la lettera deve restare singola e nitida',
+  jump:'Al segnale alterna lo sguardo tra telefono e parete',
+  ecc:'Fissa la punta della penna · tieni nitida la figura centrale in rilievo',
+};
+
+/* ---------- controls ---------- */
+const C = {
+ dur:{t:'range',label:'Durata',min:15,max:300,step:15,fmt:v=>`${Math.floor(v/60)}:${String(v%60).padStart(2,'0')}`},
+ hz:{t:'range',label:'Velocità',min:.1,max:1.2,step:.05,fmt:v=>`${(+v).toFixed(2)} Hz`},
+ amp:{t:'range',label:'Ampiezza',min:20,max:100,step:5,fmt:v=>`${v}%`},
+ size:{t:'range',label:'Dimensione bersaglio',min:6,max:40,step:1,fmt:v=>`${v}`},
+ target:{t:'seg',label:'Bersaglio',opts:[['dot','Punto'],['letter','Lettera']]},
+ color:{t:'seg',label:'Colore bersaglio',opts:[['#F4B62C','Ambra'],['#E5484D','Rosso'],['#3CCFBE','Verde acqua'],['#FFFFFF','Bianco'],['#111111','Nero']]},
+ bg:{t:'seg',label:'Sfondo',opts:[['#000000','Nero'],['#3A3F45','Grigio'],['#F2F2F0','Chiaro']]},
+ dirc:{t:'seg',label:'Senso',opts:[['cw','Orario'],['ccw','Antiorario']]},
+ iv:{t:'range',label:'Intervallo tra salti',min:300,max:3000,step:50,fmt:v=>`${v} ms`},
+ jit:{t:'seg',label:'Ritmo',opts:[['0','Regolare'],['1','Variabile']]},
+ ghost:{t:'seg',label:'Bersagli fissi visibili',opts:[['0','No'],['1','Sì']]},
+ flash:{t:'range',label:'Durata lettera',min:200,max:1200,step:50,fmt:v=>`${v} ms`},
+ ospd:{t:'range',label:'Velocità bande',min:40,max:900,step:20,fmt:v=>`${v} px/s`},
+ ow:{t:'range',label:'Larghezza bande',min:20,max:200,step:5,fmt:v=>`${v} px`},
+ opal:{t:'seg',label:'Colori',opts:[['bw','Bianco/nero'],['rw','Rosso/bianco'],['low','Basso contrasto']]},
+ fix:{t:'seg',label:'Bersaglio sopra le bande',opts:[['0','Nessuno'],['1','Punto fisso (soppressione)'],['h','Inseguimento orizzontale'],['v','Inseguimento verticale'],['c','Inseguimento circolare'],['8','Inseguimento a otto']]},
+ ct:{t:'range',label:'Durata avvicinamento / allontanamento',min:2,max:8,step:1,fmt:v=>`${v} s`},
+ hold:{t:'range',label:'Tenuta vicino',min:1,max:6,step:1,fmt:v=>`${v} s`},
+ sep:{t:'range',label:'Distanza tra le figure',min:20,max:70,step:2,fmt:v=>`${v}%`},
+ dcol:{t:'seg',label:'Colore puntini',opts:[['#FFFFFF','Bianco'],['#F4B62C','Ambra'],['#3CCFBE','Verde acqua'],['#E5484D','Rosso'],['#7A7F86','Grigio (basso contrasto)']]},
+ ccol:{t:'seg',label:'Colore punto centrale',opts:[['#E5484D','Rosso'],['#F4B62C','Ambra'],['#3CCFBE','Verde acqua'],['#FFFFFF','Bianco']]},
+ dsz:{t:'range',label:'Dimensione puntini',min:1,max:8,step:1,fmt:v=>`${v}`},
+ dn:{t:'range',label:'Quantità puntini',min:50,max:600,step:25,fmt:v=>`${v}`},
+ rspd:{t:'range',label:'Velocità rotazione',min:5,max:180,step:5,fmt:v=>`${v} °/s`},
+ sect:{t:'range',label:'Numero settori',min:6,max:32,step:2,fmt:v=>`${v}`},
+ bpm:{t:'range',label:'Metronomo',min:40,max:200,step:5,fmt:v=>`${v} bpm`},
+ snd:{t:'seg',label:'Suono',opts:[['1','Attivo'],['0','Muto']]},
+};
+const CTRLS = {
+ pursuit:['dur','hz','amp','target','size','color','bg'],
+ pursuitC:['dur','hz','amp','dirc','target','size','color','bg'],
+ saccade:['dur','iv','jit','amp','ghost','target','size','color','bg'],
+ anti:['dur','iv','flash','amp','size','bg'],
+ okn:['dur','ospd','ow','opal','fix','hz','amp','target','size','color'],
+ rot:['dur','rspd','sect','dirc','opal','fix','hz','amp','target','size','color'],
+ dots:['dur','rspd','dirc','dcol','dsz','dn','ccol'],
+ push:['dur','ct','hold','size','snd','bg'],
+ jump:['dur','iv','size','snd','bg'],
+ ecc:['dur','sep','bg'],
+ vor1:['dur','bpm','snd','size','color','bg'],
+ vor2:['dur','bpm','amp','snd','size','color','bg'],
+};
+const BASE = {dur:60,hz:.3,amp:80,size:14,target:'letter',color:'#F4B62C',bg:'#000000',dirc:'cw',iv:1000,jit:'0',ghost:'0',flash:500,ospd:200,ow:60,opal:'bw',fix:'0',rspd:40,sect:16,bpm:60,snd:'1',ct:4,hold:2,sep:36,dcol:'#FFFFFF',ccol:'#E5484D',dsz:3,dn:250};
+function ctrlSet(ex){
+  if(ex.cat==='pursuit') return ex.path==='c'?CTRLS.pursuitC:CTRLS.pursuit;
+  if(ex.cat==='saccade') return ex.pat==='a'?CTRLS.anti:CTRLS.saccade;
+  if(ex.cat==='okn') return ex.dir==='dots'?CTRLS.dots:ex.dir==='rot'?CTRLS.rot:CTRLS.okn;
+  if(ex.cat==='conv') return CTRLS[ex.conv];
+  return ex.vor===1?CTRLS.vor1:CTRLS.vor2;
+}
+function defaults(ex){
+  const d={...BASE};
+  if(ex.cat==='vor'){ d.size=22; d.amp=40; }
+  if(ex.cat==='saccade'&&ex.pat==='r'){ d.jit='1'; }
+  if(ex.pat==='a'){ d.iv=1200; d.size=18; }
+  if(ex.cat==='okn'){ d.hz=.2; d.amp=60; d.target='dot'; d.size=12; }
+  if(ex.conv==='push'){ d.size=8; d.bg='#F2F2F0'; d.color='#111111'; }
+  if(ex.conv==='jump'){ d.iv=2500; d.size=9; d.bg='#F2F2F0'; d.color='#111111'; }
+  return d;
+}
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+function loadSettings(ex){ return {...defaults(ex), ...(store.get('po:'+ex.id)||{})}; }
+
+/* ---------- path math ---------- */
+function pursuitPos(path,p,dir){
+  switch(path){
+    case 'h': return [Math.sin(p),0];
+    case 'v': return [0,Math.sin(p)];
+    case 'd1': return [Math.sin(p),-Math.sin(p)];
+    case 'd2': return [Math.sin(p),Math.sin(p)];
+    case 'c': return [Math.cos(p), (dir==='ccw'?-1:1)*Math.sin(p)];
+    case '8': return [Math.sin(p),.5*Math.sin(2*p)];
+    case 'r': return [.62*Math.sin(p)+.38*Math.sin(2.31*p+1.1), .6*Math.sin(1.37*p+.5)+.4*Math.sin(2.83*p+2)];
+  }
+  return [0,0];
+}
+
+/* ---------- previews ---------- */
+function preview(ex){
+  const W=100,H=60,cx=50,cy=30,ax=38,ay=20;
+  const A='#F4B62C', M='#5b6570';
+  let s='';
+  if(ex.cat==='pursuit'){
+    const n=ex.path==='r'?420:120, span=ex.path==='r'?TAU*4:TAU, pts=[];
+    const sq=['c','d1','d2'].includes(ex.path);
+    for(let i=0;i<=n;i++){const [x,y]=pursuitPos(ex.path,i/n*span,'cw');pts.push(`${(cx+x*(sq?ay:ax)).toFixed(1)},${(cy+y*ay).toFixed(1)}`);}
+    s+=`<polyline points="${pts.join(' ')}" fill="none" stroke="${M}" stroke-width="1.2"/>`;
+    const [x,y]=pursuitPos(ex.path,.9,'cw');
+    s+=`<circle cx="${cx+x*(sq?ay:ax)}" cy="${cy+y*ay}" r="3.2" fill="${A}"/>`;
+  } else if(ex.cat==='saccade'){
+    let P={h:[[-1,0],[1,0]],v:[[0,-1],[0,1]],d:[[-1,-1],[1,1],[1,-1],[-1,1]],r:[[-.7,-.4],[.5,.8],[.9,-.7],[-.2,.3],[-.9,.6]],a:[[-1,0],[1,0]]}[ex.pat];
+    if(ex.pat==='a'){
+      s+=`<circle cx="${cx}" cy="${cy}" r="2" fill="${M}"/><circle cx="${cx-ax}" cy="${cy}" r="3.4" fill="#E5484D"/>`;
+      s+=`<path d="M${cx-8} ${cy} L${cx+ax-8} ${cy}" stroke="${M}" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/><text x="${cx+ax}" y="${cy+4}" fill="${A}" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text>`;
+    } else {
+      s+=`<polyline points="${P.map(([x,y])=>`${cx+x*ax},${cy+y*ay}`).join(' ')}" fill="none" stroke="${M}" stroke-width="1" stroke-dasharray="3 3"/>`;
+      P.forEach(([x,y],i)=>{s+=`<circle cx="${cx+x*ax}" cy="${cy+y*ay}" r="${i===1?3.4:2.4}" fill="${i===1?A:M}"/>`;});
+    }
+  } else if(ex.cat==='okn'){
+    if(ex.dir==='dots'){
+      for(let i=0;i<46;i++){ const a=(i*137.5)*Math.PI/180, r=4+Math.sqrt(i/46)*26; s+=`<circle cx="${(cx+Math.cos(a)*r*1.6).toFixed(1)}" cy="${(cy+Math.sin(a)*r).toFixed(1)}" r="1.3" fill="#cfd4da"/>`; }
+      s+=`<circle cx="${cx}" cy="${cy}" r="3.2" fill="#E5484D"/><path d="M${cx+34} ${cy-16} a36 36 0 0 1 0 32" stroke="${A}" stroke-width="1.6" fill="none"/>`;
+    } else if(ex.dir==='rot'){
+      for(let i=0;i<12;i+=2){const a0=i/12*TAU,a1=(i+1)/12*TAU,r=26;s+=`<path d="M${cx} ${cy} L${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A${r} ${r} 0 0 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} Z" fill="#cfd4da"/>`;}
+      s+=`<path d="M${cx+30} ${cy-14} a32 32 0 0 1 0 28" stroke="${A}" stroke-width="1.6" fill="none"/>`;
+    } else {
+      const horiz = ex.dir==='l'||ex.dir==='r';
+      for(let i=0;i<10;i+=2){ s+= horiz?`<rect x="${i*10}" y="0" width="10" height="60" fill="#cfd4da"/>`:`<rect x="0" y="${i*6}" width="100" height="6" fill="#cfd4da"/>`; }
+      const ar={l:`M70 30 H30 M38 22 L30 30 L38 38`,r:`M30 30 H70 M62 22 L70 30 L62 38`,u:`M50 48 V12 M42 20 L50 12 L58 20`,d:`M50 12 V48 M42 40 L50 48 L58 40`}[ex.dir];
+      s+=`<path d="${ar}" stroke="${A}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+  } else if(ex.cat==='conv'){
+    if(ex.conv==='push'){ s+=`<path d="M12 30 H80" stroke="${M}" stroke-width="1.2" stroke-dasharray="3 3"/><path d="M20 24 L12 30 L20 36" stroke="${A}" stroke-width="1.6" fill="none"/><rect x="80" y="18" width="10" height="24" rx="2" fill="none" stroke="${A}" stroke-width="1.6"/><circle cx="10" cy="22" r="2.5" fill="${M}"/><circle cx="10" cy="38" r="2.5" fill="${M}"/>`; }
+    else if(ex.conv==='jump'){ s+=`<rect x="14" y="20" width="12" height="22" rx="2" fill="none" stroke="${A}" stroke-width="1.6"/><text x="20" y="35" font-size="9" fill="${A}" text-anchor="middle" font-family="sans-serif" font-weight="700">E</text><circle cx="84" cy="30" r="5" fill="${M}"/><path d="M32 30 H74 M68 25 L74 30 L68 35 M38 25 L32 30 L38 35" stroke="${M}" stroke-width="1.2" fill="none"/>`; }
+    else { [30,70].forEach((x,i)=>{ s+=`<circle cx="${x}" cy="30" r="15" fill="none" stroke="#cfd4da" stroke-width="2"/><circle cx="${x+(i?-4:4)}" cy="30" r="6" fill="none" stroke="${A}" stroke-width="2"/>`; }); }
+  } else {
+    const h=ex.axis==='h', vp=ex.axis==='larp'||ex.axis==='ralp';
+    if(vp){ s+=`<text x="${cx}" y="${cy+6}" fill="${A}" font-size="17" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text><path d="M14 8 V52 M9 14 L14 8 L19 14 M9 46 L14 52 L19 46" stroke="${M}" stroke-width="1.4" fill="none"/><text x="${W-6}" y="12" fill="${M}" font-size="9" text-anchor="end" font-family="monospace">×${ex.vor}</text><text x="${W-6}" y="54" fill="${A}" font-size="10" text-anchor="end" font-family="monospace" font-weight="700">${ex.axis.toUpperCase()}</text><text x="24" y="54" fill="${M}" font-size="8.5" font-family="sans-serif">testa 45° ${ex.axis==='larp'?'dx':'sx'}</text>`; return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${s}</svg>`; }
+    s+=`<text x="${cx}" y="${cy+6}" fill="${A}" font-size="17" font-weight="700" text-anchor="middle" font-family="sans-serif">E</text>`;
+    s+= h?`<path d="M18 50 H82 M24 45 L18 50 L24 55 M76 45 L82 50 L76 55" stroke="${M}" stroke-width="1.4" fill="none"/>`
+         :`<path d="M14 8 V52 M9 14 L14 8 L19 14 M9 46 L14 52 L19 46" stroke="${M}" stroke-width="1.4" fill="none"/>`;
+    if(ex.vor===2) s+= h?`<path d="M34 14 H66" stroke="${A}" stroke-width="1" stroke-dasharray="2 3"/>`:`<path d="M72 10 V50" stroke="${A}" stroke-width="1" stroke-dasharray="2 3"/>`;
+    s+=`<text x="${W-6}" y="12" fill="${M}" font-size="9" text-anchor="end" font-family="monospace">×${ex.vor}</text>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${s}</svg>`;
+}
+
+/* ---------- sheet ---------- */
+const sheetRoot=document.getElementById('sheetRoot');
+let current=null, settings=null, OPTS={};
+function openSheet(ex,opts={}){
+  current=ex; OPTS=opts; settings=opts.preset?{...defaults(ex),...opts.preset}:loadSettings(ex);
+  const cat=CATS.find(c=>c.id===ex.cat);
+  sheetRoot.innerHTML=`<div class="oc-backdrop" id="bd"><div class="oc-sheet" role="dialog" aria-modal="true" aria-labelledby="shT">
+    <div class="oc-kicker">${cat.name}</div><h3 id="shT">${ex.name}</h3><p class="oc-desc">${ex.desc}</p>
+    ${ctrlSet(ex).map(k=>ctrlHTML(k)).join('')}
+    <div class="oc-actions"><button class="btn ghost" id="shClose" type="button">Annulla</button>${opts.onAdd?`<button class="btn ghost" id="shAdd" type="button">${opts.addLabel||'Aggiungi al programma'}</button>`:''}<button class="btn primary" id="shGo" type="button">Avvia</button></div>
+  </div></div>`;
+  sheetRoot.hidden=false;
+  sheetRoot.querySelectorAll('input[type=range]').forEach(inp=>inp.addEventListener('input',()=>{settings[inp.dataset.k]=+inp.value; inp.parentElement.querySelector('output').textContent=C[inp.dataset.k].fmt(+inp.value);}));
+  sheetRoot.querySelectorAll('.oc-seg').forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; settings[seg.dataset.k]=b.dataset.v; seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
+  document.getElementById('bd').addEventListener('click',e=>{if(e.target.id==='bd') closeSheet();});
+  document.getElementById('shClose').onclick=closeSheet;
+  if(opts.onAdd) document.getElementById('shAdd').onclick=()=>{ const o=diffSettings(ex,settings); closeSheet(); opts.onAdd(o); };
+  document.getElementById('shGo').onclick=()=>{ if(!opts.preset) store.set('po:'+ex.id,settings); closeSheet(); startPlayer();};
+  document.getElementById('shGo').focus();
+}
+function diffSettings(ex,s){ const d=defaults(ex), o={}; ctrlSet(ex).forEach(k=>{ if(String(s[k])!==String(d[k])) o[k]=s[k]; }); return o; }
+function ctrlHTML(k){
+  const c=C[k], v=settings[k], id='c-'+k;
+  if(c.t==='range') return `<div class="oc-ctrl"><label for="${id}">${c.label}</label><output>${c.fmt(v)}</output><input id="${id}" type="range" data-k="${k}" min="${c.min}" max="${c.max}" step="${c.step}" value="${v}"></div>`;
+  return `<div class="oc-ctrl"><label>${c.label}</label><span></span><div class="oc-seg" id="${id}" data-k="${k}" role="group" aria-label="${c.label}">${c.opts.map(([val,lab])=>`<button type="button" data-v="${val}" aria-pressed="${String(val)===String(v)}">${lab}</button>`).join('')}</div></div>`;
+}
+function closeSheet(){ sheetRoot.hidden=true; sheetRoot.innerHTML=''; }
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ if(!player.hidden) exitPlayer(); else if(!sheetRoot.hidden) closeSheet(); }
+  if(e.key===' ' && !player.hidden){ e.preventDefault(); togglePause(); }
+});
+
+/* ---------- player ---------- */
+const player=document.getElementById('player'), cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+const hudTime=document.getElementById('hudTime'), hudPause=document.getElementById('hudPause'), endcard=document.getElementById('endcard');
+let W=0,H=0,dpr=1, raf=0, last=0, el=0, paused=false, done=false, S=null, audio=null, wake=null;
+function resize(){ dpr=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+window.addEventListener('resize',()=>{ if(!player.hidden) resize(); });
+
+function beep(hi){
+  if(!audio||settings.snd!=='1') return;
+  const o=audio.createOscillator(), g=audio.createGain(), t=audio.currentTime;
+  o.frequency.value=hi?1320:880; o.type='sine';
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(.35,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+.07);
+  o.connect(g).connect(audio.destination); o.start(t); o.stop(t+.08);
+}
+const rl=(prev)=>{let c; do{c=LETTERS[Math.floor(Math.random()*LETTERS.length)];}while(c===prev); return c;};
+
+function startPlayer(){
+  const ex=current;
+  document.getElementById('hudName').textContent=ex.name;
+  const ins = ex.cat==='pursuit'?INSTR.pursuit: ex.cat==='saccade'?(ex.pat==='a'?INSTR.sa:INSTR.saccade): ex.cat==='okn'?(ex.dir==='dots'?INSTR.dots:settings.fix==='1'?INSTR.oknfix:settings.fix&&settings.fix!=='0'?INSTR.oknt:INSTR.okn): ex.cat==='conv'?INSTR[ex.conv]: (INSTR[ex.axis]||(ex.vor===1?INSTR.vor1:INSTR.vor2));
+  document.getElementById('instr').textContent=ins;
+  player.hidden=false; endcard.hidden=true; resize();
+  if(ex.cat==='vor'||ex.cat==='conv'){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume&&audio.resume(); }catch(e){ audio=null; } }
+  try{ const r=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); r&&r.catch&&r.catch(()=>{}); }catch(e){}
+  try{ navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{}); }catch(e){}
+  S={letter:rl(), lastLetterT:0, cph:'', jph:-1, idx:0, next:0, pos:[0,0], prevBeat:-1, anti:{phase:'fix',until:0,side:1}};
+  el=-3; paused=false; done=false; hudPause.textContent='Pausa';
+  last=performance.now(); cancelAnimationFrame(raf); raf=requestAnimationFrame(loop);
+}
+function exitPlayer(){
+  cancelAnimationFrame(raf); player.hidden=true; if(OPTS.onExit) setTimeout(()=>{ try{ OPTS.onExit(); }catch(e){} },0);
+  try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  try{ wake&&wake.release(); wake=null; }catch(e){}
+}
+function togglePause(){ if(done) return; paused=!paused; hudPause.textContent=paused?'Riprendi':'Pausa'; }
+hudPause.onclick=e=>{e.stopPropagation(); togglePause();};
+document.getElementById('hudExit').onclick=e=>{e.stopPropagation(); exitPlayer();};
+cv.addEventListener('click',togglePause);
+document.getElementById('endClose').onclick=exitPlayer;
+document.getElementById('endAgain').onclick=()=>startPlayer();
+
+function loop(now){
+  const dt=Math.min(.1,(now-last)/1000); last=now;
+  if(!paused&&!done) el+=dt;
+  const dur=settings.dur;
+  if(el>=dur && !done){ done=true; endcard.hidden=false; if(OPTS.onDone) try{ OPTS.onDone(current.id); }catch(e){} document.getElementById('endInfo').textContent=`${current.name} · ${C.dur.fmt(dur)}`; }
+  const rem=Math.max(0,dur-Math.max(0,el));
+  hudTime.textContent=`${Math.floor(rem/60)}:${String(Math.floor(rem%60)).padStart(2,'0')}`;
+  draw(Math.max(0,el), el<0);
+  if(!player.hidden) raf=requestAnimationFrame(loop);
+}
+
+function drawTarget(x,y,col,size,letter,asLetter){
+  if(asLetter){
+    ctx.fillStyle=col; ctx.font=`700 ${Math.round(size*2.6)}px Barlow, Arial, sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(letter,x,y+size*.08);
+  } else {
+    ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,y,size,0,TAU); ctx.fill();
+    ctx.fillStyle=settings.bg==='#F2F2F0'?'#F2F2F0':'#000'; ctx.beginPath(); ctx.arc(x,y,Math.max(1.5,size*.18),0,TAU); ctx.fill();
+  }
+}
+function countdown(t){
+  ctx.fillStyle=settings.bg==='#F2F2F0'?'#222':'#fff';
+  ctx.globalAlpha=.8; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(String(Math.ceil(-el)),W/2,H/2); ctx.globalAlpha=1;
+}
+
+function draw(t,pre){
+  const ex=current, s=settings;
+  const margin=s.size*2.8+10, hx=(W/2-margin)*s.amp/100, hy=(H/2-margin-40)*s.amp/100, hm=Math.min(hx,hy);
+  const cx=W/2, cy=H/2;
+
+  if(ex.cat==='okn'){ drawOKN(t,pre); return; }
+  ctx.fillStyle=s.bg; ctx.fillRect(0,0,W,H);
+  if(pre){ countdown(); return; }
+  const asL=s.target==='letter';
+
+  if(ex.cat==='pursuit'){
+    const p=TAU*s.hz*t, [ux,uy]=pursuitPos(ex.path,p,s.dirc);
+    const sq=['c','d1','d2'].includes(ex.path);
+    if(t-S.lastLetterT>1.4){ S.letter=rl(S.letter); S.lastLetterT=t; }
+    drawTarget(cx+ux*(sq?hm:hx), cy+uy*(sq?hm:hy), s.color, s.size, S.letter, asL);
+    return;
+  }
+
+  if(ex.cat==='saccade' && ex.pat!=='a'){
+    const ms=t*1000;
+    const fixed={h:[[-1,0],[1,0]],v:[[0,-1],[0,1]],d:[[-1,-1],[1,1],[1,-1],[-1,1]]}[ex.pat];
+    if(ms>=S.next){
+      S.idx++;
+      if(ex.pat==='r'){ let q; do{ q=[Math.random()*2-1,Math.random()*2-1]; }while(Math.hypot(q[0]-S.pos[0],q[1]-S.pos[1])<.6); S.pos=q; }
+      else S.pos=fixed[S.idx%fixed.length];
+      S.letter=rl(S.letter);
+      S.next=ms+s.iv*(s.jit==='1'?(.6+Math.random()*.8):1);
+    }
+    if(s.ghost==='1' && fixed){ ctx.globalAlpha=.28; fixed.forEach(([x,y])=>{ ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(cx+x*hx,cy+y*hy,Math.max(3,s.size*.35),0,TAU); ctx.fill(); }); ctx.globalAlpha=1; }
+    drawTarget(cx+S.pos[0]*hx, cy+S.pos[1]*hy, s.color, s.size, S.letter, asL);
+    return;
+  }
+
+  if(ex.pat==='a'){
+    const ms=t*1000, A=S.anti, fc=s.bg==='#F2F2F0'?'#333':'#bbb';
+    if(ms>=A.until){
+      if(A.phase==='fix'){ A.phase='cue'; A.side=Math.random()<.5?-1:1; A.until=ms+220; }
+      else if(A.phase==='cue'){ A.phase='gap'; A.until=ms+120; S.letter=rl(S.letter); }
+      else if(A.phase==='gap'){ A.phase='letter'; A.until=ms+s.flash; }
+      else { A.phase='fix'; A.until=ms+s.iv*(.8+Math.random()*.4); }
+    }
+    if(A.phase==='fix'||A.phase==='cue'||A.phase==='gap'){ ctx.fillStyle=fc; ctx.fillRect(cx-8,cy-1.5,16,3); ctx.fillRect(cx-1.5,cy-8,3,16); }
+    if(A.phase==='cue'){ ctx.fillStyle='#E5484D'; ctx.beginPath(); ctx.arc(cx+A.side*hx,cy,s.size*1.2,0,TAU); ctx.fill(); }
+    if(A.phase==='letter'){ drawTarget(cx-A.side*hx,cy,'#F4B62C',s.size,S.letter,true); }
+    return;
+  }
+
+  if(ex.cat==='conv'){ drawConv(t); return; }
+  if(ex.cat==='vor'){
+    const beatLen=60/s.bpm, beat=Math.floor(t/beatLen);
+    if(beat!==S.prevBeat){ S.prevBeat=beat; beep(beat%4===0); if(beat%2===0) S.letter=rl(S.letter); }
+    const frac=(t/beatLen)%1, side=beat%2===0?1:-1;
+    let x=cx,y=cy;
+    if(ex.vor===2){ const u=Math.cos(Math.PI*t/beatLen); if(ex.axis==='h') x=cx+u*hx; else y=cy+u*hy; }
+    if(ex.axis==='larp'||ex.axis==='ralp'){ const ink0=s.bg==='#F2F2F0'?'rgba(0,0,0,.7)':'rgba(255,255,255,.7)'; ctx.fillStyle=ink0; ctx.font='600 15px Barlow, Arial, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(`Testa ruotata 45° a ${ex.axis==='larp'?'DESTRA':'SINISTRA'} · piano ${ex.axis.toUpperCase()}`, cx, 78); }
+    // beat cue: pulse ring + head direction
+    const ink=s.bg==='#F2F2F0'?'rgba(0,0,0,':'rgba(255,255,255,';
+    ctx.strokeStyle=ink+(0.5*(1-frac)).toFixed(2)+')'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(x,y,s.size*2.2+frac*s.size*2,0,TAU); ctx.stroke();
+    drawTarget(x,y,s.color,s.size,S.letter,true);
+    // head direction arrow (for VOR×2 head goes opposite of target)
+    const hdir = ex.vor===1 ? side : (Math.sin(Math.PI*t/beatLen)>=0?1:-1);
+    ctx.fillStyle=ink+'0.55)'; ctx.font='500 14px Barlow, Arial, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const lbl = ex.axis==='h' ? (hdir>0?'testa →':'← testa') : (hdir>0?'testa ↓':'testa ↑');
+    ctx.fillText(lbl, cx, H-70);
+  }
+}
+
+function drawOKN(t,pre){
+  const s=settings, ex=current;
+  const pal={bw:['#FFFFFF','#000000'],rw:['#D7262E','#FFFFFF'],low:['#7A7F86','#55595F']}[s.opal];
+  ctx.fillStyle=pal[1]; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=pal[0];
+  if(ex.dir==='dots'){
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+    const R=Math.hypot(W,H)/2;
+    if(!S.dots||S.dots.n!==s.dn||S.dots.R!==R){ const d=[]; for(let i=0;i<s.dn;i++) d.push([Math.sqrt(Math.random())*R,Math.random()*TAU]); S.dots={n:s.dn,R,d}; }
+    const a0=(s.dirc==='ccw'?-1:1)*t*s.rspd*Math.PI/180, cx=W/2, cy=H/2;
+    ctx.fillStyle=s.dcol;
+    for(const [r,a] of S.dots.d){ if(r<14) continue; const x=cx+r*Math.cos(a+a0), y=cy+r*Math.sin(a+a0); ctx.beginPath(); ctx.arc(x,y,s.dsz,0,TAU); ctx.fill(); }
+    if(pre){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(String(Math.ceil(-el)),W/2,H/2); return; }
+    ctx.fillStyle=s.ccol; ctx.beginPath(); ctx.arc(cx,cy,Math.max(6,s.dsz*2.2),0,TAU); ctx.fill();
+    return;
+  }
+  if(ex.dir==='rot'){
+    const n=s.sect, a=(s.dirc==='ccw'?-1:1)*t*s.rspd*Math.PI/180, R=Math.hypot(W,H), cx=W/2, cy=H/2;
+    for(let i=0;i<n;i+=2){ const a0=a+i/n*TAU, a1=a+(i+1)/n*TAU; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,a0,a1); ctx.closePath(); ctx.fill(); }
+  } else {
+    const w=s.ow, per=w*2, off=((t*s.ospd)%per+per)%per;
+    const horiz=ex.dir==='l'||ex.dir==='r', sgn=(ex.dir==='r'||ex.dir==='d')?1:-1;
+    const o=sgn*off, len=horiz?W:H;
+    for(let p=-per+(o%per); p<len+per; p+=per){ if(horiz) ctx.fillRect(p,0,w,H); else ctx.fillRect(0,p,W,w); }
+  }
+  if(pre){ ctx.fillStyle='rgba(0,0,0,.55)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.font=`600 ${Math.min(W,H)*.22}px "Barlow Semi Condensed", Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(String(Math.ceil(-el)),W/2,H/2); return; }
+  if(s.fix==='1'){ ctx.fillStyle='#F4B62C'; ctx.strokeStyle='#000'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(W/2,H/2,9,0,TAU); ctx.fill(); ctx.stroke(); }
+  else if(s.fix&&s.fix!=='0'){
+    const margin=s.size*2.8+10, hx=(W/2-margin)*s.amp/100, hy=(H/2-margin-40)*s.amp/100, hm=Math.min(hx,hy);
+    const [ux,uy]=pursuitPos(s.fix,TAU*s.hz*t,s.dirc||'cw'); const sq=s.fix==='c';
+    const x=W/2+ux*(sq?hm:hx), y=H/2+uy*(sq?hm:hy);
+    if(t-S.lastLetterT>1.4){ S.letter=rl(S.letter); S.lastLetterT=t; }
+    ctx.lineWidth=5; ctx.strokeStyle='#000';
+    if(s.target==='letter'){ ctx.font=`700 ${Math.round(s.size*2.6)}px Barlow, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.lineJoin='round'; ctx.strokeText(S.letter,x,y+s.size*.08); ctx.fillStyle=s.color; ctx.fillText(S.letter,x,y+s.size*.08); }
+    else { ctx.beginPath(); ctx.arc(x,y,s.size+2,0,TAU); ctx.fillStyle='#000'; ctx.fill(); ctx.fillStyle=s.color; ctx.beginPath(); ctx.arc(x,y,s.size,0,TAU); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(x,y,Math.max(1.5,s.size*.18),0,TAU); ctx.fill(); }
+  }
+}
+
+function drawConv(t){
+  const s=settings, ex=current, cx=W/2, cy=H/2, light=s.bg==='#F2F2F0', ink=light?'#15191D':'#E7EAEE', mut=light?'rgba(0,0,0,.55)':'rgba(255,255,255,.6)';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  if(ex.conv==='push'){
+    const a=s.ct, h=s.hold, cyc=2*a+h, u=t%cyc, k=Math.floor(t/cyc);
+    const ph=u<a?'AVVICINA':u<a+h?'TIENI':'ALLONTANA', frac=u<a?u/a:u<a+h?1:1-(u-a-h)/a;
+    if(ph!==S.cph){ S.cph=ph; beep(ph==='TIENI'); if(ph==='AVVICINA') S.letter=rl(S.letter); }
+    drawTarget(cx,cy,s.color,s.size,S.letter,true);
+    ctx.fillStyle=ink; ctx.font='700 26px "Barlow Semi Condensed", Arial, sans-serif'; ctx.fillText(ph,cx,cy-110);
+    const bw=Math.min(260,W-80); ctx.fillStyle=mut; ctx.globalAlpha=.35; ctx.fillRect(cx-bw/2,cy+100,bw,8); ctx.globalAlpha=1; ctx.fillStyle=s.color==='#111111'&&!light?'#F4B62C':s.color; ctx.fillRect(cx-bw/2,cy+100,bw*frac,8);
+    ctx.fillStyle=mut; ctx.font='500 13px Barlow, Arial, sans-serif'; ctx.fillText('lontano',cx-bw/2+24,cy+124); ctx.fillText('vicino al naso',cx+bw/2-40,cy+124); ctx.fillText(`ripetizione ${k+1}`,cx,cy+150);
+    return;
+  }
+  if(ex.conv==='jump'){
+    const iv=s.iv/1000, j=Math.floor(t/iv), near=j%2===0;
+    if(j!==S.jph){ S.jph=j; beep(near); if(near) S.letter=rl(S.letter); }
+    if(near){ drawTarget(cx,cy,s.color,s.size,S.letter,true); ctx.fillStyle=mut; ctx.font='600 16px Barlow, Arial, sans-serif'; ctx.fillText('VICINO · leggi la lettera',cx,cy-90); }
+    else { ctx.fillStyle=mut; ctx.font='700 30px "Barlow Semi Condensed", Arial, sans-serif'; ctx.fillText('LONTANO',cx,cy-10); ctx.font='500 15px Barlow, Arial, sans-serif'; ctx.fillText('guarda il bersaglio a parete',cx,cy+22); }
+    return;
+  }
+  // eccentric circles
+  const R=Math.min(W*.16,H*.2,110), r=R*.42, d=R*.18, sepPx=Math.max(W*s.sep/200,R*1.25);
+  [[-1,1],[1,-1]].forEach(([side,off],i)=>{ const x=cx+side*sepPx;
+    ctx.lineWidth=Math.max(3,R*.06); ctx.strokeStyle=light?'#2B3138':'#DDE2E7'; ctx.beginPath(); ctx.arc(x,cy,R,0,TAU); ctx.stroke();
+    ctx.strokeStyle=light?'#C98400':'#F4B62C'; ctx.beginPath(); ctx.arc(x+off*d,cy,r,0,TAU); ctx.stroke();
+    ctx.fillStyle=light?'#2B3138':'#DDE2E7'; ctx.beginPath(); ctx.arc(x,i?cy+R+18:cy-R-18,5,0,TAU); ctx.fill(); });
+  ctx.fillStyle=mut; ctx.font='500 14px Barlow, Arial, sans-serif'; ctx.fillText('Figura centrale nitida e in rilievo · entrambi i puntini visibili',cx,H-110);
+}
+
+window.OCULO={CATS,EX,C,preview,defaults,ctrlSet,
+  openSheet:(id,opts)=>openSheet(EX.find(e=>e.id===id),opts||{}),
+  start:(id,preset,opts={})=>{ const ex=EX.find(e=>e.id===id); current=ex; OPTS=opts; settings={...defaults(ex),...(preset||{})}; startPlayer(); },
+  summary:(id,o)=>{ const ex=EX.find(e=>e.id===id); if(!ex) return ''; const s={...defaults(ex),...(o||{})}; return ctrlSet(ex).filter(k=>['dur','hz','bpm','iv','ospd','rspd','ct','fix','dirc'].includes(k)).map(k=>{const c=C[k]; if(c.t==='range') return `${c.label} ${c.fmt(s[k])}`; const op=c.opts.find(x=>String(x[0])===String(s[k])); return op?`${c.label}: ${op[1]}`:'';}).filter(Boolean).join(' · '); }
+};
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js';document.head.appendChild(s);"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (()=>{
 const STUDIO={name:'Paolo Stati Osteopata',sub:'Centro Parioli',addr:'Via Alberto Caroncini 58 · 00197 Roma'};
@@ -211,23 +724,23 @@ const NDI_Q=[['Intensità del dolore',['Al momento non ho dolore','Il dolore è 
  ['Tempo libero',['Faccio tutte le attività senza dolore','Tutte, con un po’ di dolore','La maggior parte, ma non tutte','Solo alcune','Quasi nessuna','Nessuna']]];
 const ABC_Q=['Camminare per casa','Salire o scendere le scale','Chinarsi a raccogliere una pantofola dal pavimento','Prendere un barattolo da uno scaffale all’altezza degli occhi','Alzarsi in punta di piedi per prendere qualcosa sopra la testa','Salire su una sedia per prendere qualcosa','Spazzare il pavimento','Uscire di casa e raggiungere l’auto parcheggiata','Salire o scendere dall’auto','Attraversare un parcheggio per raggiungere un centro commerciale','Salire o scendere una rampa','Camminare in un centro commerciale affollato, con persone che passano veloci','Essere urtato/a dalle persone mentre cammina in un centro commerciale','Salire o scendere da una scala mobile tenendosi al corrimano','Salire o scendere da una scala mobile senza corrimano, con pacchi in mano','Camminare all’aperto su un marciapiede ghiacciato'];
 
-const SYS={somato:'Somatosensoriale',visivo:'Visivo',vest:'Vestibolare',cerv:'Cervicale',integr:'Integrazione'};
+const SYS={ocul:'Oculomotori',somato:'Somatosensoriale',visivo:'Visivo',vest:'Vestibolare',cerv:'Cervicale',integr:'Integrazione'};
 const EXS=[
  {id:'e1',sys:'somato',n:'Romberg a occhi chiusi',how:'Piedi uniti su superficie stabile, a piedi nudi. Occhi chiusi, respiro calmo, peso distribuito su tutto il piede.',w:30,r:20,sets:3,prog:['Semi-tandem → tandem','Braccia incrociate al petto','Rotazioni lente del capo']},
  {id:'e2',sys:'somato',n:'Tandem a occhi chiusi',how:'Tallone davanti a punta, superficie stabile. Occhi chiusi, vicino a una parete per sicurezza.',w:20,r:20,sets:3,prog:['Alternare il piede anteriore','Aggiungere compito cognitivo']},
  {id:'e3',sys:'somato',n:'Monopodalico a occhi chiusi',how:'Un piede, ginocchio morbido. Occhi chiusi. Alternare i lati.',w:15,r:15,sets:4,prog:['Da 10 a 30 s','Superficie morbida']},
  {id:'e4',sys:'somato',n:'Trasferimenti di carico a piedi nudi',how:'Oscillazioni lente avanti-indietro e laterali dalle caviglie, occhi chiusi. Percepire la pressione sotto i piedi.',w:40,r:20,sets:3,prog:['Ampiezza maggiore','Su una gamba']},
  {id:'e5',sys:'visivo',n:'Foam con fissazione',how:'Piedi uniti su foam, occhi su un punto a parete all’altezza degli occhi.',w:30,r:20,sets:3,prog:['Semi-tandem su foam','Tandem su foam']},
- {id:'e6',sys:'visivo',n:'Foam + inseguimento visivo',how:'Su foam, segui con gli occhi un bersaglio che si muove orizzontalmente. Testa ferma.',w:30,r:20,sets:3,prog:['Traiettoria verticale e diagonale','Velocità maggiore']},
- {id:'e7',sys:'visivo',n:'Foam + saccadi',how:'Su foam, sposta lo sguardo rapidamente tra due bersagli a parete distanti 30–40 cm.',w:30,r:20,sets:3,prog:['Bersagli più distanti','Tandem su foam']},
+ {id:'e6',screen:'p-h',sys:'visivo',n:'Foam + inseguimento visivo',how:'Su foam, segui con gli occhi un bersaglio che si muove orizzontalmente. Testa ferma.',w:30,r:20,sets:3,prog:['Traiettoria verticale e diagonale','Velocità maggiore']},
+ {id:'e7',screen:'s-h',sys:'visivo',n:'Foam + saccadi',how:'Su foam, sposta lo sguardo rapidamente tra due bersagli a parete distanti 30–40 cm.',w:30,r:20,sets:3,prog:['Bersagli più distanti','Tandem su foam']},
  {id:'e8',sys:'vest',n:'Foam a occhi chiusi',how:'Piedi uniti su foam, occhi chiusi, con operatore vicino o davanti a un angolo.',w:20,r:20,sets:3,prog:['Piedi alla larghezza del bacino → uniti','Semi-tandem']},
- {id:'e9',sys:'vest',n:'VOR ×1 in stazione eretta',how:'Guarda una lettera a parete e ruota il capo a destra e sinistra a ritmo del metronomo, lettera sempre nitida.',w:30,r:20,sets:3,bpm:80,prog:['Piedi uniti → tandem → foam','Movimento verticale','Metronomo più veloce']},
+ {id:'e9',screen:'v1-h',sys:'vest',n:'VOR ×1 in stazione eretta',how:'Guarda una lettera a parete e ruota il capo a destra e sinistra a ritmo del metronomo, lettera sempre nitida.',w:30,r:20,sets:3,bpm:80,prog:['Piedi uniti → tandem → foam','Movimento verticale','Metronomo più veloce']},
  {id:'e10',sys:'vest',n:'Cammino con rotazioni del capo',how:'Cammina in linea retta girando il capo a destra e sinistra ogni 2 passi.',w:40,r:20,sets:3,prog:['Rotazioni verticali','Su linea (tandem walk)']},
  {id:'e11',sys:'vest',n:'Marcia sul posto a occhi chiusi',how:'Marcia sul posto a occhi chiusi, ginocchia alte, braccia avanti. Correggi la rotazione a occhi aperti tra le serie.',w:30,r:20,sets:3,bpm:100,prog:['Da 30 a 60 s','Su foam']},
  {id:'e15',sys:'cerv',n:'Riposizionamento con laser',how:'Laser sulla testa, bersaglio a 90 cm. Da posizione neutra ruota la testa, poi torna al centro a occhi chiusi; apri gli occhi e correggi.',w:60,r:30,sets:3,prog:['Ritorno da flessione ed estensione','Paziente in piedi, poi su foam']},
  {id:'e16',sys:'cerv',n:'Tracciare figure con il laser',how:'Con il laser sulla testa segui lentamente e con precisione una linea, un cerchio o un otto disegnati a parete.',w:45,r:20,sets:3,prog:['Figure più piccole','Velocità maggiore']},
  {id:'e17',sys:'cerv',n:'Coordinazione occhi-testa',how:'Sposta prima gli occhi su un bersaglio laterale, poi ruota la testa mantenendo lo sguardo fermo sul bersaglio.',w:30,r:20,sets:3,prog:['Bersagli verticali','In piedi su foam']},
- {id:'e18',sys:'cerv',n:'Inseguimento con collo in torsione',how:'Testa ferma, tronco ruotato di 20–45°: segui con gli occhi un bersaglio che si muove orizzontalmente.',w:30,r:20,sets:3,prog:['Torsione maggiore','Bersaglio più veloce']},
+ {id:'e18',screen:'p-h',sys:'cerv',n:'Inseguimento con collo in torsione',how:'Testa ferma, tronco ruotato di 20–45°: segui con gli occhi un bersaglio che si muove orizzontalmente.',w:30,r:20,sets:3,prog:['Torsione maggiore','Bersaglio più veloce']},
  {id:'e19',sys:'cerv',n:'Flessione cranio-cervicale',how:'Supino, piccolo cenno di "sì" mantenendo la nuca appoggiata. Tieni 10 s senza attivare i muscoli superficiali del collo.',w:10,r:10,sets:10,prog:['Con biofeedback a pressione','Da seduto']},
  {id:'e12',sys:'integr',n:'Tandem walk con doppio compito',how:'Cammino tallone-punta contando all’indietro di 3 da 100.',w:40,r:20,sets:3,prog:['Occhi chiusi per 3 passi','Rotazioni del capo']},
  {id:'e13',sys:'integr',n:'Monopodalico con lanci di palla',how:'Su un piede, passaggi di palla con l’operatore o contro il muro.',w:30,r:20,sets:3,prog:['Lanci laterali','Su foam']},
@@ -397,7 +910,7 @@ $('ptNewBtn').onclick=()=>{$('ptNew').hidden=false; $('ptName').focus();};
 $('ptCancel').onclick=()=>{$('ptNew').hidden=true;};
 $('ptAdd').onclick=()=>{ const n=$('ptName').value.trim(); if(!n){ $('ptName').focus(); return; } const p={id:uid(),name:n}; DB.patients.push(p); pid=p.id; store.set('ba:pid',pid); save(); $('ptName').value=''; $('ptNew').hidden=true; renderAll(); };
 let VIEW='test';
-function goView(v){ VIEW=v; document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x.dataset.v===v)); ['test','hist','cmp','ex'].forEach(k=>$('v-'+k).hidden=k!==v); renderAll(); window.scrollTo(0,0); }
+function goView(v){ VIEW=v; document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x.dataset.v===v)); ['test','hist','cmp','ex','prog'].forEach(k=>$('v-'+k).hidden=k!==v); renderAll(); window.scrollTo(0,0); }
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>goView(b.dataset.v));
 function segHTML(id,opts,val,multi){ return `<div class="seg" id="${id}" role="group">${opts.map(([v,l])=>`<button class="chip" type="button" data-v="${v}" aria-pressed="${multi?(val||[]).includes(v):String(v)===String(val)}">${l}</button>`).join('')}</div>`; }
 function bindSeg(id,cb,multi){ const el=$(id); if(!el) return; el.onclick=e=>{const b=e.target.closest('button'); if(!b) return;
@@ -939,21 +1452,51 @@ function renderCmp(){
 }
 function bindCmp(){ $('cA').onchange=e=>{CMP.a=e.target.value; renderCmp();}; $('cB').onchange=e=>{CMP.b=e.target.value; CMP.a=null; renderCmp();}; }
 
+/* ================= LIBRARY: balance + screen exercises ================= */
+const OC=window.OCULO;
+const APP_URL=/github\.io$/.test(location.hostname)?location.origin+location.pathname.replace(/index\.html$/,''):'https://paolostati-lab.github.io/Audit-equilibrio/';
+const OSYS={pursuit:'ocul',saccade:'ocul',okn:'ocul',conv:'ocul',vor:'vest'};
+const OPRE={pursuit:'Inseguimento',saccade:'Saccadi',okn:'Optocinetico',conv:'Convergenza',vor:''};
+const LIB=[...EXS.map(e=>({...e,kind:'x'})),...OC.EX.map(e=>({id:e.id,n:(OPRE[e.cat]?OPRE[e.cat]+' · ':'')+e.name,sys:OSYS[e.cat],how:e.desc,kind:'o',ocat:e.cat}))];
+const libById=id=>LIB.find(x=>x.id===id);
+const firstName=n=>String(n||'').trim().split(/\s+/)[0]||'';
+function progOf(id=pid){ DB.programs=DB.programs||{}; if(!DB.programs[id]){ const p=DB.patients.find(x=>x.id===id); DB.programs[id]={items:[],freq:'1 volta al giorno',note:'',name:firstName(p?.name),upd:null}; } return DB.programs[id]; }
+function doseTxt(it){ const e=libById(it.i); if(!e) return ''; if(it.t==='x') return `${it.s} serie × ${it.w} s · recupero ${it.r} s${e.bpm?` · ${e.bpm} bpm`:''}`; return OC.summary(it.i,it.o); }
+let toastT=null; function toast(m){ let t=$('toast'); if(!t){ t=document.createElement('div'); t.id='toast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2400); }
+function progAdd(it){ const P=progOf(); P.items.push(it); P.upd=null; save(); toast(`Aggiunto al programma di ${P.name||patient()?.name||'paziente'}`); if(VIEW==='prog') renderProg(); }
+function addFromLib(id){
+  if(!patient()){ toast('Crea o scegli prima un paziente'); return; }
+  const e=libById(id); if(e.kind==='x') progAdd({t:'x',i:id,s:e.sets,w:e.w,r:e.r});
+  else OC.openSheet(id,{onAdd:o=>progAdd({t:'o',i:id,o}),addLabel:`Aggiungi al programma`});
+}
+
 /* ================= VIEW: exercises ================= */
 let EXF='all';
-function renderEx(){
-  const list=EXS.filter(e=>EXF==='all'||e.sys===EXF);
-  $('v-ex').innerHTML=`<h2>Esercizi</h2><p class="muted" style="margin:0 0 10px">Raggruppati per il sistema da allenare. Ogni esercizio ha un timer guidato con serie e recuperi.</p>
-   ${segHTML('exF',[['all','Tutti'],...Object.entries(SYS)],EXF)}
-   <div class="grid" style="margin-top:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${list.map(e=>`<div class="ex"><span class="sys">${SYS[e.sys]}</span><h3>${e.n}</h3><p>${e.how}</p>
+function exCard(e){
+  if(e.kind==='o'){ const oe=OC.EX.find(x=>x.id===e.id);
+    return `<div class="ex"><span class="sys">${SYS[e.sys]} · a schermo</span><span class="pv">${OC.preview(oe)}</span><h3>${e.n}</h3><p>${e.how}</p>
+      <div class="btns"><button class="btn primary small" data-oset="${e.id}" type="button">Imposta e avvia</button><button class="btn ghost small" data-add="${e.id}" type="button">+ Programma</button></div></div>`; }
+  return `<div class="ex"><span class="sys">${SYS[e.sys]}</span><h3>${e.n}</h3><p>${e.how}</p>
      <div class="mono muted" style="font-size:12.5px">${e.sets} × ${e.w} s · recupero ${e.r} s${e.bpm?` · ${e.bpm} bpm`:''}</div>
-     <ul>${e.prog.map(p=>`<li>${p}</li>`).join('')}</ul><button class="btn ghost small" data-ex="${e.id}" type="button" style="margin-top:auto">Avvia timer</button></div>`).join('')}</div>
+     <ul>${e.prog.map(p=>`<li>${p}</li>`).join('')}</ul>
+     <div class="btns"><button class="btn primary small" data-ex="${e.id}" type="button">Avvia timer</button>${e.screen?`<button class="btn ghost small" data-oset="${e.screen}" type="button">Stimolo a schermo</button>`:''}<button class="btn ghost small" data-add="${e.id}" type="button">+ Programma</button></div></div>`;
+}
+function renderEx(){
+  const list=LIB.filter(e=>EXF==='all'||e.sys===EXF), P=patient();
+  $('v-ex').innerHTML=`<h2>Esercizi</h2><p class="muted" style="margin:0 0 10px">Esercizi di equilibrio con timer ed esercizi visivi e vestibolari a schermo intero. Con <b>+ Programma</b> li aggiungi al programma a casa${P?` di <b>${esc(P.name)}</b>`:''}.</p>
+   ${segHTML('exF',[['all','Tutti'],...Object.entries(SYS)],EXF)}
+   <div class="grid" style="margin-top:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${list.map(exCard).join('')}</div>
    <p class="hint" style="margin-top:14px">Eseguire sempre in sicurezza (parete, angolo o operatore vicino), specie a occhi chiusi e su foam.</p>`;
   bindSeg('exF',x=>{EXF=x; renderEx();});
-  $('v-ex').querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{initAudio(); startTimer(EXS.find(e=>e.id===b.dataset.ex));});
+  const v=$('v-ex');
+  v.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{initAudio(); startTimer(EXS.find(e=>e.id===b.dataset.ex));});
+  v.querySelectorAll('[data-oset]').forEach(b=>b.onclick=()=>OC.openSheet(b.dataset.oset,patient()?{onAdd:o=>progAdd({t:'o',i:b.dataset.oset,o}),addLabel:'Aggiungi al programma'}:{}));
+  v.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addFromLib(b.dataset.add));
 }
+
+/* ================= timer ================= */
 let TM=null;
-function startTimer(e){ TM={e,set:1,phase:'pre',t0:performance.now(),dur:5,paused:false,acc:0,lastSec:-1,lastBeat:-1,w:e.w,r:e.r,sets:e.sets}; $('tmr').hidden=false; lockScreen(); say(e.n); tmRender(); requestAnimationFrame(tmLoop); }
+function startTimer(e,o={}){ TM={e,set:1,phase:'pre',t0:performance.now(),dur:5,paused:false,acc:0,lastSec:-1,lastBeat:-1,w:o.w??e.w,r:o.r??e.r,sets:o.s??e.sets,onDone:o.onDone}; $('tmr').hidden=false; lockScreen(); say(e.n); tmRender(); requestAnimationFrame(tmLoop); }
 function tmRender(){
   const T=TM, e=T.e;
   $('tmrIn').innerHTML=`<div class="ov-top"><span class="eyebrow">${SYS[e.sys]}</span><button class="btn ghost small" id="tmX" type="button">Chiudi</button></div>
@@ -962,14 +1505,14 @@ function tmRender(){
    <div class="block" style="margin-top:0"><div class="row" style="justify-content:space-between"><span>Serie</span><div class="stepper"><button class="btn ghost small" data-a="sets" data-d="-1" type="button">−</button><output>${T.sets}</output><button class="btn ghost small" data-a="sets" data-d="1" type="button">+</button></div></div>
    <div class="row" style="justify-content:space-between"><span>Lavoro (s)</span><div class="stepper"><button class="btn ghost small" data-a="w" data-d="-5" type="button">−</button><output>${T.w}</output><button class="btn ghost small" data-a="w" data-d="5" type="button">+</button></div></div></div>
    <div class="row"><button class="btn primary" id="tmP" type="button" style="flex:1">${T.paused?'Riprendi':'Pausa'}</button><button class="btn ghost" id="tmS" type="button">Salta</button></div>`;
-  $('tmX').onclick=()=>{TM=null; $('tmr').hidden=true; unlockScreen();};
+  $('tmX').onclick=()=>{TM=null; $('tmr').hidden=true; unlockScreen(); if(PMODE) renderPatient();};
   $('tmP').onclick=()=>{ if(T.paused){T.t0=performance.now()-T.acc*1000; T.paused=false;} else {T.paused=true;} tmRender(); };
   $('tmS').onclick=()=>tmNext();
   $('tmrIn').querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ const k=b.dataset.a; T[k]=Math.max(k==='sets'?1:5,T[k]+(+b.dataset.d)); tmRender(); });
 }
 function tmNext(){ const T=TM; if(!T) return;
   if(T.phase==='pre'||T.phase==='rest'){ T.phase='work'; T.dur=T.w; beep(1175,.2,.45); say('Via'); }
-  else if(T.phase==='work'){ if(T.set>=T.sets){ T.phase='done'; beep(880,.12); setTimeout(()=>beep(880,.12),180); setTimeout(()=>beep(1175,.25),360); say('Esercizio completato'); }
+  else if(T.phase==='work'){ if(T.set>=T.sets){ T.phase='done'; beep(880,.12); setTimeout(()=>beep(880,.12),180); setTimeout(()=>beep(1175,.25),360); say('Esercizio completato'); if(T.onDone) T.onDone(); }
     else { T.phase='rest'; T.dur=T.r; T.set++; beep(880,.12); setTimeout(()=>beep(880,.12),180); say('Recupero'); } }
   T.t0=performance.now(); T.acc=0; T.lastSec=-1; }
 function tmLoop(){
@@ -984,11 +1527,100 @@ function tmLoop(){
   requestAnimationFrame(tmLoop);
 }
 
+/* ================= VIEW: home program (clinician) ================= */
+const b64e=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+function progLink(P){ const o={v:1,n:P.name||'',f:P.freq||'',no:P.note||'',d:(P.upd||new Date().toISOString()).slice(0,10),x:P.items.map(it=>it.t==='x'?[it.i,it.s,it.w,it.r]:[it.i,it.o||{}])}; return APP_URL+'#p='+b64e(JSON.stringify(o)); }
+function parseProg(code){ const o=JSON.parse(b64d(code)); return {name:o.n,freq:o.f,note:o.no,date:o.d,items:(o.x||[]).filter(a=>libById(a[0])).map(a=>libById(a[0]).kind==='x'?{t:'x',i:a[0],s:a[1],w:a[2],r:a[3]}:{t:'o',i:a[0],o:a[1]||{}})}; }
+function qrInto(el,text){ try{ if(!window.QRCode||!el) return false; el.innerHTML=''; new QRCode(el,{text,width:440,height:440,correctLevel:QRCode.CorrectLevel.L}); return true; }catch(e){ return false; } }
+function qrDataURL(text){ try{ if(!window.QRCode) return null; const d=document.createElement('div'); new QRCode(d,{text,width:440,height:440,correctLevel:QRCode.CorrectLevel.L}); const c=d.querySelector('canvas'); return c?c.toDataURL('image/png'):null; }catch(e){ return null; } }
+let LINKSHOW=false;
+function renderProg(){
+  const v=$('v-prog'), Pt=patient();
+  if(!Pt){ v.innerHTML=`<h2>Programma a casa</h2><div class="block muted">Crea o scegli un paziente in alto.</div>`; return; }
+  const P=progOf();
+  const items=P.items.map((it,i)=>{ const e=libById(it.i); if(!e) return '';
+    const dose=it.t==='x'?`<div class="dosebar">${[['s','Serie',1,1],['w','Lavoro s',5,5],['r','Recupero s',5,0]].map(([k,l,st,mn])=>`<span class="muted">${l}</span><span class="stepper"><button class="mini" data-dk="${i}|${k}|-${st}|${mn}" type="button" aria-label="Meno">−</button><output>${it[k]}</output><button class="mini" data-dk="${i}|${k}|${st}|${mn}" type="button" aria-label="Più">+</button></span>`).join('')}</div>`
+      :`<div class="dosebar"><span class="dose">${esc(doseTxt(it))}</span><button class="btn ghost small" data-edit="${i}" type="button">Modifica impostazioni</button></div>`;
+    return `<div class="pitem"><span class="num">${i+1}</span><div><div class="ttl">${e.n}</div><span class="tag2">${SYS[e.sys]}${e.kind==='o'?' · a schermo':''}</span></div>
+      <div class="side"><button class="mini" data-mv="${i}|-1" type="button" aria-label="Sposta su">↑</button><button class="mini" data-mv="${i}|1" type="button" aria-label="Sposta giù">↓</button><button class="mini" data-rm="${i}" type="button" aria-label="Rimuovi">✕</button></div>${dose}</div>`; }).join('');
+  const last=sessOf()[0], sug=last?suggest(last):[];
+  v.innerHTML=`<h2>Programma a casa</h2><p class="muted" style="margin:0">${esc(Pt.name)} · il paziente apre il programma dal suo telefono con un link o un QR code.</p>
+   <div class="block">
+     <div class="field"><label for="pgName">Nome mostrato al paziente</label><input type="text" id="pgName" value="${esc(P.name)}" placeholder="Es. Maria"></div>
+     <div class="field"><label for="pgFreq">Frequenza</label><input type="text" id="pgFreq" value="${esc(P.freq)}">${segHTML('pgFq',[['1 volta al giorno','1×/die'],['2 volte al giorno','2×/die'],['3 volte al giorno','3×/die'],['3–5 volte al giorno, sedute brevi','3–5×/die']],P.freq)}</div>
+     <div class="field"><label for="pgNote">Indicazioni per il paziente</label><textarea id="pgNote" placeholder="Es. se compaiono vertigini forti fermati e riposa; prossimo controllo tra 3 settimane">${esc(P.note)}</textarea></div>
+   </div>
+   <div class="block"><div class="row" style="justify-content:space-between"><h3>Esercizi (${P.items.length})</h3><div class="row"><button class="btn ghost small" id="pgAdd" type="button">+ Aggiungi</button>${sug.length?`<button class="btn ghost small" id="pgSug" type="button">Suggerisci dall'ultimo test</button>`:''}</div></div>
+     ${P.items.length?items:`<p class="muted">Nessun esercizio. Aggiungili dalla scheda Esercizi con <b>+ Programma</b>${sug.length?', oppure usa i suggerimenti dell’ultimo test':''}.</p>`}</div>
+   <div class="block"><h3>Invia al paziente</h3><p class="hint" style="margin:4px 0 10px">Il link contiene il programma: nessun dato passa da un server. Ogni volta che modifichi il programma, invia di nuovo il link.</p>
+     <div class="row"><button class="btn primary" id="pgLink" type="button" style="flex:1" ${P.items.length?'':'aria-disabled="true"'}>${LINKSHOW?'Aggiorna link':'Crea link e QR code'}</button></div>
+     <div id="pgOut"></div></div>`;
+  const upd=()=>{ P.upd=null; save(); };
+  $('pgName').oninput=e=>{P.name=e.target.value; upd();};
+  $('pgFreq').oninput=e=>{P.freq=e.target.value; upd();};
+  bindSeg('pgFq',x=>{P.freq=x; $('pgFreq').value=x; upd();});
+  $('pgNote').oninput=e=>{P.note=e.target.value; upd();};
+  $('pgAdd').onclick=()=>goView('ex');
+  if($('pgSug')) $('pgSug').onclick=()=>{ let n=0; sug.forEach(sy=>{ LIB.filter(e=>e.sys===sy&&!P.items.some(it=>it.i===e.id)).slice(0,2).forEach(e=>{ P.items.push(e.kind==='x'?{t:'x',i:e.id,s:e.sets,w:e.w,r:e.r}:{t:'o',i:e.id,o:{}}); n++; }); }); upd(); renderProg(); toast(n?`${n} esercizi aggiunti`:'Già presenti nel programma'); };
+  v.querySelectorAll('[data-dk]').forEach(b=>b.onclick=()=>{ const [i,k,d,mn]=b.dataset.dk.split('|'); const it=P.items[+i]; it[k]=Math.max(+mn,(+it[k])+(+d)); upd(); renderProg(); });
+  v.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>{ const [i,d]=b.dataset.mv.split('|').map(Number), j=i+d; if(j<0||j>=P.items.length) return; [P.items[i],P.items[j]]=[P.items[j],P.items[i]]; upd(); renderProg(); });
+  v.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{ P.items.splice(+b.dataset.rm,1); upd(); renderProg(); });
+  v.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{ const it=P.items[+b.dataset.edit]; OC.openSheet(it.i,{preset:it.o,onAdd:o=>{ it.o=o; upd(); renderProg(); toast('Impostazioni aggiornate'); },addLabel:'Salva nel programma'}); });
+  $('pgLink').onclick=()=>{ if(!P.items.length) return; P.upd=new Date().toISOString(); save(); LINKSHOW=true; showLink(P); $('pgLink').textContent='Aggiorna link'; };
+  if(LINKSHOW&&P.items.length) showLink(P);
+}
+function showLink(P){
+  const url=progLink(P), out=$('pgOut'); const canShare=!!navigator.share;
+  out.innerHTML=`<div class="field" style="border:0"><label for="pgUrl">Link del programma</label><input class="link" id="pgUrl" readonly value="${esc(url)}"></div>
+    <div class="row">${canShare?'<button class="btn primary small" id="pgShare" type="button">Condividi (WhatsApp, SMS…)</button>':''}<button class="btn ghost small" id="pgCopy" type="button">Copia link</button><a class="btn ghost small" href="${esc(url)}" target="_blank" rel="noopener">Anteprima</a></div>
+    <div class="qr" id="pgQr" hidden></div><p class="hint" id="pgMsg">${url.length>1800?'Programma molto lungo: il QR code potrebbe essere difficile da leggere, meglio inviare il link.':''}</p>`;
+  if(qrInto($('pgQr'),url)) $('pgQr').hidden=false;
+  if($('pgShare')) $('pgShare').onclick=async()=>{ try{ await navigator.share({title:'Il tuo programma di esercizi',text:`Programma di esercizi${P.name?' per '+P.name:''} · ${STUDIO.name}`,url}); }catch(e){} };
+  $('pgCopy').onclick=()=>{ const i=$('pgUrl'); const fb=()=>{ i.select(); $('pgMsg').textContent='Seleziona e copia il link qui sopra.'; };
+    try{ navigator.clipboard.writeText(url).then(()=>$('pgMsg').textContent='Link copiato.').catch(fb); }catch(e){ fb(); } };
+}
+
+/* ================= PATIENT MODE ================= */
+let PMODE=false, MYP=null;
+function initMode(){
+  const h=location.hash;
+  if(h.startsWith('#p=')){ try{ MYP=parseProg(h.slice(3)); store.set('ba:myprog',MYP); store.set('ba:mode','patient'); }catch(e){ MYP=null; } }
+  else if(store.get('ba:mode')==='patient'){ MYP=store.get('ba:myprog'); }
+  PMODE=!!(MYP&&MYP.items&&MYP.items.length);
+}
+const today=()=>new Date().toISOString().slice(0,10);
+function plog(){ return store.get('ba:plog')||{}; }
+function markDone(i,val=true){ const L=plog(), d=today(); L[d]=L[d]||{}; if(val) L[d][i]=1; else delete L[d][i]; store.set('ba:plog',L); }
+function streak(){ const L=plog(); let n=0; const d=new Date(); if(!(L[today()]&&Object.keys(L[today()]).length)) d.setDate(d.getDate()-1);
+  for(;;){ const k=d.toISOString().slice(0,10); if(L[k]&&Object.keys(L[k]).length){ n++; d.setDate(d.getDate()-1); } else break; } return n; }
+function renderPatient(){
+  document.querySelector('.pt').hidden=true; document.querySelector('nav.tabs').hidden=true; $('ptNew').hidden=true;
+  ['test','hist','cmp','ex','prog'].forEach(k=>$('v-'+k).hidden=true);
+  const v=$('v-pat'); v.hidden=false;
+  const P=MYP, done=plog()[today()]||{}, nd=P.items.filter((_,i)=>done[i]).length, st=streak();
+  v.innerHTML=`<h2>${P.name?`Ciao ${esc(P.name)}, ecco`:'Ecco'} il tuo programma</h2>
+   <p class="muted" style="margin:0">Indicato da ${STUDIO.name}${P.date?` · aggiornato il ${dstr(P.date)}`:''}</p>
+   <div class="block"><div class="row" style="justify-content:space-between"><b>Oggi: ${nd} di ${P.items.length} esercizi</b>${st?`<span class="muted">${st} ${st===1?'giorno':'giorni'} di fila</span>`:''}</div>
+     <div class="meter" style="margin-top:8px"><i style="width:${P.items.length?nd/P.items.length*100:0}%"></i></div>
+     ${P.freq?`<p style="margin:10px 0 0"><b>Quando:</b> ${esc(P.freq)}</p>`:''}${P.note?`<p style="margin:6px 0 0">${esc(P.note)}</p>`:''}</div>
+   ${P.items.map((it,i)=>{ const e=libById(it.i); if(!e) return ''; return `<div class="pcard ${done[i]?'done':''}"><div class="hd"><h3>${i+1}. ${e.n}</h3>${done[i]?'<span class="ok">✓ fatto oggi</span>':''}</div>
+     <div class="mono muted" style="font-size:12.5px">${esc(doseTxt(it))}</div><p style="margin:0;font-size:14.5px">${e.how}</p>
+     <div class="btns" style="margin-top:6px"><button class="btn primary small" data-go="${i}" type="button">Avvia</button><button class="btn ghost small" data-tick="${i}" type="button">${done[i]?'Segna come non fatto':'Segna come fatto'}</button></div></div>`; }).join('')}
+   <div class="callout" style="margin-top:14px">Esegui gli esercizi in sicurezza, vicino a una parete o a un appoggio, soprattutto a occhi chiusi o su superfici morbide. Se compaiono vertigini forti, nausea o dolore, fermati e contatta lo studio.</div>
+   <p class="plink" style="margin-top:20px">${STUDIO.name} · ${STUDIO.sub} · ${STUDIO.addr}<br>Per tornare a questo programma salva questa pagina tra i preferiti o nella schermata Home.<br><a href="#" id="proMode">Sei il terapeuta? Area professionista</a></p>`;
+  v.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.go, it=P.items[i], e=libById(it.i); initAudio();
+    const fin=()=>{ markDone(i); };
+    if(it.t==='x') startTimer(e,{s:it.s,w:it.w,r:it.r,onDone:fin}); else OC.start(it.i,it.o,{onDone:fin,onExit:renderPatient}); });
+  v.querySelectorAll('[data-tick]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.tick; markDone(i,!done[i]); renderPatient(); });
+  $('proMode').onclick=e=>{ e.preventDefault(); store.set('ba:mode',null); PMODE=false; if(location.hash) history.replaceState(null,'',location.pathname); location.reload(); };
+}
+
 /* ================= REPORT PDF ================= */
 let REP=null;
 function openReport(A,B){
   REP={A,B,ex:new Set(),note:'',blob:null};
-  const sug=suggest(B); EXS.forEach(e=>{ if(sug.includes(e.sys)) REP.ex.add(e.id); });
+  const sug=suggest(B); EXS.forEach(e=>{ if(sug.includes(e.sys)) REP.ex.add(e.id); }); (DB.programs?.[pid]?.items||[]).filter(it=>it.t==='x').forEach(it=>REP.ex.add(it.i));
   repRender(); $('rep').hidden=false;
 }
 function repRender(){
@@ -1117,6 +1749,15 @@ async function buildPDF(A,B,exIds,note){
     text('Esegui gli esercizi in sicurezza, vicino a una parete o a un appoggio, soprattutto a occhi chiusi o su superfici morbide. Interrompi se compaiono vertigini intense, nausea o dolore.',{size:8.5,color:MUT});
   }
   if(note&&note.trim()){ h2('Note'); const w=wrap(note.trim(),F,10,CW-20); ensure(w.length*14+16); page.drawRectangle({x:M,y:y-w.length*14-12,width:CW,height:w.length*14+12,color:SOFT}); y-=6; w.forEach(t=>{ page.drawText(t,{x:M+10,y:y-10,size:10,font:F,color:INK}); y-=14; }); y-=10; }
+  const PG=DB.programs?.[pid];
+  if(PG&&PG.items.length){ const url=progLink(PG), q=qrDataURL(url); h2('Il tuo programma a casa');
+    text(q?'Inquadra il codice QR con la fotocamera del telefono: si apre il programma con la guida di ogni esercizio (timer o stimolo a schermo).':'Apri il programma dal link che ti è stato inviato: contiene la guida di ogni esercizio.',{size:9.5});
+    if(q){ ensure(140); const img=await pdf.embedPng(q); const top=y-4; page.drawImage(img,{x:M,y:top-124,width:124,height:124}); let yy=top-4;
+      PG.items.slice(0,10).forEach((it,i)=>{ const e=libById(it.i); if(!e) return; page.drawText(safe(`${i+1}. ${e.n}`.slice(0,70)),{x:M+140,y:yy-9,size:9.5,font:F,color:INK}); yy-=13; });
+      if(PG.items.length>10) { page.drawText(safe(`... e altri ${PG.items.length-10}`),{x:M+140,y:yy-9,size:9,font:F,color:MUT}); yy-=13; }
+      if(PG.freq) page.drawText(safe('Quando: '+PG.freq),{x:M+140,y:yy-12,size:9.5,font:FB,color:ACC});
+      y=Math.min(top-134,yy-24); }
+  }
   // signature
   ensure(50); gap(18); page.drawText(safe('Paolo Stati · Osteopata D.O. BSc'),{x:PW-M-FB.widthOfTextAtSize(safe('Paolo Stati · Osteopata D.O. BSc'),10),y:y-10,size:10,font:FB,color:INK});
   // footers
@@ -1129,9 +1770,10 @@ async function buildPDF(A,B,exIds,note){
 }
 
 /* ================= boot ================= */
-function renderAll(){ renderPt(); if(VIEW==='test') renderTest(); if(VIEW==='hist') renderHist(); if(VIEW==='cmp') renderCmp(); if(VIEW==='ex') renderEx(); }
+function renderAll(){ if(PMODE){ renderPatient(); return; } renderPt(); if(VIEW==='test') renderTest(); if(VIEW==='hist') renderHist(); if(VIEW==='cmp') renderCmp(); if(VIEW==='ex') renderEx(); if(VIEW==='prog') renderProg(); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rep').hidden){ $('rep').hidden=true; } } });
-renderAll();
+initMode(); renderAll();
+window.addEventListener('hashchange',()=>{ initMode(); renderAll(); });
 })();
 </script>
 </body></html>
